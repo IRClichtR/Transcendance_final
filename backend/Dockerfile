@@ -6,13 +6,10 @@ ENV   PYTHONUNBUFFERED 1
 WORKDIR /app
 
 COPY requirements.txt /app/requirements.txt
-
 RUN pip install -r requirements.txt
 
 
 COPY . /app
 RUN chmod +x /app/entrypoint.sh
-RUN ls -la backend_server
-RUN pwd
-
+COPY ./server_ignition.py /app
 ENTRYPOINT /app/entrypoint.sh
