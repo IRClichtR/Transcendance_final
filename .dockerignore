@@ -1,0 +1,50 @@
+# Ignore Python bytecode
+*.pyc
+*.pyo
+__pycache__
+
+# Ignore Django specific files
+*.log
+db.sqlite3
+*.sqlite3
+
+# Ignore environment variables
+.env
+*.env
+
+# Ignore virtual environments
+venv/
+env/
+ENV/
+
+# Ignore static and media files
+static/
+media/
+
+# Ignore local settings
+local_settings.py
+
+# Ignore IDE configurations
+.idea/
+.vscode/
+*.iml
+
+# Ignore OS specific files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore Docker files
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Ignore build and cache directories
+build/
+dist/
+*.egg-info/

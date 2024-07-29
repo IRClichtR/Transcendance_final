@@ -1,0 +1,33 @@
+# local python environment
+venv
+env/
+ENV/
+
+# IDE
+.*.un~
+.vscode/
+*~
+*.swp
+.sass-cache/
+._*
+
+# Django-specific files
+*.log
+*.pot
+*.pyc
+*.pyo
+__pycache__/
+db.sqlite3
+*.sqlite3
+
+# migrations
+*/migrations/__pycache__/
+*/migrations/*.py[cod]
+*/migrations/*.pyc
+*/migrations/*.pyo
+
+# staticfiles
+staticfiles/
+media/
+
+
