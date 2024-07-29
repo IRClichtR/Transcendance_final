@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Pong Game</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        #localButton, #startButton, #startTournamentButton, #historyButton {
+            padding: 10px 20px;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label, input {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Pong Game</h1>
+
+    <form id="localForm" method="POST" action="{% url 'start_local_game' %}">
+        {% csrf_token %}
+        <label for="playerName">Enter your name:</label>
+        <input type="text" id="playerNameLocalStart" name="playerName" required>
+        <button type="submit" id="localButton">Start Local Game</button>
+    </form>
+    
+    <form id="startForm" method="POST" action="{% url 'start_game' %}">
+        {% csrf_token %}
+        <label for="playerNameStart">Enter your name:</label>
+        <input type="text" id="playerNameStart" name="playerName" required>
+        <button type="submit" id="startButton">Start Play</button>
+    </form>
+    
+    <form id="startTournamentForm" method="POST" action="{% url 'waiting_room' %}">
+        {% csrf_token %}
+        <label for="playerNameTournament">Enter your name:</label>
+        <input type="text" id="playerNameTournament" name="playerName" required>
+        <button type="submit" id="startTournamentButton">Start Tournament</button>        
+    </form>
+
+    <form id="historyForm" method="POST" action="{% url 'get_data' %}">
+        {% csrf_token %}
+        <label for="playerNameHistory">Enter your name:</label>
+        <input type="text" id="playerNameHistory" name="playerName" required>
+        <button type="submit" id="historyButton">Get History</button>        
+    </form>
+</body>
+</html>

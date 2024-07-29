@@ -1,0 +1,12 @@
+Django
+django-bootstrap-v5==1.0.11
+djangorestframework==3.14.0
+django-staticfiles==1.2.1
+daphne
+channels
+psycopg2-binary
+python-dotenv
+requests
+django-rest-swagger
+django-redis
+celery[redis]

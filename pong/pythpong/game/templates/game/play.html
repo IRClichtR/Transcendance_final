@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Pong Game</title>
+    <meta charset="UTF-8">
+    <!-- {% load static %}
+    <script src="{% static 'pong.js' %}"></script> -->
+</head>
+<body>
+<canvas id="pong" width="{{ window_width }}" height="{{ window_height }}"></canvas>    
+
+{{ window_width|json_script:"window-width" }}
+{{ window_height|json_script:"window-height" }}
+{{ ball_diameter|json_script:"ball-diameter" }}
+{{ bat_height|json_script:"bat-height" }}
+{{ bat_width|json_script:"bat-width" }}
+{{ game_id|json_script:"game-id" }}
+{{ player_id|json_script:"player-id" }}
+{{ bat_speed|json_script:"bat-speed"}}
+{{ start_pos_y|json_script:"start-pos-y"}}
+{{ player1_x |json_script:"player1-x"}}
+{{ player2_x |json_script:"player2-x"}}
+{{ player_name|json_script:"player_name" }}
+{% load static %}
+<script src="{% static 'pong.js' %}"></script>
+</body>
+</html>

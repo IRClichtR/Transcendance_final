@@ -1,0 +1,5 @@
+django #handle dhango-backend module
+channels[daphne] #handle server-side pong
+web3 #handle blockchain module
+python-dotenv
+djangorestframework
