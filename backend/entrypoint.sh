@@ -3,27 +3,21 @@
 # define DJANGO SETTING as environment variable
 export DJANGO_SETTINGS_MODULE="backend_server.settings"
 
-# Wait for database launching 
+# Wait for database launching
 
-if [ "$DATABASE" = "postgres" ]
-then
-    echo "Waiting for postgres..."
+while ! pg_isready -h $SQL_HOST -p $SQL_PORT -U $SQL_USER > /dev/null 2>&1; do
+	echo "Waiting for PostgreSQL to be ready..."
+	sleep 1
+done
 
-    while ! nc -z $SQL_HOST $SQL_PORT; do
-      sleep 0.1
-    done
-
-    echo "PostgreSQL started"
-fi
-
-if [ ! -d "/app/backend_server" ]
-then 
-# Create Django project if not exist
-  echo "Create Django project Server... "
-  django-admin startproject backend_server
-fi
-
-echo "Make migrations and collect static..."
+# if [ ! -d "/app/backend_server" ]
+# then 
+# # Create Django project if not exist
+#   echo "Create Django project Server... "
+#   django-admin startproject backend_server
+# fi
+#
+echo "Making migrations to transcendance_DB and collect static..."
 
 # DB migration management
 
@@ -32,11 +26,14 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --noinput
 
-#launch server
-daphne -b 0.0.0.0 -p 8001 backend_server.asgi:application
+#launch server and listen Celery
 
-# launch message broker
-echo "launching backend message broker"
-celery -A backend_server worker -l info
+python server_ignition.py
+
+# daphne -b 0.0.0.0 -p 8001 backend_server.asgi:application
+#
+# # launch message broker
+# echo "launching backend message broker"
+# celery -A backend_server worker -l info
 
 exec "$@"
