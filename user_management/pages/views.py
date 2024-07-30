@@ -14,21 +14,23 @@ def req_api42(request, token):
 
 	#  fetch api 42
     response = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
-    # data = response.json()
+    data = response.json()
+
+    # user = get_user_model().objects.get(email=data['email'])
+    # print('hello user ===============> ', user)
+    # if user.email == data['email']:
+    #     return redirect('/app/')
 
     if response.status_code == 200:
-        # user = User.objects.get(email=data['email'])
-        # print('user ===============> ', user)
-        # if user.email == data['email']:
-        #     return redirect('/app/')
 	# # ! add user 42 to DB
-        # user = user.objects.create_user(
-		# 			username=data['displayname'],
-		# 			first_name=data['first_name'],
-		# 			last_name=data['last_name'],
-		# 			email=data['email'],
-		# 		)
-        # user.save()
+        user = AppUser.objects.create_user(
+                email = data['email'],
+                password = data['email'],
+				)
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        user.username = data['email']
+        user.save()
         return redirect('/app/')
     else:
         return render(request, 'pages/login.html', {'error': 'Impossible de récupérer les datas'})
