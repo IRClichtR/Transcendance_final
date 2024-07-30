@@ -15,13 +15,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
 def user_data(request):
     users = get_user_model().objects.all()
-    print('users ================> ', users)
+    print('user_data ================> ', users)
     serializer = UserSerializer(users, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 def getProfile_from_db(id):
     user = get_user_model().objects.get(id=id)  # Corrected to use keyword argument
-    print('user ===============> ', user)
+    print('getProfile_from_db ===============> ', user)
     serializer = UserSerializer(user)
     return JsonResponse(serializer.data, safe=False)
 
