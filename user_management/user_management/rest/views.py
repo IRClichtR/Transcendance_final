@@ -15,11 +15,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
 def user_data(request):
     users = get_user_model().objects.all()
+    print('users ================> ', users)
     serializer = UserSerializer(users, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 def getProfile_from_db(id):
     user = get_user_model().objects.get(id=id)  # Corrected to use keyword argument
+    print('user ===============> ', user)
     serializer = UserSerializer(user)
     return JsonResponse(serializer.data, safe=False)
 
@@ -41,9 +43,14 @@ def me_data(request):
     else:
         user = request.user
         user_data = {
+			'id': user.id,
+			'username': user.username,
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
+			'is_active': user.is_active,
+			'is_staff': user.is_staff,
+			'date_joined': user.date_joined,
         }
         profile = JsonResponse(user_data, safe=False)
     return profile
@@ -54,7 +61,7 @@ class UserProfileUploadView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        profile = User.objects.all().order_by('id')
+        profile = get_user_model().objects.all().order_by('id')
         serializer = UserSerializer(profile, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
