@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from .serializers import UserSerializer
 from rest_framework import permissions, viewsets, status
@@ -8,18 +9,17 @@ from rest_framework.parsers import MultiPartParser, FormParser
 import requests
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('id')
+    queryset = get_user_model().objects.all().order_by('id')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 def user_data(request):
-
-    users = User.objects.all()
+    users = get_user_model().objects.all()
     serializer = UserSerializer(users, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 def getProfile_from_db(id):
-    user = User.objects.get(id=id)  # Corrected to use keyword argument
+    user = get_user_model().objects.get(id=id)  # Corrected to use keyword argument
     serializer = UserSerializer(user)
     return JsonResponse(serializer.data, safe=False)
 
@@ -49,7 +49,7 @@ def me_data(request):
     return profile
 
 class UserProfileUploadView(APIView):
-    queryset = User.objects.all().order_by('id')
+    queryset = get_user_model().objects.all().order_by('id')
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [permissions.IsAuthenticated]
 
