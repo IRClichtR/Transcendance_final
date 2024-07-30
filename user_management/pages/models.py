@@ -29,6 +29,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
     email = models.EmailField(max_length=50, unique=True)
     username = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    password = models.CharField(max_length=300)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     groups = models.ManyToManyField(
         Group,
         related_name='appuser_set',  # Changed related_name to avoid clash

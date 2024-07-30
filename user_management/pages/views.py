@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .models import AppUserManager, AppUser
 
 def req_api42(request, token):
     headers = {'Authorization': f'Bearer {token}'}
@@ -51,7 +52,7 @@ def index(request):
                 email=email,
                 password=password,
             )
-            user.save()
+            # user.save()
             return redirect('/login')
         except Exception as e:
             return render(request, 'pages/index.html', {'error': 'Error while creating user. Please choose others credentials.'})
