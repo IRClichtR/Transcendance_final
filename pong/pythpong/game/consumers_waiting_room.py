@@ -14,6 +14,11 @@ class WaitingRoomConsumer(AsyncWebsocketConsumer):
         await self.accept()
         asyncio.create_task(self.send_players_list())
 
+    async def disconnect(self, close_code):
+        self.connected = False
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
+        await self.remove_player_from_waiting_room(self.player_name)
+
     #this function refresh player list and notify when tournament can start
     async def send_players_list(self):
         while self.connected:
@@ -72,3 +77,10 @@ class WaitingRoomConsumer(AsyncWebsocketConsumer):
     def set_tournament_created(self, waiting_room, value):
         waiting_room.tournament_created = value
         waiting_room.save()
+
+    @database_sync_to_async
+    def remove_player_from_waiting_room(self, player_name):
+        waiting_room = WaitingRoom.objects.first()
+        if player_name in waiting_room.players:
+            waiting_room.players.remove(player_name)
+            waiting_room.save()

@@ -13,4 +13,5 @@ urlpatterns = [
     path('pong/history/<str:player_name>/', get_history, name='get_history'),
     path('pong/debug/settings/', debug_settings, name='debug-settings'),
     re_path(r'^pong/api/games/(?P<player_name>.+)/$', GameViewset.as_view({'get': 'list'})),
+    re_path(r'^pong/api/waiting-room/$', WaitingRoomViewset.as_view({'get': 'list'})),
 ]
