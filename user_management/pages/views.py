@@ -10,7 +10,9 @@ def req_api42(request, token):
 
 	#  fetch api 42
     response = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
-	# data = response.json()
+    print('response:::', response)
+    data = response.json()
+    print('data.response:::', data)
 
     if response.status_code == 200:
     #     user = User.objects.get(email=data['email'])
