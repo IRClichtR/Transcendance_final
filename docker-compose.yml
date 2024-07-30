@@ -33,13 +33,39 @@ services:
       - db
     networks:
       - transcendance
+
+  redis:
+    image: redis
+    ports:
+      - "6381:6381"
+    container_name: redis
+    networks:
+      - transcendance
+
+  # game:
+  #   container_name: game
+  #   build:
+  #     context: ./pong
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./pong:/app
+  #   entrypoint: ["/bin/sh", "-c", "chmod +x /app/entrypoint.sh && /app/entrypoint.sh"]
+  #   expose:
+  #     - "8002"
+  #   env_file:
+  #     - .env
+  #     - .pythpong.env
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - transcendance
   
   db:
     image: postgres:16
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-      #- ./pong/pythpong:/app/pythpong
+      # - ./pong/pythpong:/app/pythpong
     env_file:
       - .env
     #port:

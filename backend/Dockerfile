@@ -11,5 +11,5 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 RUN chmod +x /app/entrypoint.sh
-COPY ./server_ignition.py /app
+COPY ./server_ignition.py /app/backend_server
 ENTRYPOINT /app/entrypoint.sh

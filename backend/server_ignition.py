@@ -5,10 +5,11 @@ import os
 import requests
 
 # Add the directory containing celery.py to the Python path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'backend_server/backend_server/'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '/backend_server'))
 
 def start_server():
-    return subprocess.Popen(["daphne", "backend_server.asgi:application"])
+    return subprocess.Popen(["daphne", "-b", "0.0.0.0", "-p", "8001", "backend_server.asgi:application"])
+# daphne -b 0.0.0.0 -p 8001 backend_server.asgi:application
 
 def wait_ignition():
     print("Waiting for server to be ready...")

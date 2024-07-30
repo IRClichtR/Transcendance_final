@@ -28,8 +28,8 @@ python manage.py collectstatic --noinput
 
 #launch server and listen Celery
 
-cd /app
-python server_ignition.py
+# cd /app
+python /app/server_ignition.py
 
 # daphne -b 0.0.0.0 -p 8001 backend_server.asgi:application
 #
