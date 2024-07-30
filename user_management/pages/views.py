@@ -5,6 +5,7 @@ import requests
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, get_user_model
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from .models import AppUserManager, AppUser
 
@@ -13,22 +14,23 @@ def req_api42(request, token):
 
 	#  fetch api 42
     response = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
-    # print('response:::', response)
-    # data = response.json()
-    # print('data.response:::', data)
+    data = response.json()
+
+    # user = get_user_model().objects.get(email=data['email'])
+    # print('hello user ===============> ', user)
+    # if user.email == data['email']:
+    #     return redirect('/app/')
 
     if response.status_code == 200:
-    #     user = User.objects.get(email=data['email'])
-    #     if user.email == data['email']:
-    #         return redirect('/app/')
 	# # ! add user 42 to DB
-        # user = user.objects.create_user(
-		# 			username=data['displayname'],
-		# 			first_name=data['first_name'],
-		# 			last_name=data['last_name'],
-		# 			email=data['email'],
-		# 		)
-        # user.save()
+        user = AppUser.objects.create_user(
+                email = data['email'],
+                password = data['email'],
+				)
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        user.username = data['email']
+        user.save()
         return redirect('/app/')
     else:
         return render(request, 'pages/login.html', {'error': 'Impossible de récupérer les datas'})
@@ -57,8 +59,7 @@ def index(request):
             user.save()
             return redirect('/login')
         except Exception as e:
-            return render(request, 'pages/index.html', {'error': e})
-            # return render(request, 'pages/index.html', {'error': 'Error while creating user. Please choose others credentials.'})
+            return render(request, 'pages/index.html', {'error': 'Error while creating user. Please choose others credentials.'})
     return render(request, "pages/index.html")
 
 @csrf_protect
