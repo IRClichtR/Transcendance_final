@@ -51,9 +51,3 @@ def create_final(tournament_id, player_name):
     tournament.final.save()
     tournament.save()
     return tournament
-
-
-
-
-            
-
