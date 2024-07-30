@@ -4,7 +4,7 @@ from .constants import *
 from .models import WaitingRoom, Game
 from .eth import get_all_tournament_games
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from .serializers import GameSerializer
+from .serializers import GameSerializer, WaitingRoomSerializer
 
 # for debug purpose only
 from django.conf import settings
@@ -115,3 +115,11 @@ class GameViewset(ReadOnlyModelViewSet):
         queryset = Game.objects.filter(game_type='regular')
         filtered_queryset = [game for game in queryset if player_name in game.player_names]
         return filtered_queryset
+    
+class WaitingRoomViewset(ReadOnlyModelViewSet):
+ 
+    serializer_class = WaitingRoomSerializer
+
+    def get_queryset(self):
+        return WaitingRoom.objects.all()
+        
