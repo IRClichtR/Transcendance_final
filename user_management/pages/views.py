@@ -10,7 +10,9 @@ def req_api42(request, token):
 
 	#  fetch api 42
     response = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
-	# data = response.json()
+    # print('response:::', response)
+    # data = response.json()
+    # print('data.response:::', data)
 
     if response.status_code == 200:
     #     user = User.objects.get(email=data['email'])
@@ -85,11 +87,21 @@ def login(request):
             data = {
                 "grant_type": "authorization_code",
                 "client_id": "u-s4t2ud-e6514ae93c2f3f3c25c6c98db2627ae8b9c70362848bea099f4e972c73370ec3",
-                "client_secret": "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",
+                "client_secret": "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",
                 "code": code,
                 "redirect_uri": "http://localhost:8000/login"
             }
+
+            # data = {
+            #     "grant_type": "authorization_code",
+            #     "client_id": "u-s4t2ud-e6514ae93c2f3f3c25c6c98db2627ae8b9c70362848bea099f4e972c73370ec3",
+            #     "client_secret": "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",
+            #     "code": code,
+            #     "redirect_uri": "http://localhost:8000/login"
+            # }
+
             response = requests.post(url_token, headers=headers, data=data)
+            print('response==================>', response)
             if response.status_code == 200:
                 token = response.json().get("access_token")
                 if token:

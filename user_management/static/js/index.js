@@ -746,7 +746,7 @@ var getMe = (options = {}) => {
 };
 var updateUser = async (user) => {
   try {
-    const response = await ky.put("/api/user/update", {
+    const response = await ky.put("/user/update", {
       json: user
     }).json();
     return response;
@@ -756,7 +756,7 @@ var updateUser = async (user) => {
 };
 var updatePassword = async ({ currentPassword, newPassword }) => {
   try {
-    const response = await ky.put("/api/user/password", {
+    const response = await ky.put("/user/password", {
       json: { currentPassword, newPassword }
     }).json();
     return response;
@@ -2216,7 +2216,7 @@ var FreindsComponent = class extends s3 {
 											<div class="py-6">
 												<div class="row">
 													${this.friends.map(
-        (friend) => x`
+        (friend) => friend.first_name === user.first_name ? `` : x`
 															<div
 																class="col-lg-4 col-12"
 															>

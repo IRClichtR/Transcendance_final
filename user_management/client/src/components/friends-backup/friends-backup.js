@@ -175,7 +175,7 @@ export class FreindsComponent extends LitElement {
 											<div class="py-6">
 												<div class="row">
 													${this.friends.map(
-														(friend) => friend.first_name === user.first_name ? `` : html`
+														(friend) => html`
 															<div
 																class="col-lg-4 col-12"
 															>
