@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 
@@ -26,33 +27,20 @@ class AppUserManager(BaseUserManager):
 
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
-    user_id = models.AutoField(primary_key=True)
     email = models.EmailField(max_length=50, unique=True)
-    username = models.CharField(max_length=50)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, blank=False)
+    first_name = models.CharField(max_length=50, blank=False)
+    last_name = models.CharField(max_length=50, blank=False)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=now)
     password = models.CharField(max_length=300)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
-    groups = models.ManyToManyField(
-        Group,
-        related_name='appuser_set',  # Changed related_name to avoid clash
-        blank=True,
-        help_text='',
-        verbose_name='groups',
-    )
-
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='appuser_permissions_set',  # Changed related_name to avoid clash
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-    )
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['email']
 
     objects = AppUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.username
