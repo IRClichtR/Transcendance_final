@@ -33,9 +33,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         Group,
         related_name='appuser_set',  # Changed related_name to avoid clash
         blank=True,
-        help_text='The groups this user belongs to.',
+        help_text='',
         verbose_name='groups',
     )
+
     user_permissions = models.ManyToManyField(
         Permission,
         related_name='appuser_permissions_set',  # Changed related_name to avoid clash
