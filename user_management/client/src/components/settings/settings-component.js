@@ -1,6 +1,7 @@
 import { Task } from '@lit/task';
 import { LitElement, html, css } from 'lit';
-import { getMe, updateUser } from '../../utils/rest.js';
+import { getMe, updateUser, getProfilePic } from '../../utils/rest.js';
+import { query } from 'lit/decorators/query.js';
 
 export class SettingsComponent extends LitElement {
 	static properties = {
@@ -17,7 +18,7 @@ export class SettingsComponent extends LitElement {
 				this.link = response.image.link;
 				return response;
 			}
-			const storedAvatar = this.getStoredAvatarSrc(response.email);
+			const storedAvatar = await this.getStoredAvatarSrc(response.email);
 			if (storedAvatar) {
 				this.link = storedAvatar;
 			} else {
@@ -44,6 +45,7 @@ export class SettingsComponent extends LitElement {
 		super();
 		this.link = '';
 		this.profilePicture = '';
+		this.previewSrc = '';
 	}
 
 	storeAvatarSrc = (email, src) => {
@@ -64,12 +66,14 @@ export class SettingsComponent extends LitElement {
 		localStorage.setItem('avatars', stringified);
 	};
 
-	getStoredAvatarSrc = (email) => {
+	getStoredAvatarSrc = async (email) => {
 		if (!email || typeof email !== 'string') {
 			throw new Error(
 				'Unable to store avatar without an email, got: ' + email
 			);
 		}
+		const storedProfilePicture = await getProfilePic();
+		if (storedProfilePicture) return storedProfilePicture;
 		const avatars = localStorage.getItem('avatars');
 		const parsed = avatars ? JSON.parse(avatars) : {};
 		return parsed[email] || '';
@@ -78,17 +82,10 @@ export class SettingsComponent extends LitElement {
 	updateUserInfo = async (event) => {
 		event.preventDefault();
 		const formData = new FormData(event.target);
-		console.log('formData => ', formData);
-		const updatedUser = {
-			username: formData.get('username'),
-			first_name: formData.get('first_Name'),
-			last_name: formData.get('last_Name'),
-			email: formData.get('email'),
-		};
-		console.log('updatedUser => ', updatedUser);
+		console.log('formData => ', [...formData.entries()]);
 
 		try {
-			const response = await updateUser(updatedUser);
+			const response = await updateUser(formData);
 			console.log('User updated successfully =>', response);
 			// Optionally, update the user property to reflect changes
 			this.user = response;
@@ -96,6 +93,20 @@ export class SettingsComponent extends LitElement {
 		} catch (error) {
 			alert('Please provide a valid email.', error);
 			console.error('Error updating user:', error);
+		}
+	};
+
+	previewPhoto = (event) => {
+		const input = event.target;
+		console.log('input =====> ', input);
+		const file = input.files;
+		if (file) {
+			const fileReader = new FileReader();
+			const preview = this.shadowRoot.getElementById('selectedImage');
+			fileReader.onload = (event) => {
+				preview.setAttribute('src', event.target.result);
+			};
+			fileReader.readAsDataURL(file[0]);
 		}
 	};
 
@@ -170,61 +181,65 @@ export class SettingsComponent extends LitElement {
 													>
 														Settings
 													</h5>
-													<div class="col-12">
-														<div
-															class="row gy-2 pt-4"
-														>
-															<label
-																class="col-12 form-label m-0"
-																>Profile
-																Image</label
-															>
-															<div class="col-12">
-																<div>
-																	<div
-																		class=" d-flex "
-																	>
-																		<img
-																			id="selectedImage"
-																			src="${this
-																				.link
-																				? this
-																						.link
-																				: 'https://bootdey.com/img/Content/avatar/avatar1.png'}"
-																			alt="example placeholder"
-																			style="width: 300px;"
-																		/>
-																	</div>
-																	<div
-																		class="d-flex"
-																	>
-																		<div
-																			data-mdb-ripple-init
-																			class=""
-																		>
-																			<label
-																				class="badge bg-dark form-label text-white mb-4"
-																				for="customFile1"
-																				>Upload
-																				file</label
-																			>
-																			<input
-																				type="file"
-																				class="form-control d-none"
-																				id="customFile1"
-																				onchange="displaySelectedImage(event, 'selectedImage')"
-																			/>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
 													<form
 														@submit=${this
 															.updateUserInfo}
 														class="row gy-3 gy-xxl-4"
 													>
+														<div class="col-12">
+															<div
+																class="row gy-2 pt-4"
+															>
+																<label
+																	class="col-12 form-label m-0"
+																	>Profile
+																	Image</label
+																>
+																<div
+																	class="col-12"
+																>
+																	<div>
+																		<div
+																			class=" d-flex "
+																		>
+																			<img
+																				id="selectedImage"
+																				src=${this
+																					.link
+																					? this
+																							.link
+																					: 'https://bootdey.com/img/Content/avatar/avatar1.png'}
+																				alt="example placeholder"
+																				style="width: 300px;"
+																			/>
+																		</div>
+																		<div
+																			class="d-flex"
+																		>
+																			<div
+																				data-mdb-ripple-init
+																				class=""
+																			>
+																				<label
+																					class="badge bg-dark form-label text-white mb-4"
+																					for="customFile1"
+																					>Upload
+																					file</label
+																				>
+																				<input
+																					name="profile_picture"
+																					type="file"
+																					class="form-control d-none"
+																					id="customFile1"
+																					@change=${this
+																						.previewPhoto}
+																				/>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
 														<div
 															class="col-12 col-md-6"
 														>
