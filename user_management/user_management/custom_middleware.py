@@ -4,8 +4,6 @@ from django.urls import reverse
 
 def CustomMiddleware(get_response):
     def middleware(request):
-        print('ilias loging path',request.path_info)
-        
         # added 'and not request.user.is_authenticated' in condition.
         # because when we login from POST (without 42API) we don't have access_token AND we have /app in path
         # so everytime we wanted to login, we were redirect in login instead of /app

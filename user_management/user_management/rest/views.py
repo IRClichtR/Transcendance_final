@@ -5,7 +5,8 @@ from .serializers import UserSerializer
 from rest_framework import permissions, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view, permission_classes
 import requests
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -56,17 +57,16 @@ def me_data(request):
         profile = JsonResponse(user_data, safe=False)
     return profile
 
-class UserProfileUploadView(APIView):
-    queryset = get_user_model().objects.all().order_by('id')
-    parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [permissions.IsAuthenticated]
+@api_view(['PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_me_data(request):
+    user = request.user
+    print('user ===============> ', user)
+    data = JSONParser().parse(request)  # Parsing the JSON data from the request
+    print('data ===============> ', data)
+    serializer = UserSerializer(user, data=data, partial=True)  # Using partial update
 
-    def post(self, request, *args, **kwargs):
-        profile = get_user_model().objects.all().order_by('id')
-        serializer = UserSerializer(profile, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            if (Response.status_code == 200):
-                return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+    return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

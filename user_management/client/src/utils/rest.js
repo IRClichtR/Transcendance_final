@@ -22,13 +22,16 @@ const getMe = (options = {}) => {
 
 const updateUser = async (user) => {
 	try {
+		console.log('New user info: ', user);
 		const response = await ky
 			.put('/user/update', {
 				json: user,
 			})
 			.json();
+		console.log('update user reponse: ', response);
 		return response;
 	} catch (error) {
+		console.log('Error details: ', error);
 		throw new Error('Failed to update user');
 	}
 };

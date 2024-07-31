@@ -15,6 +15,7 @@ urlpatterns = [
     path("", include("pages.urls")),
 	path("user/", views.user_data),
 	path("user/me", views.me_data),
+	path("user/update", views.update_me_data),
     path("admin/", admin.site.urls),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
