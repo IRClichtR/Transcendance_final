@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from .serializers import UserSerializer
-from rest_framework import permissions, viewsets, status
+from .serializers import UserSerializer, AppUserSerializer
+from rest_framework import permissions, viewsets, status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -16,13 +16,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
 def user_data(request):
     users = get_user_model().objects.all()
-    print('user_data ================> ', users)
     serializer = UserSerializer(users, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 def getProfile_from_db(id):
     user = get_user_model().objects.get(id=id)  # Corrected to use keyword argument
-    print('getProfile_from_db ===============> ', user)
     serializer = UserSerializer(user)
     return JsonResponse(serializer.data, safe=False)
 
@@ -61,12 +59,17 @@ def me_data(request):
 @permission_classes([permissions.IsAuthenticated])
 def update_me_data(request):
     user = request.user
-    print('user ===============> ', user)
     data = JSONParser().parse(request)  # Parsing the JSON data from the request
-    print('data ===============> ', data)
     serializer = UserSerializer(user, data=data, partial=True)  # Using partial update
 
     if serializer.is_valid():
         serializer.save()
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateUserProfileView(generics.UpdateAPIView):
+    serializer_class = AppUserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user

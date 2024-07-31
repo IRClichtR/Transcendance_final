@@ -22,16 +22,24 @@ const getMe = (options = {}) => {
 
 const updateUser = async (user) => {
 	try {
-		console.log('New user info: ', user);
+		console.log('New user info => ', user);
 		const response = await ky
-			.put('/user/update', {
+			.patch('/user/update/', {
 				json: user,
 			})
 			.json();
-		console.log('update user reponse: ', response);
+		console.log('update user response => ', response);
 		return response;
 	} catch (error) {
-		console.log('Error details: ', error);
+		if (error.response) {
+			console.log('Error details (response) => ', error.response);
+			console.log('Error status => ', error.response.status);
+			console.log('Error data => ', await error.response.json());
+		} else if (error.request) {
+			console.log('Error details (request) => ', error.request);
+		} else {
+			console.log('Error message => ', error.message);
+		}
 		throw new Error('Failed to update user');
 	}
 };

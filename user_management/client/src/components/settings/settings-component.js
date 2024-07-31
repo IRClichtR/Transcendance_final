@@ -78,23 +78,25 @@ export class SettingsComponent extends LitElement {
 	updateUserInfo = async (event) => {
 		event.preventDefault();
 		const formData = new FormData(event.target);
-		console.log('formData: ', formData);
+		console.log('formData => ', formData);
 		const updatedUser = {
+			username: formData.get('username'),
 			first_name: formData.get('first_Name'),
 			last_name: formData.get('last_Name'),
 			email: formData.get('email'),
 		};
-		console.log('updatedUser: ', updatedUser);
+		console.log('updatedUser => ', updatedUser);
 
 		try {
 			const response = await updateUser(updatedUser);
-			console.log('User updated successfully:', response);
+			console.log('User updated successfully =>', response);
 			// Optionally, update the user property to reflect changes
 			this.user = response;
+			console.log(this.user);
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}
-	}
+	};
 
 	render() {
 		return this._userTask.render({
@@ -172,6 +174,22 @@ export class SettingsComponent extends LitElement {
 															.updateUserInfo}
 														class="row gy-3 gy-xxl-4"
 													>
+														<div
+															class="col-12 col-md-6"
+														>
+															<label
+																for="inputFirstName"
+																class="form-label"
+																>Username</label
+															>
+															<input
+																type="text"
+																class="form-control"
+																id="inputFirstName"
+																name="first_Name"
+																value="${user.first_name}"
+															/>
+														</div>
 														<div
 															class="col-12 col-md-6"
 														>

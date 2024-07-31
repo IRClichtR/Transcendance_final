@@ -65,15 +65,11 @@ def index(request):
 @csrf_protect
 def login(request):
     user = get_user_model()
-    print('user ==========>', user)
     if request.session.get('authMethod', None) is None:
         if request.method == 'POST'  :
             email = request.POST.get('email')
-            print('email ==========>', email)
             password = request.POST.get('password')
-            print('password ==========>', password)
             user = authenticate(request, username=email, password=password)
-            print('user ==========>', user)
             if user is not None:
                 auth_login(request, user)
                 request.session['authMethod'] = 'local'
