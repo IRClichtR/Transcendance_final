@@ -40,7 +40,6 @@ const updatePassword = async ({ currentPassword, newPassword }) => {
 				json: { currentPassword, newPassword },
 			})
 			.json();
-
 		return response;
 	} catch (error) {
 		console.error('Failed to update password:', error);
