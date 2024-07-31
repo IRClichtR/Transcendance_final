@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from .serializers import UserSerializer
-from rest_framework import permissions, viewsets, status
+from .serializers import UserSerializer, AppUserSerializer
+from rest_framework import permissions, viewsets, status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view, permission_classes
 import requests
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -15,13 +16,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
 def user_data(request):
     users = get_user_model().objects.all()
-    print('users ================> ', users)
     serializer = UserSerializer(users, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 def getProfile_from_db(id):
     user = get_user_model().objects.get(id=id)  # Corrected to use keyword argument
-    print('user ===============> ', user)
     serializer = UserSerializer(user)
     return JsonResponse(serializer.data, safe=False)
 
@@ -44,6 +43,7 @@ def me_data(request):
         user = request.user
         user_data = {
 			'id': user.id,
+			'last_login': user.last_login,
 			'username': user.username,
             'first_name': user.first_name,
             'last_name': user.last_name,
@@ -55,17 +55,9 @@ def me_data(request):
         profile = JsonResponse(user_data, safe=False)
     return profile
 
-class UserProfileUploadView(APIView):
-    queryset = get_user_model().objects.all().order_by('id')
-    parser_classes = (MultiPartParser, FormParser)
+class UpdateUserProfileView(generics.UpdateAPIView):
+    serializer_class = AppUserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        profile = get_user_model().objects.all().order_by('id')
-        serializer = UserSerializer(profile, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            if (Response.status_code == 200):
-                return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_object(self):
+        return self.request.user

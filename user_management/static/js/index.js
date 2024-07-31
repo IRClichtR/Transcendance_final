@@ -726,9 +726,18 @@ var r5 = (s6, i7) => s6 === i7 || s6.length === i7.length && s6.every((s7, h4) =
 
 // src/utils/rest.js
 import ky from "https://esm.sh/ky@1";
+var getCookies = () => {
+  return Object.fromEntries(
+    document.cookie.split("; ").map((v2) => v2.split(/=(.*)/s).map(decodeURIComponent))
+  );
+};
+var csrfToken = getCookies().csrftoken;
 var rest = ky.extend({
   mode: "same-origin",
   timeout: 3e4,
+  headers: {
+    "X-CSRFToken": csrfToken
+  },
   hooks: {
     afterResponse: [
       async (request, options, response) => {
@@ -746,11 +755,21 @@ var getMe = (options = {}) => {
 };
 var updateUser = async (user) => {
   try {
-    const response = await ky.put("/user/update", {
+    console.log("New user info => ", user);
+    const response = await rest.patch("/user/update/", {
       json: user
     }).json();
     return response;
   } catch (error) {
+    if (error.response) {
+      console.log("Error details (response) => ", error.response);
+      console.log("Error status => ", error.response.status);
+      console.log("Error data => ", await error.response.json());
+    } else if (error.request) {
+      console.log("Error details (request) => ", error.request);
+    } else {
+      console.log("Error message => ", error.message);
+    }
     throw new Error("Failed to update user");
   }
 };
@@ -899,11 +918,11 @@ var DashboardComponent = class extends s3 {
 															alt="${user.login ? user.login : user.first_name}"
 														/>
 													</div>
-														<h5
-															class="text-center mb-1"
-														>
-															${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
-														</h5>
+													<h5
+														class="text-center mb-1"
+													>
+														${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
+													</h5>
 												</div>
 											</div>
 										</div>
@@ -1759,7 +1778,7 @@ var DashboardComponent = class extends s3 {
 																					type="button"
 																					aria-current="page"
 																					class="nav-link btn btn-primary mt-3"
-																					href="/app/settings"
+																					href="/app/settingsPage"
 																				>
 																					Update
 																					Profile
@@ -1885,22 +1904,26 @@ var SettingsComponent = class extends s3 {
     const parsed = avatars ? JSON.parse(avatars) : {};
     return parsed[email] || "";
   };
-  async updateUser(event) {
+  updateUserInfo = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+    console.log("formData => ", formData);
     const updatedUser = {
-      first_name: formData.get("firstName"),
-      last_name: formData.get("lastName"),
+      username: formData.get("username"),
+      first_name: formData.get("first_Name"),
+      last_name: formData.get("last_Name"),
       email: formData.get("email")
     };
+    console.log("updatedUser => ", updatedUser);
     try {
       const response = await updateUser(updatedUser);
-      console.log("User updated successfully:", response);
+      console.log("User updated successfully =>", response);
       this.user = response;
+      console.log("this.user::::: ", this.user);
     } catch (error) {
       console.error("Error updating user:", error);
     }
-  }
+  };
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading settings...</p>`,
@@ -1964,8 +1987,54 @@ var SettingsComponent = class extends s3 {
 													>
 														Settings
 													</h5>
+													<div class="col-12">
+														<div
+															class="row gy-2 pt-4"
+														>
+															<label
+																class="col-12 form-label m-0"
+																>Profile
+																Image</label
+															>
+															<div class="col-12">
+																<div>
+																	<div
+																		class=" d-flex "
+																	>
+																		<img
+																			id="selectedImage"
+																			src="${this.link ? this.link : "https://bootdey.com/img/Content/avatar/avatar1.png"}"
+																			alt="example placeholder"
+																			style="width: 300px;"
+																		/>
+																	</div>
+																	<div
+																		class="d-flex"
+																	>
+																		<div
+																			data-mdb-ripple-init
+																			class=""
+																		>
+																			<label
+																				class="badge bg-dark form-label text-white mb-4"
+																				for="customFile1"
+																				>Upload
+																				file</label
+																			>
+																			<input
+																				type="file"
+																				class="form-control d-none"
+																				id="customFile1"
+																				onchange="displaySelectedImage(event, 'selectedImage')"
+																			/>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
 													<form
-														@submit=${this.updateUser}
+														@submit=${this.updateUserInfo}
 														class="row gy-3 gy-xxl-4"
 													>
 														<div
@@ -1981,7 +2050,7 @@ var SettingsComponent = class extends s3 {
 																type="text"
 																class="form-control"
 																id="inputFirstName"
-																name="firstName"
+																name="first_Name"
 																value="${user.first_name}"
 															/>
 														</div>
@@ -1998,8 +2067,24 @@ var SettingsComponent = class extends s3 {
 																type="text"
 																class="form-control"
 																id="inputLastName"
-																name="lastName"
+																name="last_Name"
 																value="${user.last_name}"
+															/>
+														</div>
+														<div
+															class="col-12 col-md-6"
+														>
+															<label
+																for="inputUsername"
+																class="form-label"
+																>Username</label
+															>
+															<input
+																type="text"
+																class="form-control"
+																id="inputUsername"
+																name="username"
+																value="${user.username}"
 															/>
 														</div>
 														<div
@@ -2216,43 +2301,43 @@ var FreindsComponent = class extends s3 {
 											<div class="py-6">
 												<div class="row">
 													${this.friends.map(
-        (friend) => friend.first_name === user.first_name ? `` : x`
-															<div
-																class="col-lg-4 col-12"
-															>
-																<div
-																	class="card mt-5 rounded-3"
-																>
-																	<div
-																		class="card-body d-flex justify-content-between"
-																	>
-																		<div>
-																			<h4
-																				class="mb-1"
-																			>
-																				${friend.first_name + " " + friend.last_name}
-																			</h4>
-																			<span
-																				>${friend.online ? "Online" : "Offline"}</span
-																			>
-																		</div>
+        (friend) => friend.email === user.email ? `` : x`
 																		<div
-																			class="pl-4"
+																			class="col-lg-4 col-12"
 																		>
-																			<button
-																				@click=${() => this.handleAddFriend(
+																			<div
+																				class="card mt-5 rounded-3"
+																			>
+																				<div
+																					class="card-body d-flex justify-content-between"
+																				>
+																					<div>
+																						<h4
+																							class="mb-1"
+																						>
+																							${friend.first_name + " " + friend.last_name}
+																						</h4>
+																						<span
+																							>${friend.online ? "Online" : "Offline"}</span
+																						>
+																					</div>
+																					<div
+																						class="pl-4"
+																					>
+																						<button
+																							@click=${() => this.handleAddFriend(
           friend
         )}
-																				class="btn btn-sm btn-outline-success mr-2 mb-2"
-																				style="height: 30px; width: 100px;"
-																			>
-																				Add
-																			</button>
+																							class="btn btn-sm btn-outline-success mr-2 mb-2"
+																							style="height: 30px; width: 100px;"
+																						>
+																							Add
+																						</button>
+																					</div>
+																				</div>
+																			</div>
 																		</div>
-																	</div>
-																</div>
-															</div>
-														`
+																	`
       )}
 												</div>
 											</div>

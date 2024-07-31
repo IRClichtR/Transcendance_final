@@ -145,15 +145,15 @@ export class DashboardComponent extends LitElement {
 																: user.first_name}"
 														/>
 													</div>
-														<h5
-															class="text-center mb-1"
-														>
-															${user.displayname
-																? user.displayname
-																: user.first_name +
-																	' ' +
-																	user.last_name}
-														</h5>
+													<h5
+														class="text-center mb-1"
+													>
+														${user.displayname
+															? user.displayname
+															: user.first_name +
+																' ' +
+																user.last_name}
+													</h5>
 												</div>
 											</div>
 										</div>
@@ -986,8 +986,8 @@ export class DashboardComponent extends LitElement {
 																					${user.login
 																						? user.login
 																						: user.first_name +
-																						  ' ' +
-																						  user.last_name}
+																							' ' +
+																							user.last_name}
 																				</div>
 																			</div>
 
@@ -1014,7 +1014,7 @@ export class DashboardComponent extends LitElement {
 																					type="button"
 																					aria-current="page"
 																					class="nav-link btn btn-primary mt-3"
-																					href="/app/settings"
+																					href="/app/settingsPage"
 																				>
 																					Update
 																					Profile

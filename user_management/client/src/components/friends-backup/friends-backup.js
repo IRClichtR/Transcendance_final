@@ -283,4 +283,4 @@ export class FreindsComponent extends LitElement {
 	}
 }
 
-customElements.define('freinds-component', FreindsComponent);
+	customElements.define('freinds-component', FreindsComponent);

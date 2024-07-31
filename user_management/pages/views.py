@@ -16,22 +16,22 @@ def req_api42(request, token):
     response = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
     data = response.json()
 
-    # user = get_user_model().objects.get(email=data['email'])
-    # print('hello user ===============> ', user)
-    # if user.email == data['email']:
-    #     return redirect('/app/')
-
+	#  if 42 user in DB: redirect to user profile else add user to DB then send to user profile
     if response.status_code == 200:
-	# # ! add user 42 to DB
-        user = AppUser.objects.create_user(
-                email = data['email'],
-                password = data['email'],
-				)
-        user.first_name = data['first_name']
-        user.last_name = data['last_name']
-        user.username = data['email']
-        user.save()
-        return redirect('/app/')
+        if AppUser.objects.filter(email=data['email']).exists():
+            user = AppUser.objects.get(email=data['email'])
+            if user.email == data['email']:
+                return redirect('/app/')
+        else:
+            user = AppUser.objects.create_user(
+					email = data['email'],
+					password = data['email'],
+					)
+            user.first_name = data['first_name']
+            user.last_name = data['last_name']
+            user.username = data['email']
+            user.save()
+            return redirect('/app/')
     else:
         return render(request, 'pages/login.html', {'error': 'Impossible de récupérer les datas'})
 
@@ -65,15 +65,11 @@ def index(request):
 @csrf_protect
 def login(request):
     user = get_user_model()
-    print('user ==========>', user)
     if request.session.get('authMethod', None) is None:
         if request.method == 'POST'  :
             email = request.POST.get('email')
-            print('email ==========>', email)
             password = request.POST.get('password')
-            print('password ==========>', password)
             user = authenticate(request, username=email, password=password)
-            print('user ==========>', user)
             if user is not None:
                 auth_login(request, user)
                 request.session['authMethod'] = 'local'
