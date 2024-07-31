@@ -16,10 +16,10 @@ def req_api42(request, token):
     response = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
     data = response.json()
 
-    # user = get_user_model().objects.get(email=data['email'])
-    # print('hello user ===============> ', user)
-    # if user.email == data['email']:
-    #     return redirect('/app/')
+    user = get_user_model().objects.get(email=data['email'])
+    print('hello user ===============> ', user)
+    if user.email == data['email']:
+        return redirect('/app/')
 
     if response.status_code == 200:
 	# # ! add user 42 to DB
