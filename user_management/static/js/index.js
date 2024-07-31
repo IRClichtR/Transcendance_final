@@ -2216,43 +2216,43 @@ var FreindsComponent = class extends s3 {
 											<div class="py-6">
 												<div class="row">
 													${this.friends.map(
-        (friend) => friend.first_name === user.first_name ? `` : x`
-															<div
-																class="col-lg-4 col-12"
-															>
-																<div
-																	class="card mt-5 rounded-3"
-																>
-																	<div
-																		class="card-body d-flex justify-content-between"
-																	>
-																		<div>
-																			<h4
-																				class="mb-1"
-																			>
-																				${friend.first_name + " " + friend.last_name}
-																			</h4>
-																			<span
-																				>${friend.online ? "Online" : "Offline"}</span
-																			>
-																		</div>
+        (friend) => friend.email === user.email ? `` : x`
 																		<div
-																			class="pl-4"
+																			class="col-lg-4 col-12"
 																		>
-																			<button
-																				@click=${() => this.handleAddFriend(
+																			<div
+																				class="card mt-5 rounded-3"
+																			>
+																				<div
+																					class="card-body d-flex justify-content-between"
+																				>
+																					<div>
+																						<h4
+																							class="mb-1"
+																						>
+																							${friend.first_name + " " + friend.last_name}
+																						</h4>
+																						<span
+																							>${friend.online ? "Online" : "Offline"}</span
+																						>
+																					</div>
+																					<div
+																						class="pl-4"
+																					>
+																						<button
+																							@click=${() => this.handleAddFriend(
           friend
         )}
-																				class="btn btn-sm btn-outline-success mr-2 mb-2"
-																				style="height: 30px; width: 100px;"
-																			>
-																				Add
-																			</button>
+																							class="btn btn-sm btn-outline-success mr-2 mb-2"
+																							style="height: 30px; width: 100px;"
+																						>
+																							Add
+																						</button>
+																					</div>
+																				</div>
+																			</div>
 																		</div>
-																	</div>
-																</div>
-															</div>
-														`
+																	`
       )}
 												</div>
 											</div>
