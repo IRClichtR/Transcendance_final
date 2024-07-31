@@ -44,6 +44,7 @@ def me_data(request):
         user = request.user
         user_data = {
 			'id': user.id,
+			'last_login': user.last_login,
 			'username': user.username,
             'first_name': user.first_name,
             'last_name': user.last_name,
