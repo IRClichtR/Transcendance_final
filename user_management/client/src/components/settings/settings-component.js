@@ -92,7 +92,7 @@ export class SettingsComponent extends LitElement {
 			console.log('User updated successfully =>', response);
 			// Optionally, update the user property to reflect changes
 			this.user = response;
-			console.log(this.user);
+			console.log('this.user::::: ', this.user);
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}
@@ -169,27 +169,61 @@ export class SettingsComponent extends LitElement {
 													>
 														Settings
 													</h5>
+													<div class="col-12">
+														<div
+															class="row gy-2 pt-4"
+														>
+															<label
+																class="col-12 form-label m-0"
+																>Profile
+																Image</label
+															>
+															<div class="col-12">
+																<div>
+																	<div
+																		class=" d-flex "
+																	>
+																		<img
+																			id="selectedImage"
+																			src="${this
+																				.link
+																				? this
+																						.link
+																				: 'https://bootdey.com/img/Content/avatar/avatar1.png'}"
+																			alt="example placeholder"
+																			style="width: 300px;"
+																		/>
+																	</div>
+																	<div
+																		class="d-flex"
+																	>
+																		<div
+																			data-mdb-ripple-init
+																			class=""
+																		>
+																			<label
+																				class="badge bg-dark form-label text-white mb-4"
+																				for="customFile1"
+																				>Upload
+																				file</label
+																			>
+																			<input
+																				type="file"
+																				class="form-control d-none"
+																				id="customFile1"
+																				onchange="displaySelectedImage(event, 'selectedImage')"
+																			/>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
 													<form
 														@submit=${this
 															.updateUserInfo}
 														class="row gy-3 gy-xxl-4"
 													>
-														<div
-															class="col-12 col-md-6"
-														>
-															<label
-																for="inputFirstName"
-																class="form-label"
-																>Username</label
-															>
-															<input
-																type="text"
-																class="form-control"
-																id="inputFirstName"
-																name="first_Name"
-																value="${user.first_name}"
-															/>
-														</div>
 														<div
 															class="col-12 col-md-6"
 														>
@@ -222,6 +256,22 @@ export class SettingsComponent extends LitElement {
 																id="inputLastName"
 																name="last_Name"
 																value="${user.last_name}"
+															/>
+														</div>
+														<div
+															class="col-12 col-md-6"
+														>
+															<label
+																for="inputUsername"
+																class="form-label"
+																>Username</label
+															>
+															<input
+																type="text"
+																class="form-control"
+																id="inputUsername"
+																name="username"
+																value="${user.username}"
 															/>
 														</div>
 														<div

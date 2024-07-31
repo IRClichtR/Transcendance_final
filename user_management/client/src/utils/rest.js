@@ -1,8 +1,21 @@
 import ky from 'https://esm.sh/ky@1';
 
+const getCookies = () => {
+	return Object.fromEntries(
+		document.cookie
+			.split('; ')
+			.map((v) => v.split(/=(.*)/s).map(decodeURIComponent))
+	);
+};
+
+const csrfToken = getCookies().csrftoken;
+
 const rest = ky.extend({
 	mode: 'same-origin',
 	timeout: 30_000,
+	headers: {
+		'X-CSRFToken': csrfToken,
+	},
 	hooks: {
 		afterResponse: [
 			async (request, options, response) => {
@@ -21,14 +34,14 @@ const getMe = (options = {}) => {
 };
 
 const updateUser = async (user) => {
+	// console.log('csrfToken ======> ', csrfToken);
 	try {
 		console.log('New user info => ', user);
-		const response = await ky
+		const response = await rest
 			.patch('/user/update/', {
 				json: user,
 			})
 			.json();
-		console.log('update user response => ', response);
 		return response;
 	} catch (error) {
 		if (error.response) {

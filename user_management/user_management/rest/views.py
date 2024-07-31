@@ -55,18 +55,6 @@ def me_data(request):
         profile = JsonResponse(user_data, safe=False)
     return profile
 
-@api_view(['PUT'])
-@permission_classes([permissions.IsAuthenticated])
-def update_me_data(request):
-    user = request.user
-    data = JSONParser().parse(request)  # Parsing the JSON data from the request
-    serializer = UserSerializer(user, data=data, partial=True)  # Using partial update
-
-    if serializer.is_valid():
-        serializer.save()
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-    return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class UpdateUserProfileView(generics.UpdateAPIView):
     serializer_class = AppUserSerializer
     permission_classes = [permissions.IsAuthenticated]

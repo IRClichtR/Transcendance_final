@@ -746,14 +746,22 @@ var getMe = (options = {}) => {
 };
 var updateUser = async (user) => {
   try {
-    console.log("New user info: ", user);
-    const response = await ky.put("/user/update", {
+    console.log("New user info => ", user);
+    const response = await ky.patch("/user/update/", {
       json: user
     }).json();
-    console.log("update user reponse: ", response);
+    console.log("update user response => ", response);
     return response;
   } catch (error) {
-    console.log("Error details: ", error);
+    if (error.response) {
+      console.log("Error details (response) => ", error.response);
+      console.log("Error status => ", error.response.status);
+      console.log("Error data => ", await error.response.json());
+    } else if (error.request) {
+      console.log("Error details (request) => ", error.request);
+    } else {
+      console.log("Error message => ", error.message);
+    }
     throw new Error("Failed to update user");
   }
 };
@@ -1891,17 +1899,19 @@ var SettingsComponent = class extends s3 {
   updateUserInfo = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    console.log("formData: ", formData);
+    console.log("formData => ", formData);
     const updatedUser = {
+      username: formData.get("username"),
       first_name: formData.get("first_Name"),
       last_name: formData.get("last_Name"),
       email: formData.get("email")
     };
-    console.log("updatedUser: ", updatedUser);
+    console.log("updatedUser => ", updatedUser);
     try {
       const response = await updateUser(updatedUser);
-      console.log("User updated successfully:", response);
+      console.log("User updated successfully =>", response);
       this.user = response;
+      console.log(this.user);
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -1973,6 +1983,22 @@ var SettingsComponent = class extends s3 {
 														@submit=${this.updateUserInfo}
 														class="row gy-3 gy-xxl-4"
 													>
+														<div
+															class="col-12 col-md-6"
+														>
+															<label
+																for="inputFirstName"
+																class="form-label"
+																>Username</label
+															>
+															<input
+																type="text"
+																class="form-control"
+																id="inputFirstName"
+																name="first_Name"
+																value="${user.first_name}"
+															/>
+														</div>
 														<div
 															class="col-12 col-md-6"
 														>
