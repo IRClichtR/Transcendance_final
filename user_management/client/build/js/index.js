@@ -1921,6 +1921,7 @@ var SettingsComponent = class extends s3 {
       this.user = response;
       console.log("this.user::::: ", this.user);
     } catch (error) {
+      alert("Please provide a valid email.", error);
       console.error("Error updating user:", error);
     }
   };

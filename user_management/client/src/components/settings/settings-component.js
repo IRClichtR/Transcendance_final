@@ -94,6 +94,7 @@ export class SettingsComponent extends LitElement {
 			this.user = response;
 			console.log('this.user::::: ', this.user);
 		} catch (error) {
+			alert('Please provide a valid email.', error);
 			console.error('Error updating user:', error);
 		}
 	};
