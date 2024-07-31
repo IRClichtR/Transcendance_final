@@ -746,11 +746,14 @@ var getMe = (options = {}) => {
 };
 var updateUser = async (user) => {
   try {
+    console.log("New user info: ", user);
     const response = await ky.put("/user/update", {
       json: user
     }).json();
+    console.log("update user reponse: ", response);
     return response;
   } catch (error) {
+    console.log("Error details: ", error);
     throw new Error("Failed to update user");
   }
 };
@@ -1885,14 +1888,16 @@ var SettingsComponent = class extends s3 {
     const parsed = avatars ? JSON.parse(avatars) : {};
     return parsed[email] || "";
   };
-  async updateUser(event) {
+  updateUserInfo = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+    console.log("formData: ", formData);
     const updatedUser = {
-      first_name: formData.get("firstName"),
-      last_name: formData.get("lastName"),
+      first_name: formData.get("first_Name"),
+      last_name: formData.get("last_Name"),
       email: formData.get("email")
     };
+    console.log("updatedUser: ", updatedUser);
     try {
       const response = await updateUser(updatedUser);
       console.log("User updated successfully:", response);
@@ -1900,7 +1905,7 @@ var SettingsComponent = class extends s3 {
     } catch (error) {
       console.error("Error updating user:", error);
     }
-  }
+  };
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading settings...</p>`,
@@ -1965,7 +1970,7 @@ var SettingsComponent = class extends s3 {
 														Settings
 													</h5>
 													<form
-														@submit=${this.updateUser}
+														@submit=${this.updateUserInfo}
 														class="row gy-3 gy-xxl-4"
 													>
 														<div
@@ -1981,7 +1986,7 @@ var SettingsComponent = class extends s3 {
 																type="text"
 																class="form-control"
 																id="inputFirstName"
-																name="firstName"
+																name="first_Name"
 																value="${user.first_name}"
 															/>
 														</div>
@@ -1998,7 +2003,7 @@ var SettingsComponent = class extends s3 {
 																type="text"
 																class="form-control"
 																id="inputLastName"
-																name="lastName"
+																name="last_Name"
 																value="${user.last_name}"
 															/>
 														</div>
