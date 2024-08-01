@@ -8,16 +8,23 @@ export class SettingsComponent extends LitElement {
 		user: {},
 		link: { type: String },
 		profilePicture: { type: String },
+		previewSrc: { type: String },
 	};
 
 	_userTask = new Task(this, {
 		task: async ([user], { signal }) => {
 			const response = await getMe({ signal });
-			console.log('Ky got user:', response);
+
 			if (response.image?.link) {
 				this.link = response.image.link;
+				console.log('response.image.link: ', this.link);
+				return response;
+			} else if (response?.profile_picture) {
+				this.link = 'http://localhost:8000' + response.profile_picture;
+				console.log('response.profile_picture: ', this.link);
 				return response;
 			}
+
 			const storedAvatar = await this.getStoredAvatarSrc(response.email);
 			if (storedAvatar) {
 				this.link = storedAvatar;
@@ -26,6 +33,7 @@ export class SettingsComponent extends LitElement {
 				this.storeAvatarSrc(response.email, random);
 				this.link = random;
 			}
+
 			return response;
 		},
 		args: () => [this.user],
@@ -73,7 +81,7 @@ export class SettingsComponent extends LitElement {
 			);
 		}
 		const storedProfilePicture = await getProfilePic();
-		if (storedProfilePicture) return storedProfilePicture;
+		if (storedProfilePicture) localStorage.setItem(storedProfilePicture);
 		const avatars = localStorage.getItem('avatars');
 		const parsed = avatars ? JSON.parse(avatars) : {};
 		return parsed[email] || '';
@@ -82,23 +90,18 @@ export class SettingsComponent extends LitElement {
 	updateUserInfo = async (event) => {
 		event.preventDefault();
 		const formData = new FormData(event.target);
-		console.log('formData => ', [...formData.entries()]);
-
 		try {
 			const response = await updateUser(formData);
-			console.log('User updated successfully =>', response);
-			// Optionally, update the user property to reflect changes
-			this.user = response;
-			console.log('this.user::::: ', this.user);
+			this.user = response.json;
+			return this.user;
 		} catch (error) {
-			alert('Please provide a valid email.', error);
+			// alert('Please provide a valid email.', error);
 			console.error('Error updating user:', error);
 		}
 	};
 
 	previewPhoto = (event) => {
 		const input = event.target;
-		console.log('input =====> ', input);
 		const file = input.files;
 		if (file) {
 			const fileReader = new FileReader();

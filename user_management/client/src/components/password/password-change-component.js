@@ -11,11 +11,17 @@ export class PasswordChangeComponent extends LitElement {
 	_userTask = new Task(this, {
 		task: async ([user], { signal }) => {
 			const response = await getMe({ signal });
-			console.log('Ky got user:', response);
+
 			if (response.image?.link) {
 				this.link = response.image.link;
+				console.log('response.image.link: ', this.link);
+				return response;
+			} else if (response?.profile_picture) {
+				this.link = 'http://localhost:8000' + response.profile_picture;
+				console.log('response.profile_picture: ', this.link);
 				return response;
 			}
+
 			const storedAvatar = this.getStoredAvatarSrc(response.email);
 			if (storedAvatar) {
 				this.link = storedAvatar;
