@@ -760,7 +760,6 @@ var updateUser = async (user) => {
     const response = await rest.patch("/user/update/", {
       body: user
     }).json();
-    console.log("updateUser.response: ", response);
     return response;
   } catch (error) {
     if (error.response) {
@@ -778,7 +777,6 @@ var updateUser = async (user) => {
 var getProfilePic = async (user) => {
   try {
     const response = await getMe();
-    console.log("getProfilePic: ", response);
     return response;
   } catch (error) {
     console.log("error: ", error);
