@@ -16,7 +16,6 @@ urlpatterns = [
     path("", include("pages.urls")),
 	path("user/", views.user_data),
 	path("user/me", views.me_data),
-	# path("user/update/", views.update_me_data),
 	path('user/update/', UpdateUserProfileView.as_view(), name='profile-update'),
     path("admin/", admin.site.urls),
 

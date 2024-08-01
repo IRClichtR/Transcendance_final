@@ -30,16 +30,16 @@ const rest = ky.extend({
 });
 
 const getMe = (options = {}) => {
-	return rest.get('/user/me', options).json();
+	const response = rest.get('/user/me', options).json();
+	return response;
 };
 
 const updateUser = async (user) => {
-	// console.log('csrfToken ======> ', csrfToken);
 	try {
 		console.log('New user info => ', user);
 		const response = await rest
 			.patch('/user/update/', {
-				json: user,
+				body: user,
 			})
 			.json();
 		return response;
@@ -53,6 +53,16 @@ const updateUser = async (user) => {
 		} else {
 			console.log('Error message => ', error.message);
 		}
+		throw new Error('Failed to update user');
+	}
+};
+
+const getProfilePic = async (user) => {
+	try {
+		const response = await getMe();
+		return response;
+	} catch (error) {
+		console.log('error: ', error);
 		throw new Error('Failed to update user');
 	}
 };
@@ -71,4 +81,4 @@ const updatePassword = async ({ currentPassword, newPassword }) => {
 	}
 };
 
-export { rest, getMe, updateUser, updatePassword };
+export { rest, getMe, updateUser, updatePassword, getProfilePic };

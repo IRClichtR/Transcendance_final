@@ -4,16 +4,16 @@ var e = t.ShadowRoot && (void 0 === t.ShadyCSS || t.ShadyCSS.nativeShadow) && "a
 var s = Symbol();
 var o = /* @__PURE__ */ new WeakMap();
 var n = class {
-  constructor(t4, e5, o6) {
+  constructor(t4, e7, o6) {
     if (this._$cssResult$ = true, o6 !== s) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
-    this.cssText = t4, this.t = e5;
+    this.cssText = t4, this.t = e7;
   }
   get styleSheet() {
     let t4 = this.o;
     const s6 = this.t;
     if (e && void 0 === t4) {
-      const e5 = void 0 !== s6 && 1 === s6.length;
-      e5 && (t4 = o.get(s6)), void 0 === t4 && ((this.o = t4 = new CSSStyleSheet()).replaceSync(this.cssText), e5 && o.set(s6, t4));
+      const e7 = void 0 !== s6 && 1 === s6.length;
+      e7 && (t4 = o.get(s6)), void 0 === t4 && ((this.o = t4 = new CSSStyleSheet()).replaceSync(this.cssText), e7 && o.set(s6, t4));
     }
     return t4;
   }
@@ -22,8 +22,8 @@ var n = class {
   }
 };
 var r = (t4) => new n("string" == typeof t4 ? t4 : t4 + "", void 0, s);
-var i = (t4, ...e5) => {
-  const o6 = 1 === t4.length ? t4[0] : e5.reduce((e6, s6, o7) => e6 + ((t5) => {
+var i = (t4, ...e7) => {
+  const o6 = 1 === t4.length ? t4[0] : e7.reduce((e8, s6, o7) => e8 + ((t5) => {
     if (true === t5._$cssResult$) return t5.cssText;
     if ("number" == typeof t5) return t5;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + t5 + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
@@ -32,15 +32,15 @@ var i = (t4, ...e5) => {
 };
 var S = (s6, o6) => {
   if (e) s6.adoptedStyleSheets = o6.map((t4) => t4 instanceof CSSStyleSheet ? t4 : t4.styleSheet);
-  else for (const e5 of o6) {
+  else for (const e7 of o6) {
     const o7 = document.createElement("style"), n4 = t.litNonce;
-    void 0 !== n4 && o7.setAttribute("nonce", n4), o7.textContent = e5.cssText, s6.appendChild(o7);
+    void 0 !== n4 && o7.setAttribute("nonce", n4), o7.textContent = e7.cssText, s6.appendChild(o7);
   }
 };
 var c = e ? (t4) => t4 : (t4) => t4 instanceof CSSStyleSheet ? ((t5) => {
-  let e5 = "";
-  for (const s6 of t5.cssRules) e5 += s6.cssText;
-  return r(e5);
+  let e7 = "";
+  for (const s6 of t5.cssRules) e7 += s6.cssText;
+  return r(e7);
 })(t4) : t4;
 
 // node_modules/@lit/reactive-element/reactive-element.js
@@ -96,15 +96,15 @@ var b = class extends HTMLElement {
     }
   }
   static getPropertyDescriptor(t4, s6, i7) {
-    const { get: e5, set: h4 } = r2(this.prototype, t4) ?? { get() {
+    const { get: e7, set: h4 } = r2(this.prototype, t4) ?? { get() {
       return this[s6];
     }, set(t5) {
       this[s6] = t5;
     } };
     return { get() {
-      return e5?.call(this);
+      return e7?.call(this);
     }, set(s7) {
-      const r6 = e5?.call(this);
+      const r6 = e7?.call(this);
       h4.call(this, s7), this.requestUpdate(t4, r6, i7);
     }, configurable: true, enumerable: true };
   }
@@ -137,8 +137,8 @@ var b = class extends HTMLElement {
   static finalizeStyles(s6) {
     const i7 = [];
     if (Array.isArray(s6)) {
-      const e5 = new Set(s6.flat(1 / 0).reverse());
-      for (const s7 of e5) i7.unshift(c(s7));
+      const e7 = new Set(s6.flat(1 / 0).reverse());
+      for (const s7 of e7) i7.unshift(c(s7));
     } else void 0 !== s6 && i7.push(c(s6));
     return i7;
   }
@@ -179,17 +179,17 @@ var b = class extends HTMLElement {
     this._$AK(t4, i7);
   }
   _$EC(t4, s6) {
-    const i7 = this.constructor.elementProperties.get(t4), e5 = this.constructor._$Eu(t4, i7);
-    if (void 0 !== e5 && true === i7.reflect) {
+    const i7 = this.constructor.elementProperties.get(t4), e7 = this.constructor._$Eu(t4, i7);
+    if (void 0 !== e7 && true === i7.reflect) {
       const r6 = (void 0 !== i7.converter?.toAttribute ? i7.converter : u).toAttribute(s6, i7.type);
-      this._$Em = t4, null == r6 ? this.removeAttribute(e5) : this.setAttribute(e5, r6), this._$Em = null;
+      this._$Em = t4, null == r6 ? this.removeAttribute(e7) : this.setAttribute(e7, r6), this._$Em = null;
     }
   }
   _$AK(t4, s6) {
-    const i7 = this.constructor, e5 = i7._$Eh.get(t4);
-    if (void 0 !== e5 && this._$Em !== e5) {
-      const t5 = i7.getPropertyOptions(e5), r6 = "function" == typeof t5.converter ? { fromAttribute: t5.converter } : void 0 !== t5.converter?.fromAttribute ? t5.converter : u;
-      this._$Em = e5, this[e5] = r6.fromAttribute(s6, t5.type), this._$Em = null;
+    const i7 = this.constructor, e7 = i7._$Eh.get(t4);
+    if (void 0 !== e7 && this._$Em !== e7) {
+      const t5 = i7.getPropertyOptions(e7), r6 = "function" == typeof t5.converter ? { fromAttribute: t5.converter } : void 0 !== t5.converter?.fromAttribute ? t5.converter : u;
+      this._$Em = e7, this[e7] = r6.fromAttribute(s6, t5.type), this._$Em = null;
     }
   }
   requestUpdate(t4, s6, i7) {
@@ -319,8 +319,8 @@ var V = class _V {
     for (; null !== (r6 = E.nextNode()) && d3.length < u3; ) {
       if (1 === r6.nodeType) {
         if (r6.hasAttributes()) for (const t5 of r6.getAttributeNames()) if (t5.endsWith(e3)) {
-          const i7 = v2[a3++], s7 = r6.getAttribute(t5).split(h2), e5 = /([.?@])?(.*)/.exec(i7);
-          d3.push({ type: 1, index: c4, name: e5[2], strings: s7, ctor: "." === e5[1] ? k : "?" === e5[1] ? H : "@" === e5[1] ? I : R }), r6.removeAttribute(t5);
+          const i7 = v2[a3++], s7 = r6.getAttribute(t5).split(h2), e7 = /([.?@])?(.*)/.exec(i7);
+          d3.push({ type: 1, index: c4, name: e7[2], strings: s7, ctor: "." === e7[1] ? k : "?" === e7[1] ? H : "@" === e7[1] ? I : R }), r6.removeAttribute(t5);
         } else t5.startsWith(h2) && (d3.push({ type: 6, index: c4 }), r6.removeAttribute(t5));
         if ($.test(r6.tagName)) {
           const t5 = r6.textContent.split(h2), s7 = t5.length - 1;
@@ -343,11 +343,11 @@ var V = class _V {
     return s6.innerHTML = t4, s6;
   }
 };
-function N(t4, i7, s6 = t4, e5) {
+function N(t4, i7, s6 = t4, e7) {
   if (i7 === w) return i7;
-  let h4 = void 0 !== e5 ? s6._$Co?.[e5] : s6._$Cl;
+  let h4 = void 0 !== e7 ? s6._$Co?.[e7] : s6._$Cl;
   const o6 = c3(i7) ? void 0 : i7._$litDirective$;
-  return h4?.constructor !== o6 && (h4?._$AO?.(false), void 0 === o6 ? h4 = void 0 : (h4 = new o6(t4), h4._$AT(t4, s6, e5)), void 0 !== e5 ? (s6._$Co ??= [])[e5] = h4 : s6._$Cl = h4), void 0 !== h4 && (i7 = N(t4, h4._$AS(t4, i7.values), h4, e5)), i7;
+  return h4?.constructor !== o6 && (h4?._$AO?.(false), void 0 === o6 ? h4 = void 0 : (h4 = new o6(t4), h4._$AT(t4, s6, e7)), void 0 !== e7 ? (s6._$Co ??= [])[e7] = h4 : s6._$Cl = h4), void 0 !== h4 && (i7 = N(t4, h4._$AS(t4, i7.values), h4, e7)), i7;
 }
 var S2 = class {
   constructor(t4, i7) {
@@ -360,8 +360,8 @@ var S2 = class {
     return this._$AM._$AU;
   }
   u(t4) {
-    const { el: { content: i7 }, parts: s6 } = this._$AD, e5 = (t4?.creationScope ?? r3).importNode(i7, true);
-    E.currentNode = e5;
+    const { el: { content: i7 }, parts: s6 } = this._$AD, e7 = (t4?.creationScope ?? r3).importNode(i7, true);
+    E.currentNode = e7;
     let h4 = E.nextNode(), o6 = 0, n4 = 0, l3 = s6[0];
     for (; void 0 !== l3; ) {
       if (o6 === l3.index) {
@@ -370,7 +370,7 @@ var S2 = class {
       }
       o6 !== l3?.index && (h4 = E.nextNode(), o6++);
     }
-    return E.currentNode = r3, e5;
+    return E.currentNode = r3, e7;
   }
   p(t4) {
     let i7 = 0;
@@ -381,8 +381,8 @@ var M = class _M {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
-  constructor(t4, i7, s6, e5) {
-    this.type = 2, this._$AH = T, this._$AN = void 0, this._$AA = t4, this._$AB = i7, this._$AM = s6, this.options = e5, this._$Cv = e5?.isConnected ?? true;
+  constructor(t4, i7, s6, e7) {
+    this.type = 2, this._$AH = T, this._$AN = void 0, this._$AA = t4, this._$AB = i7, this._$AM = s6, this.options = e7, this._$Cv = e7?.isConnected ?? true;
   }
   get parentNode() {
     let t4 = this._$AA.parentNode;
@@ -408,10 +408,10 @@ var M = class _M {
     this._$AH !== T && c3(this._$AH) ? this._$AA.nextSibling.data = t4 : this.T(r3.createTextNode(t4)), this._$AH = t4;
   }
   $(t4) {
-    const { values: i7, _$litType$: s6 } = t4, e5 = "number" == typeof s6 ? this._$AC(t4) : (void 0 === s6.el && (s6.el = V.createElement(C(s6.h, s6.h[0]), this.options)), s6);
-    if (this._$AH?._$AD === e5) this._$AH.p(i7);
+    const { values: i7, _$litType$: s6 } = t4, e7 = "number" == typeof s6 ? this._$AC(t4) : (void 0 === s6.el && (s6.el = V.createElement(C(s6.h, s6.h[0]), this.options)), s6);
+    if (this._$AH?._$AD === e7) this._$AH.p(i7);
     else {
-      const t5 = new S2(e5, this), s7 = t5.u(this.options);
+      const t5 = new S2(e7, this), s7 = t5.u(this.options);
       t5.p(i7), this.T(s7), this._$AH = t5;
     }
   }
@@ -422,9 +422,9 @@ var M = class _M {
   k(t4) {
     a2(this._$AH) || (this._$AH = [], this._$AR());
     const i7 = this._$AH;
-    let s6, e5 = 0;
-    for (const h4 of t4) e5 === i7.length ? i7.push(s6 = new _M(this.S(l2()), this.S(l2()), this, this.options)) : s6 = i7[e5], s6._$AI(h4), e5++;
-    e5 < i7.length && (this._$AR(s6 && s6._$AB.nextSibling, e5), i7.length = e5);
+    let s6, e7 = 0;
+    for (const h4 of t4) e7 === i7.length ? i7.push(s6 = new _M(this.S(l2()), this.S(l2()), this, this.options)) : s6 = i7[e7], s6._$AI(h4), e7++;
+    e7 < i7.length && (this._$AR(s6 && s6._$AB.nextSibling, e7), i7.length = e7);
   }
   _$AR(t4 = this._$AA.nextSibling, i7) {
     for (this._$AP?.(false, true, i7); t4 && t4 !== this._$AB; ) {
@@ -443,19 +443,19 @@ var R = class {
   get _$AU() {
     return this._$AM._$AU;
   }
-  constructor(t4, i7, s6, e5, h4) {
-    this.type = 1, this._$AH = T, this._$AN = void 0, this.element = t4, this.name = i7, this._$AM = e5, this.options = h4, s6.length > 2 || "" !== s6[0] || "" !== s6[1] ? (this._$AH = Array(s6.length - 1).fill(new String()), this.strings = s6) : this._$AH = T;
+  constructor(t4, i7, s6, e7, h4) {
+    this.type = 1, this._$AH = T, this._$AN = void 0, this.element = t4, this.name = i7, this._$AM = e7, this.options = h4, s6.length > 2 || "" !== s6[0] || "" !== s6[1] ? (this._$AH = Array(s6.length - 1).fill(new String()), this.strings = s6) : this._$AH = T;
   }
-  _$AI(t4, i7 = this, s6, e5) {
+  _$AI(t4, i7 = this, s6, e7) {
     const h4 = this.strings;
     let o6 = false;
     if (void 0 === h4) t4 = N(this, t4, i7, 0), o6 = !c3(t4) || t4 !== this._$AH && t4 !== w, o6 && (this._$AH = t4);
     else {
-      const e6 = t4;
+      const e8 = t4;
       let n4, r6;
-      for (t4 = h4[0], n4 = 0; n4 < h4.length - 1; n4++) r6 = N(this, e6[s6 + n4], i7, n4), r6 === w && (r6 = this._$AH[n4]), o6 ||= !c3(r6) || r6 !== this._$AH[n4], r6 === T ? t4 = T : t4 !== T && (t4 += (r6 ?? "") + h4[n4 + 1]), this._$AH[n4] = r6;
+      for (t4 = h4[0], n4 = 0; n4 < h4.length - 1; n4++) r6 = N(this, e8[s6 + n4], i7, n4), r6 === w && (r6 = this._$AH[n4]), o6 ||= !c3(r6) || r6 !== this._$AH[n4], r6 === T ? t4 = T : t4 !== T && (t4 += (r6 ?? "") + h4[n4 + 1]), this._$AH[n4] = r6;
     }
-    o6 && !e5 && this.j(t4);
+    o6 && !e7 && this.j(t4);
   }
   j(t4) {
     t4 === T ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t4 ?? "");
@@ -478,13 +478,13 @@ var H = class extends R {
   }
 };
 var I = class extends R {
-  constructor(t4, i7, s6, e5, h4) {
-    super(t4, i7, s6, e5, h4), this.type = 5;
+  constructor(t4, i7, s6, e7, h4) {
+    super(t4, i7, s6, e7, h4), this.type = 5;
   }
   _$AI(t4, i7 = this) {
     if ((t4 = N(this, t4, i7, 0) ?? T) === w) return;
-    const s6 = this._$AH, e5 = t4 === T && s6 !== T || t4.capture !== s6.capture || t4.once !== s6.once || t4.passive !== s6.passive, h4 = t4 !== T && (s6 === T || e5);
-    e5 && this.element.removeEventListener(this.name, this, s6), h4 && this.element.addEventListener(this.name, this, t4), this._$AH = t4;
+    const s6 = this._$AH, e7 = t4 === T && s6 !== T || t4.capture !== s6.capture || t4.once !== s6.once || t4.passive !== s6.passive, h4 = t4 !== T && (s6 === T || e7);
+    e7 && this.element.removeEventListener(this.name, this, s6), h4 && this.element.addEventListener(this.name, this, t4), this._$AH = t4;
   }
   handleEvent(t4) {
     "function" == typeof this._$AH ? this._$AH.call(this.options?.host ?? this.element, t4) : this._$AH.handleEvent(t4);
@@ -504,11 +504,11 @@ var L = class {
 var Z = t2.litHtmlPolyfillSupport;
 Z?.(V, M), (t2.litHtmlVersions ??= []).push("3.1.4");
 var j = (t4, i7, s6) => {
-  const e5 = s6?.renderBefore ?? i7;
-  let h4 = e5._$litPart$;
+  const e7 = s6?.renderBefore ?? i7;
+  let h4 = e7._$litPart$;
   if (void 0 === h4) {
     const t5 = s6?.renderBefore ?? null;
-    e5._$litPart$ = h4 = new M(i7.insertBefore(l2(), t5), t5, void 0, s6 ?? {});
+    e7._$litPart$ = h4 = new M(i7.insertBefore(l2(), t5), t5, void 0, s6 ?? {});
   }
   return h4._$AI(t4), h4;
 };
@@ -569,11 +569,11 @@ var i4 = class {
     let i7;
     if (0 === this.routes.length && void 0 === this.fallback) i7 = t4, this.u = "", this.t = { 0: i7 };
     else {
-      const e5 = this.p(t4);
-      if (void 0 === e5) throw Error("No route found for " + t4);
-      const h4 = s4(e5).exec({ pathname: t4 }), n4 = h4?.pathname.groups ?? {};
-      if (i7 = o4(n4), "function" == typeof e5.enter && false === await e5.enter(n4)) return;
-      this.v = e5, this.t = n4, this.u = void 0 === i7 ? t4 : t4.substring(0, t4.length - i7.length);
+      const e7 = this.p(t4);
+      if (void 0 === e7) throw Error("No route found for " + t4);
+      const h4 = s4(e7).exec({ pathname: t4 }), n4 = h4?.pathname.groups ?? {};
+      if (i7 = o4(n4), "function" == typeof e7.enter && false === await e7.enter(n4)) return;
+      this.v = e7, this.t = n4, this.u = void 0 === i7 ? t4 : t4.substring(0, t4.length - i7.length);
     }
     if (void 0 !== i7) for (const t5 of this.o) t5.goto(i7);
     this.l.requestUpdate();
@@ -620,8 +620,8 @@ var i5 = class extends i4 {
       if (void 0 === s6 || "" !== s6.target || s6.hasAttribute("download") || "external" === s6.getAttribute("rel")) return;
       const n4 = s6.href;
       if ("" === n4 || n4.startsWith("mailto:")) return;
-      const e5 = window.location;
-      s6.origin === o5 && (t4.preventDefault(), n4 !== e5.href && (window.history.pushState({}, "", n4), this.goto(s6.pathname)));
+      const e7 = window.location;
+      s6.origin === o5 && (t4.preventDefault(), n4 !== e7.href && (window.history.pushState({}, "", n4), this.goto(s6.pathname)));
     }, this.R = (t4) => {
       this.goto(window.location.pathname);
     };
@@ -668,16 +668,16 @@ var h3 = class {
     t4 ??= this.T(), this.O = t4, 1 === this.i ? this.q?.abort() : (this.t = void 0, this.o = void 0, this.h = void 0), this.i = 1, "afterUpdate" === this.autoRun ? queueMicrotask(() => this._.requestUpdate()) : this._.requestUpdate();
     const r6 = ++this.p;
     this.q = new AbortController();
-    let e5 = false;
+    let e7 = false;
     try {
       s6 = await this.v(t4, { signal: this.q.signal });
     } catch (t5) {
-      e5 = true, h4 = t5;
+      e7 = true, h4 = t5;
     }
     if (this.p === r6) {
       if (s6 === i6) this.i = 0;
       else {
-        if (false === e5) {
+        if (false === e7) {
           try {
             this.k?.(s6);
           } catch {
@@ -757,7 +757,7 @@ var updateUser = async (user) => {
   try {
     console.log("New user info => ", user);
     const response = await rest.patch("/user/update/", {
-      json: user
+      body: user
     }).json();
     return response;
   } catch (error) {
@@ -770,6 +770,15 @@ var updateUser = async (user) => {
     } else {
       console.log("Error message => ", error.message);
     }
+    throw new Error("Failed to update user");
+  }
+};
+var getProfilePic = async (user) => {
+  try {
+    const response = await getMe();
+    console.log("getProfilePic: ", response);
+  } catch (error) {
+    console.log("error: ", error);
     throw new Error("Failed to update user");
   }
 };
@@ -1808,7 +1817,7 @@ var DashboardComponent = class extends s3 {
 					</section>
 				</div>
 			`,
-      error: (e5) => x`<p>Error: ${e5}</p>`
+      error: (e7) => x`<p>Error: ${e7}</p>`
     });
   }
 };
@@ -1853,7 +1862,7 @@ var SettingsComponent = class extends s3 {
         this.link = response.image.link;
         return response;
       }
-      const storedAvatar = this.getStoredAvatarSrc(response.email);
+      const storedAvatar = await this.getStoredAvatarSrc(response.email);
       if (storedAvatar) {
         this.link = storedAvatar;
       } else {
@@ -1876,6 +1885,7 @@ var SettingsComponent = class extends s3 {
     super();
     this.link = "";
     this.profilePicture = "";
+    this.previewSrc = "";
   }
   storeAvatarSrc = (email, src) => {
     if (!email || typeof email !== "string") {
@@ -1894,12 +1904,14 @@ var SettingsComponent = class extends s3 {
     const stringified = JSON.stringify(parsed);
     localStorage.setItem("avatars", stringified);
   };
-  getStoredAvatarSrc = (email) => {
+  getStoredAvatarSrc = async (email) => {
     if (!email || typeof email !== "string") {
       throw new Error(
         "Unable to store avatar without an email, got: " + email
       );
     }
+    const storedProfilePicture = await getProfilePic();
+    if (storedProfilePicture) return storedProfilePicture;
     const avatars = localStorage.getItem("avatars");
     const parsed = avatars ? JSON.parse(avatars) : {};
     return parsed[email] || "";
@@ -1907,21 +1919,28 @@ var SettingsComponent = class extends s3 {
   updateUserInfo = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    console.log("formData => ", formData);
-    const updatedUser = {
-      username: formData.get("username"),
-      first_name: formData.get("first_Name"),
-      last_name: formData.get("last_Name"),
-      email: formData.get("email")
-    };
-    console.log("updatedUser => ", updatedUser);
+    console.log("formData => ", [...formData.entries()]);
     try {
-      const response = await updateUser(updatedUser);
+      const response = await updateUser(formData);
       console.log("User updated successfully =>", response);
       this.user = response;
       console.log("this.user::::: ", this.user);
     } catch (error) {
+      alert("Please provide a valid email.", error);
       console.error("Error updating user:", error);
+    }
+  };
+  previewPhoto = (event) => {
+    const input = event.target;
+    console.log("input =====> ", input);
+    const file = input.files;
+    if (file) {
+      const fileReader = new FileReader();
+      const preview = this.shadowRoot.getElementById("selectedImage");
+      fileReader.onload = (event2) => {
+        preview.setAttribute("src", event2.target.result);
+      };
+      fileReader.readAsDataURL(file[0]);
     }
   };
   render() {
@@ -1987,56 +2006,59 @@ var SettingsComponent = class extends s3 {
 													>
 														Settings
 													</h5>
-													<div class="col-12">
-														<div
-															class="row gy-2 pt-4"
-														>
-															<label
-																class="col-12 form-label m-0"
-																>Profile
-																Image</label
+													<form
+														@submit=${this.updateUserInfo}
+														class="row gy-3 gy-xxl-4"
+													>
+														<div class="col-12">
+															<div
+																class="row gy-2 pt-4"
 															>
-															<div class="col-12">
-																<div>
-																	<div
-																		class=" d-flex "
-																	>
-																		<img
-																			id="selectedImage"
-																			src="${this.link ? this.link : "https://bootdey.com/img/Content/avatar/avatar1.png"}"
-																			alt="example placeholder"
-																			style="width: 300px;"
-																		/>
-																	</div>
-																	<div
-																		class="d-flex"
-																	>
+																<label
+																	class="col-12 form-label m-0"
+																	>Profile
+																	Image</label
+																>
+																<div
+																	class="col-12"
+																>
+																	<div>
 																		<div
-																			data-mdb-ripple-init
-																			class=""
+																			class=" d-flex "
 																		>
-																			<label
-																				class="badge bg-dark form-label text-white mb-4"
-																				for="customFile1"
-																				>Upload
-																				file</label
-																			>
-																			<input
-																				type="file"
-																				class="form-control d-none"
-																				id="customFile1"
-																				onchange="displaySelectedImage(event, 'selectedImage')"
+																			<img
+																				id="selectedImage"
+																				src=${this.link ? this.link : "https://bootdey.com/img/Content/avatar/avatar1.png"}
+																				alt="example placeholder"
+																				style="width: 300px;"
 																			/>
+																		</div>
+																		<div
+																			class="d-flex"
+																		>
+																			<div
+																				data-mdb-ripple-init
+																				class=""
+																			>
+																				<label
+																					class="badge bg-dark form-label text-white mb-4"
+																					for="customFile1"
+																					>Upload
+																					file</label
+																				>
+																				<input
+																					name="profile_picture"
+																					type="file"
+																					class="form-control d-none"
+																					id="customFile1"
+																					@change=${this.previewPhoto}
+																				/>
+																			</div>
 																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
-													</div>
-													<form
-														@submit=${this.updateUserInfo}
-														class="row gy-3 gy-xxl-4"
-													>
 														<div
 															class="col-12 col-md-6"
 														>
@@ -2138,7 +2160,7 @@ var SettingsComponent = class extends s3 {
 					</section>
 				</div>
 			`,
-      error: (e5) => x`<p>Error: ${e5}</p>`
+      error: (e7) => x`<p>Error: ${e7}</p>`
     });
   }
 };
@@ -2394,7 +2416,7 @@ var FreindsComponent = class extends s3 {
 					</section>
 				</div>
 			`,
-      error: (e5) => x`<p>Error: ${e5}</p>`
+      error: (e7) => x`<p>Error: ${e7}</p>`
     });
   }
 };
@@ -2614,7 +2636,7 @@ var PasswordChangeComponent = class extends s3 {
 					</section>
 				</div>
 			`,
-      error: (e5) => x`<p>Error: ${e5}</p>`
+      error: (e7) => x`<p>Error: ${e7}</p>`
     });
   }
 };
@@ -2940,6 +2962,20 @@ lit-html/is-server.js:
    *)
 
 @lit/task/task.js:
+  (**
+   * @license
+   * Copyright 2017 Google LLC
+   * SPDX-License-Identifier: BSD-3-Clause
+   *)
+
+@lit/reactive-element/decorators/base.js:
+  (**
+   * @license
+   * Copyright 2017 Google LLC
+   * SPDX-License-Identifier: BSD-3-Clause
+   *)
+
+@lit/reactive-element/decorators/query.js:
   (**
    * @license
    * Copyright 2017 Google LLC
