@@ -41,24 +41,6 @@ services:
     container_name: redis
     networks:
       - transcendance
-
-  # game:
-  #   container_name: game
-  #   build:
-  #     context: ./pong
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./pong:/app
-  #   entrypoint: ["/bin/sh", "-c", "chmod +x /app/entrypoint.sh && /app/entrypoint.sh"]
-  #   expose:
-  #     - "8002"
-  #   env_file:
-  #     - .env
-  #     - .pythpong.env
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     - transcendance
   
   db:
     image: postgres:16
@@ -72,17 +54,17 @@ services:
     networks:
       - transcendance
 
-  modsecurity-nginx:
-    container_name: nginx_server
-    build: ./modsecurity-nginx
-    # volumes:
-    #   - static_volume:/home/app/web/staticfiles
-    ports:
-      - 8443:443
-    # depends_on:
-    #   - server
-    networks:
-      - transcendance
+  # modsecurity-nginx:
+  #   container_name: nginx_server
+  #   build: ./modsecurity-nginx
+  #   # volumes:
+  #   #   - static_volume:/home/app/web/staticfiles
+  #   ports:
+  #     - 8443:443
+  #   # depends_on:
+  #   #   - server
+  #   networks:
+  #     - transcendance
   
   # vault:
   #   image: hashicorp/vault:1.17.1

@@ -1,5 +1,12 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, include
+from rest_framework.routers import DefaultRouter
 from .views import *
+
+# create a router and register viewsets in it
+router = DefaultRouter()
+router.register(r'games', GameViewset, basename='game')
+router.register(r'waitingrooms', WaitingRoomViewset, basename='waitingroom')
+
 
 urlpatterns = [
     path('pong/', index, name='index'),
@@ -14,4 +21,6 @@ urlpatterns = [
     path('pong/debug/settings/', debug_settings, name='debug-settings'),
     re_path(r'^pong/api/games/(?P<player_name>.+)/$', GameViewset.as_view({'get': 'list'})),
     re_path(r'^pong/api/waiting-room/$', WaitingRoomViewset.as_view({'get': 'list'})),
+    # include router-generated URL patterns
+    path('pong/api/', include(router.urls)),
 ]
