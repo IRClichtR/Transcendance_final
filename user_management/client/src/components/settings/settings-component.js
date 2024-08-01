@@ -93,6 +93,7 @@ export class SettingsComponent extends LitElement {
 		try {
 			const response = await updateUser(formData);
 			this.user = response.json;
+			location.reload();
 			return this.user;
 		} catch (error) {
 			// alert('Please provide a valid email.', error);
