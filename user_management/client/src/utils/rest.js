@@ -30,11 +30,11 @@ const rest = ky.extend({
 });
 
 const getMe = (options = {}) => {
-	return rest.get('/user/me', options).json();
+	const response = rest.get('/user/me', options).json();
+	return response;
 };
 
 const updateUser = async (user) => {
-	// console.log('csrfToken ======> ', csrfToken);
 	try {
 		console.log('New user info => ', user);
 		const response = await rest
@@ -60,7 +60,7 @@ const updateUser = async (user) => {
 const getProfilePic = async (user) => {
 	try {
 		const response = await getMe();
-		console.log('getProfilePic: ', response);
+		return response;
 	} catch (error) {
 		console.log('error: ', error);
 		throw new Error('Failed to update user');
