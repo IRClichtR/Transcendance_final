@@ -25,10 +25,9 @@ class AppUserManager(BaseUserManager):
         user.save()
         return user
 
-
 class AppUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=50, unique=True)
-    username = models.CharField(max_length=50, blank=False)
+    username = models.CharField(max_length=50, blank=False, unique=False)
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     is_active = models.BooleanField(default=True)
