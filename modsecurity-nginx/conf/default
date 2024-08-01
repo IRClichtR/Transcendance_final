@@ -58,5 +58,8 @@ server {
 
 	location /static/ {
         alias /app/staticfiles/;
+        types {
+            application/javascript js;
+        }
     }
 }
