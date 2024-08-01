@@ -81,7 +81,6 @@ export class SettingsComponent extends LitElement {
 			);
 		}
 		const storedProfilePicture = await getProfilePic();
-		if (storedProfilePicture) localStorage.setItem(storedProfilePicture);
 		const avatars = localStorage.getItem('avatars');
 		const parsed = avatars ? JSON.parse(avatars) : {};
 		return parsed[email] || '';
@@ -96,7 +95,6 @@ export class SettingsComponent extends LitElement {
 			location.reload();
 			return this.user;
 		} catch (error) {
-			// alert('Please provide a valid email.', error);
 			console.error('Error updating user:', error);
 		}
 	};
