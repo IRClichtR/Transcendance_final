@@ -1932,6 +1932,7 @@ var SettingsComponent = class extends s3 {
     try {
       const response = await updateUser(formData);
       this.user = response.json;
+      location.reload();
       return this.user;
     } catch (error) {
       console.error("Error updating user:", error);
