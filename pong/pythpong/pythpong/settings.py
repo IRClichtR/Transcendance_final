@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [f'https://{HOST_IP}:8443',]
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
