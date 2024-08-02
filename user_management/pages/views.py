@@ -96,7 +96,7 @@ def login(request):
                 "client_id": "u-s4t2ud-e6514ae93c2f3f3c25c6c98db2627ae8b9c70362848bea099f4e972c73370ec3",
                 "client_secret": "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",
                 "code": code,
-                "redirect_uri": "http://localhost:8000/login"
+                "redirect_uri": "https://localhost:8443/login"
             }
 
             response = requests.post(url_token, headers=headers, data=data)

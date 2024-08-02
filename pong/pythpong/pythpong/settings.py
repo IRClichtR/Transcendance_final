@@ -29,12 +29,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = config('SECRET_KEY_PONG')
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG")
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [f'https://{HOST_IP}:8443',]
+
 
 
 # Application definition
@@ -172,7 +173,7 @@ STATIC_URL = 'pong/static/'
 
 #seek static here (and BASE_DIR)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles/game'),
+    os.path.join(BASE_DIR, 'game/static'),
 ]
 
 # Default primary key field type

@@ -1,21 +1,20 @@
 services:
 
-#   server:
-#     container_name: backend_server
-#     build:
-#       context: ./backend
-#       dockerfile: Dockerfile
-#     volumes:
-#       - ./backend/backend_server:/app/backend_server
-#     expose:
-#       - "8001"
-#     env_file:
-#       - .env
-#     depends_on:
-#       - db
-#  #     - redis
-#     networks:
-#       - transcendance
+  web:
+    container_name: web
+    build:
+      context: ./user_management
+      dockerfile: Dockerfile
+    volumes:
+      - ./user_management:/app
+    env_file:
+      - .env
+    expose:
+      - "8001"
+    depends_on:
+      - db
+    networks:
+      - transcendance
 
   game:
     container_name: game
@@ -34,14 +33,14 @@ services:
     networks:
       - transcendance
 
-  redis:
-    image: redis
-    ports:
-      - "6381:6381"
-    container_name: redis
-    networks:
-      - transcendance
-  
+  # redis:
+  #   image: redis
+  #   ports:
+  #     - "6381:6381"
+  #   container_name: redis
+  #   networks:
+  #     - transcendance
+
   db:
     image: postgres:16
     container_name: db
@@ -50,22 +49,21 @@ services:
       # - ./pong/pythpong:/app/pythpong
     env_file:
       - .env
-    #port:
     networks:
       - transcendance
 
-  # modsecurity-nginx:
-  #   container_name: nginx_server
-  #   build: ./modsecurity-nginx
-  #   # volumes:
-  #   #   - static_volume:/home/app/web/staticfiles
-  #   ports:
-  #     - 8443:443
-  #   # depends_on:
-  #   #   - server
-  #   networks:
-  #     - transcendance
-  
+  modsecurity-nginx:
+    container_name: nginx_server
+    build: ./modsecurity-nginx
+    # volumes:
+    #   - static_volume:/home/app/web/staticfiles
+    ports:
+      - 8443:443
+    depends_on:
+      - web
+    networks:
+      - transcendance
+
   # vault:
   #   image: hashicorp/vault:1.17.1
   #   container_name: vault
