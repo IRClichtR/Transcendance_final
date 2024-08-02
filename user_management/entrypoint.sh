@@ -8,7 +8,7 @@ while ! pg_isready -h $SQL_HOST -p $SQL_PORT -U $SQL_USER > /dev/null 2>&1; do
 done
 
 echo "PostgreSQL started"
-python manage.py makemigrations
+python manage.py makemigrations pages
 python manage.py migrate
 python manage.py collectstatic --noinput
 
