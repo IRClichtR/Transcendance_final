@@ -144,7 +144,7 @@ STATIC_URL = 'pong/static/'
 
 #seek static here (and BASE_DIR)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles/game'),
+    os.path.join(BASE_DIR, 'game/static'),
 ]
 
 # Default primary key field type
