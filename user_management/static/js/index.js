@@ -1921,7 +1921,6 @@ var SettingsComponent = class extends s3 {
       );
     }
     const storedProfilePicture = await getProfilePic();
-    if (storedProfilePicture) localStorage.setItem(storedProfilePicture);
     const avatars = localStorage.getItem("avatars");
     const parsed = avatars ? JSON.parse(avatars) : {};
     return parsed[email] || "";
