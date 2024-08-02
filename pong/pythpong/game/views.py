@@ -9,7 +9,7 @@ from .serializers import GameSerializer, WaitingRoomSerializer
 # for debug purpose only
 from django.conf import settings
 from django.http import JsonResponse
-from rest_framework.permissions import IsAuthenticated
+# from rest_framework.permissions import IsAuthenticated
 
 def debug_settings(request):
     debug_info = {
@@ -111,7 +111,7 @@ def get_history(request, player_name):
 class GameViewset(ReadOnlyModelViewSet):
  
     serializer_class = GameSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         player_name = self.kwargs['player_name']
@@ -122,7 +122,7 @@ class GameViewset(ReadOnlyModelViewSet):
 class WaitingRoomViewset(ReadOnlyModelViewSet):
  
     serializer_class = WaitingRoomSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return WaitingRoom.objects.all()
