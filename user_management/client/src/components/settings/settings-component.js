@@ -13,28 +13,26 @@ export class SettingsComponent extends LitElement {
 
 	_userTask = new Task(this, {
 		task: async ([user], { signal }) => {
-			const response = await getMe({ signal });
+			const me = await getMe({ signal });
 
-			if (response.image?.link) {
-				this.link = response.image.link;
-				console.log('response.image.link: ', this.link);
-				return response;
-			} else if (response?.profile_picture) {
-				this.link = 'http://localhost:8000' + response.profile_picture;
-				console.log('response.profile_picture: ', this.link);
-				return response;
+			if (me.image?.link) {
+				this.link = me.image.link;
+				return me;
+			} else if (me.profile_picture) {
+				this.link = me.profile_picture;
+				return me;
 			}
 
-			const storedAvatar = await this.getStoredAvatarSrc(response.email);
+			const storedAvatar = await this.getStoredAvatarSrc(me.email);
 			if (storedAvatar) {
 				this.link = storedAvatar;
 			} else {
 				const random = this.getRandomAvatarSrc();
-				this.storeAvatarSrc(response.email, random);
+				this.storeAvatarSrc(me.email, random);
 				this.link = random;
 			}
 
-			return response;
+			return me;
 		},
 		args: () => [this.user],
 	});
@@ -91,9 +89,7 @@ export class SettingsComponent extends LitElement {
 		const formData = new FormData(event.target);
 		try {
 			const response = await updateUser(formData);
-			this.user = response.json;
 			location.reload();
-			return this.user;
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}
