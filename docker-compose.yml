@@ -52,17 +52,17 @@ services:
     networks:
       - transcendance
 
-  # modsecurity-nginx:
-  #   container_name: nginx_server
-  #   build: ./modsecurity-nginx
-  #   # volumes:
-  #   #   - static_volume:/home/app/web/staticfiles
-  #   ports:
-  #     - 8443:443
-  #   depends_on:
-  #     - web
-  #   networks:
-  #     - transcendance
+  modsecurity-nginx:
+    container_name: nginx_server
+    build: ./modsecurity-nginx
+    # volumes:
+    #   - static_volume:/home/app/web/staticfiles
+    ports:
+      - 8443:443
+    # depends_on:
+    #   - web
+    networks:
+      - transcendance
 
   # vault:
   #   image: hashicorp/vault:1.17.1

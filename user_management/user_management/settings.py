@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "pages.apps.PagesConfig",
-    "channels",
 	"user_management.rest",
     "channels",
 	"rest_framework",
