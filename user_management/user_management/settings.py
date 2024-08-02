@@ -28,6 +28,7 @@ CSRF_TRUSTED_ORIGINS = [f'https://localhost:8443',]
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "pages.apps.PagesConfig",
+    "channels",
 	"user_management.rest",
 	"rest_framework",
 ]
@@ -68,8 +70,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "user_management.wsgi.application"
+# WSGI_APPLICATION = "user_management.wsgi.application"
+ASGI_APPLICATION = "user_management.asgi.application"
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

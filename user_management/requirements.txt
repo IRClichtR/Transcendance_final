@@ -7,3 +7,4 @@ djangorestframework==3.14.0
 django-staticfiles==1.2.1
 Pillow
 requests
+channels[daphne]
