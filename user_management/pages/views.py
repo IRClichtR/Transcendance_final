@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from .models import AppUserManager, AppUser
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 def req_api42(request, token):
     headers = {'Authorization': f'Bearer {token}'}
@@ -45,6 +47,11 @@ def index(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
 
+        try:
+            validate_password(password)
+        except ValidationError as e:
+            error_message = e.messages
+            return render(request, 'pages/index.html', {'error': error_message})
         if password != confirm_password:
             return (render(request, 'pages/index.html', {'error': 'Differents passwords'}))
 
@@ -59,7 +66,8 @@ def index(request):
             user.save()
             return redirect('/login')
         except Exception as e:
-            return render(request, 'pages/index.html', {'error': 'Error while creating user. Please choose others credentials.'})
+            #return render(request, 'pages/index.html', {'error': 'Error while creating user. Please choose others credentials.'})
+            return render(request, 'pages/index.html', {'error :' + str(e) })
     return render(request, "pages/index.html")
 
 @csrf_protect
@@ -88,7 +96,7 @@ def login(request):
                 "client_id": "u-s4t2ud-e6514ae93c2f3f3c25c6c98db2627ae8b9c70362848bea099f4e972c73370ec3",
                 "client_secret": "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",
                 "code": code,
-                "redirect_uri": "http://localhost:8000/login"
+                "redirect_uri": "https://localhost:8443/login"
             }
 
             response = requests.post(url_token, headers=headers, data=data)

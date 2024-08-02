@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic import RedirectView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf import settings
 from django.conf.urls.static import static
 from game.views import GameViewset
@@ -30,5 +31,9 @@ urlpatterns = [
     path('game/', include('game.urls')),
     path('', include('game.urls')),
     path('api-auth/', include('rest_framework.urls')),
+    #simple jwt inclusion
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('api/', include('game.urls')),
 ] + static(settings.STATIC_URL, 
            document_root=settings.STATIC_ROOT)

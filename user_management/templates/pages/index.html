@@ -6,7 +6,9 @@
 				<div class="card text-black" style="border-radius: 25px">
 					{% if error %}
 					<div class="alert alert-danger" role="alert">
-						{{ error }}
+						{% for message in error %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
 					</div>
 					{% endif %} {% if connected %}
 					<div class="alert alert-info" role="alert">

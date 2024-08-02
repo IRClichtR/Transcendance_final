@@ -5,6 +5,14 @@ from django.conf import settings
 
 load_dotenv()
 
+HOST_IP = os.environ.get('HOST_IP')
+ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = [f'https://{HOST_IP}:8443',]
+CSRF_COOKIE_SECURE = True  
+SESSION_COOKIE_SECURE = True  
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,16 +24,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
+#ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/app/'
 
+
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -34,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "pages.apps.PagesConfig",
 	"user_management.rest",
+    "channels",
 	"rest_framework",
 ]
 
@@ -66,8 +77,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "user_management.wsgi.application"
+# WSGI_APPLICATION = "user_management.wsgi.application"
+ASGI_APPLICATION = "user_management.asgi.application"
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -130,9 +147,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_URL = "static/"
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "user_management/static"), os.path.join(BASE_DIR, "client/build")]
+
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "user_management/static"), os.path.join(BASE_DIR, "client/build")]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "user_management/static"),
+    os.path.join(BASE_DIR, "client"),
+]
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
