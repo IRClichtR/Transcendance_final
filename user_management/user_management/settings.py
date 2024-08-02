@@ -5,6 +5,8 @@ from django.conf import settings
 
 load_dotenv()
 
+HOST_IP = os.environ.get('HOST_IP')
+CSRF_TRUSTED_ORIGINS = [f'https://{HOST_IP}:8443',]
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     "pages.apps.PagesConfig",
     "channels",
 	"user_management.rest",
+    "channels",
 	"rest_framework",
 ]
 
