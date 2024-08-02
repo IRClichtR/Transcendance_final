@@ -59,8 +59,8 @@ services:
     #   - static_volume:/home/app/web/staticfiles
     ports:
       - 8443:443
-    # depends_on:
-    #   - web
+    depends_on:
+      - web
     networks:
       - transcendance
 
