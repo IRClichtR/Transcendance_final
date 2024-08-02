@@ -6,7 +6,13 @@ from django.conf import settings
 load_dotenv()
 
 HOST_IP = os.environ.get('HOST_IP')
+ALLOWED_HOSTS = ['*']
+
 CSRF_TRUSTED_ORIGINS = [f'https://{HOST_IP}:8443',]
+CSRF_COOKIE_SECURE = True  
+SESSION_COOKIE_SECURE = True  
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,11 +27,10 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 DEBUG = os.environ.get("DEBUG")
 
 #ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
-ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/app/'
-CSRF_TRUSTED_ORIGINS = [f'https://localhost:8443',]
+
 
 # Application definition
 
