@@ -66,8 +66,8 @@ def index(request):
             user.save()
             return redirect('/login')
         except Exception as e:
-            #return render(request, 'pages/index.html', {'error': 'Error while creating user. Please choose others credentials.'})
-            return render(request, 'pages/index.html', {'error :' + str(e) })
+            context = {'error': str(e)}
+            return render(request, 'pages/index.html', context)
     return render(request, "pages/index.html")
 
 @csrf_protect
