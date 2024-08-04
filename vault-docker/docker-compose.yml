@@ -1,17 +1,24 @@
 version: '3.7'
 
 services:
+
   vault:
-    build: .
     container_name: vault
+    build:
+      context: ./vault
+      dockerfile: Dockerfile
     ports:
       - "8200:8200"
-    environment:
-      VAULT_ADDR: http://0.0.0.0:8200
     volumes:
-      - ./vault-data:/vault/data
-      - ./config:/vault/config
-    command: server
+      - ./vault/config:/vault/config
+      - ./vault/policies:/vault/policies
+      - ./vault/data:/vault/data
+      - ./vault/logs:/vault/logs
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+    command: server -config=/vault/config/vault-config.json
+    cap_add:
+      - IPC_LOCK
 
 
 
