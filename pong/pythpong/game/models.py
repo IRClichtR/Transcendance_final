@@ -5,6 +5,10 @@ from django.urls import reverse
 from channels.db import database_sync_to_async
 import time
 
+
+def get_current_time():
+    return int(time.time())
+
 class GameManager(models.Manager):
     def create_game(self, player_name, game_type):
         game = self.create(
@@ -55,7 +59,7 @@ class Game(models.Model):
     end_play = models.BooleanField(default=False)
     points = models.JSONField(default=list)
     winner = models.CharField(max_length=255, blank=True)
-    start_time = models.IntegerField(default=int(time.time()))
+    start_time = models.IntegerField(default=get_current_time)
 
     objects = GameManager()
 
