@@ -27,9 +27,6 @@ server {
     ssl_certificate /etc/nginx/ssl/transcendance.crt;
     ssl_certificate_key /etc/nginx/ssl/transcendance.key;
 
-    modsecurity on;
-    modsecurity_rules_file /etc/nginx/modsec/main.conf;
-
     location / {
         proxy_pass http://web;
         proxy_http_version 1.1;
