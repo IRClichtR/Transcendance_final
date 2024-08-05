@@ -11,12 +11,16 @@ RUN mkdir /vault
 RUN apk --no-cache add \
 		bash \
 		ca-certificates \
-		wget
+		wget \
+		curl \
+		unzip
 
+# download and install Vault
 RUN wget --output-document=/tmp/vault.zip https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip && \
 		unzip /tmp/vault.zip -d /vault && \
 		rm -f /tmp/vault.zip && \
 		chmod +x /vault
+
 
 # updating path
 ENV PATH="PATH=$PATH:$PWD/vault"
