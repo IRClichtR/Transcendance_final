@@ -20,9 +20,11 @@ export class FreindsComponent extends LitElement {
 
 	async fetchFriends() {
 		try {
-			const response = await fetch('http://localhost:8000/user/');
+			const response = await fetch('/user');
+			console.log('respons ===>> ', response);
 			if (response.ok) {
 				const data = await response.json();
+
 				this.friends = data;
 			} else {
 				console.error('Failed to fetch friends');
@@ -41,7 +43,7 @@ export class FreindsComponent extends LitElement {
 				console.log('response.image.link: ', this.link);
 				return response;
 			} else if (response?.profile_picture) {
-				this.link = 'http://localhost:8000' + response.profile_picture;
+				this.link = response.profile_picture;
 				console.log('response.profile_picture: ', this.link);
 				return response;
 			}

@@ -752,14 +752,15 @@ var rest = ky.extend({
 });
 var getMe = (options = {}) => {
   const response = rest.get("/user/me", options).json();
+  console.log("response-----> ", response);
   return response;
 };
 var updateUser = async (user) => {
   try {
     console.log("New user info => ", user);
-    const response = await rest.patch("/user/update/", {
+    const response = await rest.patch("/user/update", {
       body: user
-    }).json();
+    });
     return response;
   } catch (error) {
     if (error.response) {
@@ -1862,25 +1863,23 @@ var SettingsComponent = class extends s3 {
   };
   _userTask = new h3(this, {
     task: async ([user], { signal }) => {
-      const response = await getMe({ signal });
-      if (response.image?.link) {
-        this.link = response.image.link;
-        console.log("response.image.link: ", this.link);
-        return response;
-      } else if (response?.profile_picture) {
-        this.link = "http://localhost:8000" + response.profile_picture;
-        console.log("response.profile_picture: ", this.link);
-        return response;
+      const me = await getMe({ signal });
+      if (me.image?.link) {
+        this.link = me.image.link;
+        return me;
+      } else if (me.profile_picture) {
+        this.link = me.profile_picture;
+        return me;
       }
-      const storedAvatar = await this.getStoredAvatarSrc(response.email);
+      const storedAvatar = await this.getStoredAvatarSrc(me.email);
       if (storedAvatar) {
         this.link = storedAvatar;
       } else {
         const random = this.getRandomAvatarSrc();
-        this.storeAvatarSrc(response.email, random);
+        this.storeAvatarSrc(me.email, random);
         this.link = random;
       }
-      return response;
+      return me;
     },
     args: () => [this.user]
   });
@@ -1930,9 +1929,7 @@ var SettingsComponent = class extends s3 {
     const formData = new FormData(event.target);
     try {
       const response = await updateUser(formData);
-      this.user = response.json;
       location.reload();
-      return this.user;
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -2189,7 +2186,8 @@ var FreindsComponent = class extends s3 {
   }
   async fetchFriends() {
     try {
-      const response = await fetch("http://localhost:8000/user/");
+      const response = await fetch("/user");
+      console.log("respons ===>> ", response);
       if (response.ok) {
         const data = await response.json();
         this.friends = data;
@@ -2208,7 +2206,7 @@ var FreindsComponent = class extends s3 {
         console.log("response.image.link: ", this.link);
         return response;
       } else if (response?.profile_picture) {
-        this.link = "http://localhost:8000" + response.profile_picture;
+        this.link = response.profile_picture;
         console.log("response.profile_picture: ", this.link);
         return response;
       }
@@ -2447,7 +2445,7 @@ var PasswordChangeComponent = class extends s3 {
         console.log("response.image.link: ", this.link);
         return response;
       } else if (response?.profile_picture) {
-        this.link = "http://localhost:8000" + response.profile_picture;
+        this.link = response.profile_picture;
         console.log("response.profile_picture: ", this.link);
         return response;
       }

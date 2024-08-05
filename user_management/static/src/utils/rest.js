@@ -38,11 +38,9 @@ const getMe = (options = {}) => {
 const updateUser = async (user) => {
 	try {
 		console.log('New user info => ', user);
-		const response = await rest
-			.patch('/user/update/', {
-				body: user,
-			})
-			.json();
+		const response = await rest.patch('/user/update', {
+			body: user,
+		});
 		return response;
 	} catch (error) {
 		if (error.response) {
