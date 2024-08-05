@@ -31,7 +31,6 @@ const rest = ky.extend({
 
 const getMe = (options = {}) => {
 	const response = rest.get('/user/me', options).json();
-	console.log('response-----> ', response);
 	return response;
 };
 

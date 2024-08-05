@@ -14,11 +14,9 @@ export class DashboardComponent extends LitElement {
 
 			if (response.image?.link) {
 				this.link = response.image.link;
-				console.log('response.image.link: ', this.link);
 				return response;
 			} else if (response?.profile_picture) {
-				this.link = 'http://localhost:8000' + response.profile_picture;
-				console.log('response.profile_picture: ', this.link);
+				this.link = response.profile_picture;
 				return response;
 			}
 			const storedAvatar = this.getStoredAvatarSrc(response.email);
@@ -143,7 +141,7 @@ export class DashboardComponent extends LitElement {
 														class="text-center mb-3"
 													>
 														<img
-															src="${this.link}"
+															src=${this.link}
 															class="img-fluid rounded-circle"
 															alt="${user.login
 																? user.login
