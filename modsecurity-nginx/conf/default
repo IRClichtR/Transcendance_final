@@ -22,9 +22,6 @@ server {
 	ssl_certificate /etc/nginx/ssl/transcendance.crt;
 	ssl_certificate_key /etc/nginx/ssl/transcendance.key;
 
-	modsecurity on;
-	modsecurity_rules_file /etc/nginx/modsec/main.conf;
-
 	location / {
 		# try_files $uri $uri/ =404;
 
