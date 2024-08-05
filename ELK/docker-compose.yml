@@ -1,31 +1,20 @@
 services:
+
   elasticsearch:
     container_name: elasticsearch
+    build: elasticsearch/
     image: docker.elastic.co/elasticsearch/elasticsearch:8.14.3
     environment:
       - node.name=elasticsearch
       - discovery.type=single-node
-      - cluster.name=docker.cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #ressource consumption limitation
-      - xpack.security.enabled=true
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.verification_mode=certificate
-      - xpack.security.transport.ssl.keystore.path=/usr/share/elasticsearch/config/certs/elastic-certificates.p12
-      - xpack.security.transport.ssl.keystore.password=changeit
-      - xpack.security.transport.ssl.truststore.path=/usr/share/elasticsearch/config/certs/elastic-certificates.p12
-      - xpack.security.transport.ssl.truststore.password=changeit
-    ulimits:
-      memlock:
-        soft: -1 #unlimited memory access
-        hard: -1
+      # - cluster.name=docker.cluster
+      # - bootstrap.memory_lock=true
+      #ressource consumption limitation
+      - ES_JAVA_OPTS= "-Xms256m -Xmx256m"
     volumes:
-      - esdata:/usr/share/elasticsearch/data
-      - ./certs:/usr/share/elasticsearch/config/certs
-      - ./setup.sh:/usr/share/elasticsearch/setup.sh
+      - els-vault:/usr/share/elasticsearch/elk-vault-shared
     ports:
       - "9200:9200"
-      - "9300:9300"
     networks:
       - elk
     entrypoint: ["/bin/bash", "-c", "/usr/share/elasticsearch/setup.sh"]
@@ -37,5 +26,4 @@ networks:
   elk:
 
 volumes:
-  esdata:
-    driver: local
+  elk-vault:
