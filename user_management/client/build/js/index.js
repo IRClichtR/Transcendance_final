@@ -758,7 +758,7 @@ var getMe = (options = {}) => {
 var updateUser = async (user) => {
   try {
     console.log("New user info => ", user);
-    const response = await rest.patch("/user/update", {
+    const response = await rest.patch("/user/update/", {
       body: user
     });
     return response;
