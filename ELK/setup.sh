@@ -2,6 +2,7 @@
 
 /usr/share/elasticsearch/bin/elasticsearch &
 
+
 echo "Waiting for Elasticsearch to start..."
 while true; do
     response=$(curl -s -o /dev/null -w "%{http_code}" -XGET 'http://localhost:9200')
