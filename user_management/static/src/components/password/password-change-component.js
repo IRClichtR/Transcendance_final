@@ -17,7 +17,7 @@ export class PasswordChangeComponent extends LitElement {
 				console.log('response.image.link: ', this.link);
 				return response;
 			} else if (response?.profile_picture) {
-				this.link = 'http://localhost:8000' + response.profile_picture;
+				this.link = response.profile_picture;
 				console.log('response.profile_picture: ', this.link);
 				return response;
 			}
@@ -149,8 +149,8 @@ export class PasswordChangeComponent extends LitElement {
 															${user.displayname
 																? user.displayname
 																: user.first_name +
-																	' ' +
-																	user.last_name}
+																  ' ' +
+																  user.last_name}
 														</h5>
 													</div>
 												</div>
