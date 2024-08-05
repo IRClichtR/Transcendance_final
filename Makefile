@@ -3,7 +3,7 @@
 
 all:
 	./get_ip_in_env.sh
-#	./modsecurity-nginx/generate_nginx_config.sh
+	./modsecurity-nginx/generate_nginx_config.sh
 	docker compose up -d --build
 
 d:
