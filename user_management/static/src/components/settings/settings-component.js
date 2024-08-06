@@ -151,8 +151,8 @@ export class SettingsComponent extends LitElement {
 														${user.displayname
 															? user.displayname
 															: user.first_name +
-															  ' ' +
-															  user.last_name}
+																' ' +
+																user.last_name}
 													</h5>
 													<div
 														class="d-grid m-0"
@@ -288,7 +288,9 @@ export class SettingsComponent extends LitElement {
 																class="form-control"
 																id="inputUsername"
 																name="username"
-																value="${user.username}"
+																value="${user?.username
+																	? user.username
+																	: user.displayname}"
 															/>
 														</div>
 														<div
@@ -324,12 +326,22 @@ export class SettingsComponent extends LitElement {
 															/>
 														</div>
 														<div class="col-12">
-															<button
-																type="submit"
-																class="btn btn-primary"
-															>
-																Save Changes
-															</button>
+															${user.login ? (
+																<button
+																	type="submit"
+																	class="btn"
+																	disabled
+																>
+																	Save Changes
+																</button>
+															) : (
+																<button
+																	type="submit"
+																	class="btn btn-primary"
+																>
+																	Save Changes
+																</button>
+															)}
 														</div>
 													</form>
 												</div>
