@@ -21,10 +21,10 @@ export class FreindsComponent extends LitElement {
 	async fetchFriends() {
 		try {
 			const response = await fetch('/user');
-			console.log('respons ===>> ', response);
+			console.log('fetchFriends response ===>> ', response);
 			if (response.ok) {
 				const data = await response.json();
-
+				console.log('fetchFriends data ==>', data);
 				this.friends = data;
 			} else {
 				console.error('Failed to fetch friends');
