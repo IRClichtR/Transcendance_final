@@ -114,7 +114,8 @@ export class DashboardComponent extends LitElement {
 	};
 
 	redirectTPongGame = () =>
-		(window.location.href = 'https://192.168.1.37:8443/pong/');
+		(window.location.href =
+			'https://192.168.1.37:8443/pong/start_local_game');
 
 	render() {
 		return this._userTask.render({
@@ -188,11 +189,29 @@ export class DashboardComponent extends LitElement {
 													<button
 														type="submit"
 														class="btn btn-primary mt-3"
-														hrev="/pong"
+														href="/pong/start_local_game"
 														@click="${this
 															.redirectTPongGame}"
 													>
-														Select a Game
+														Play Local Game
+													</button>
+													<button
+														type="submit"
+														class="btn btn-primary mt-3"
+														href="/pong"
+														@click="${this
+															.redirectTPongGame}"
+													>
+														Play 1v1
+													</button>
+													<button
+														type="submit"
+														class="btn btn-primary mt-3"
+														href="/pong"
+														@click="${this
+															.redirectTPongGame}"
+													>
+														Play Tournament
 													</button>
 												</div>
 
@@ -200,7 +219,7 @@ export class DashboardComponent extends LitElement {
 													style="text-decoration: underline;"
 													class="mb-3 pt-5"
 												>
-													My Dashboard
+													1v1 Dashboard
 												</h5>
 												<div class="container">
 													<div
@@ -598,10 +617,24 @@ export class DashboardComponent extends LitElement {
 																						P2
 																					</th>
 																					<th>
-																						Winner
+																						Player
+																						3
 																					</th>
 																					<th>
-																						Looser
+																						Score
+																						P3
+																					</th>
+																					<th>
+																						1st
+																						Position
+																					</th>
+																					<th>
+																						2nd
+																						Position
+																					</th>
+																					<th>
+																						3rd
+																						Position
 																					</th>
 																				</tr>
 																			</thead>
@@ -665,6 +698,24 @@ export class DashboardComponent extends LitElement {
 																					</td>
 
 																					<td>
+																						<h6
+																							class="mb-1"
+																						>
+																							La
+																							Mere
+																							Noel
+																						</h6>
+																					</td>
+
+																					<td>
+																						<h6
+																							class="mb-1"
+																						>
+																							777
+																						</h6>
+																					</td>
+
+																					<td>
 																						<span
 																							class=" btn bg-success text-light"
 																							>La
@@ -675,147 +726,7 @@ export class DashboardComponent extends LitElement {
 
 																					<td>
 																						<span
-																							class=" btn bg-danger text-light"
-																							>${user.first_name}</span
-																						>
-																					</td>
-																				</tr>
-
-																				<tr>
-																					<td>
-																						<div
-																							class="d-flex align-items-center"
-																						>
-																							<div>
-																								<h6
-																									class="m-0"
-																								>
-																									Game
-																									#2
-																								</h6>
-																							</div>
-																						</div>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							22/12/2021
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							${user.first_name}
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							54
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							Le
-																							Chat
-																							Potte
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							125
-																						</h6>
-																					</td>
-
-																					<td>
-																						<span
-																							class=" btn bg-success text-light"
-																							>Le
-																							Chat
-																							Potte</span
-																						>
-																					</td>
-
-																					<td>
-																						<span
-																							class=" btn bg-danger text-light"
-																							>${user.first_name}</span
-																						>
-																					</td>
-																				</tr>
-
-																				<tr>
-																					<td>
-																						<div
-																							class="d-flex align-items-center"
-																						>
-																							<div>
-																								<h6
-																									class="m-0"
-																								>
-																									Game
-																									#3
-																								</h6>
-																							</div>
-																						</div>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							22/12/2021
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							${user.first_name}
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							32
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							Sophie
-																							Lacoste
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							36
-																						</h6>
-																					</td>
-
-																					<td>
-																						<span
-																							class=" btn bg-success text-light"
+																							class=" btn bg-warning text-light"
 																							>${user.first_name}</span
 																						>
 																					</td>
@@ -823,78 +734,7 @@ export class DashboardComponent extends LitElement {
 																					<td>
 																						<span
 																							class=" btn bg-danger text-light"
-																							>Sophie</span
-																						>
-																					</td>
-																				</tr>
-
-																				<tr>
-																					<td>
-																						<div
-																							class="d-flex align-items-center"
-																						>
-																							<div>
-																								<h6
-																									class="m-0"
-																								>
-																									Game
-																									#3
-																								</h6>
-																							</div>
-																						</div>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							22/12/2021
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							${user.first_name}
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							12
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							Shtrouphette
-																						</h6>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							12
-																						</h6>
-																					</td>
-
-																					<td>
-																						<span
-																							class=" btn bg-success text-light"
 																							>${user.first_name}</span
-																						>
-																					</td>
-
-																					<td>
-																						<span
-																							class=" btn bg-danger text-light"
-																							>Tie</span
 																						>
 																					</td>
 																				</tr>
@@ -988,9 +828,7 @@ export class DashboardComponent extends LitElement {
 																				>
 																					${user.login
 																						? user.login
-																						: user.first_name +
-																							' ' +
-																							user.last_name}
+																						: user.username}
 																				</div>
 																			</div>
 
