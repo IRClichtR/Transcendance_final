@@ -1,62 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Pong Game</title>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-        }
-        #localButton, #startButton, #startTournamentButton, #historyButton {
-            padding: 10px 20px;
-            font-size: 20px;
-            margin-top: 10px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        label, input {
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Welcome to Pong Game</h1>
+	<head>
+		<title>Pong Game</title>
+		<meta charset="UTF-8" />
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+			integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+			integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+			crossorigin="anonymous"
+		></script>
 
-    <form id="localForm" method="POST" action="{% url 'start_local_game' %}">
-        {% csrf_token %}
-        <label for="playerName">Enter your name:</label>
-        <input type="text" id="playerNameLocalStart" name="playerName" required>
-        <button type="submit" id="localButton">Start Local Game</button>
-    </form>
-    
-    <form id="startForm" method="POST" action="{% url 'start_game' %}">
-        {% csrf_token %}
-        <label for="playerNameStart">Enter your name:</label>
-        <input type="text" id="playerNameStart" name="playerName" required>
-        <button type="submit" id="startButton">Start Play</button>
-    </form>
-    
-    <form id="startTournamentForm" method="POST" action="{% url 'waiting_room' %}">
-        {% csrf_token %}
-        <label for="playerNameTournament">Enter your name:</label>
-        <input type="text" id="playerNameTournament" name="playerName" required>
-        <button type="submit" id="startTournamentButton">Start Tournament</button>        
-    </form>
+		<script
+			src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+			integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+			crossorigin="anonymous"
+		></script>
+	</head>
+	<body>
+		<nav class="bg-dark navbar navbar-expand-lg navbar-dark">
+			<div class="container-fluid pl-5 text-align-center">
+				<div
+					class="collapse navbar-collapse"
+					id="navbarSupportedContent"
+				>
+					<a class="navbar-brand mt-lg-2" href="home">
+						FT_TRANSCENDENCE
+					</a>
+				</div>
 
-    <form id="historyForm" method="POST" action="{% url 'get_data' %}">
-        {% csrf_token %}
-        <label for="playerNameHistory">Enter your name:</label>
-        <input type="text" id="playerNameHistory" name="playerName" required>
-        <button type="submit" id="historyButton">Get History</button>        
-    </form>
-</body>
+				<div class="d-flex align-items-center">
+					<ul class="navbar-nav d-flex align-items-center">
+						<li class="nav-item">
+							<a class="nav-link" href="/app/dashboard"
+								>Dashboard</a
+							>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="/app/friends">Friends</a>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="/app/settingsPage"
+								>Settings</a
+							>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="/app/passwordChangePage"
+								>Password</a
+							>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="/logout">Logout</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div
+			class="container container-xxl mt-5 d-flex justify-content-between"
+		>
+			<div class="card shadow-sm" style="width: 18rem">
+				<img
+					src="https://cdn-icons-png.flaticon.com/128/866/866799.png"
+					class="card-img-top"
+					alt="..."
+				/>
+				<div class="card-body">
+					<h5 class="card-title">Local</h5>
+					<p>1v1 with a friend on the same keyboard.</p>
+					<form
+						id="localForm"
+						method="POST"
+						action="{% url 'start_local_game' %}"
+					>
+						{% csrf_token %}
+						<label for="playerName">Enter your name:</label>
+						<input
+							class="w-50"
+							type="text"
+							id="playerNameLocalStart"
+							name="playerName"
+							required
+						/>
+						<button
+							class="btn btn-outline-success w-50 mt-2"
+							type="submit"
+							id="localButton"
+						>
+							Play
+						</button>
+					</form>
+				</div>
+			</div>
+
+			<div class="card shadow-sm" style="width: 18rem">
+				<img
+					src="https://cdn-icons-png.flaticon.com/128/10786/10786755.png"
+					class="card-img-top"
+					alt="..."
+				/>
+				<div class="card-body">
+					<h5 class="card-title">Random</h5>
+					<p>1v1 with a randomly selected player.</p>
+					<form
+						id="startForm"
+						method="POST"
+						action="{% url 'start_game' %}"
+					>
+						{% csrf_token %}
+						<label for="playerNameStart">Enter your name:</label>
+						<input
+							class="w-50"
+							type="text"
+							id="playerNameStart"
+							name="playerName"
+							required
+						/>
+						<button
+							class="btn btn-outline-success w-50 mt-2"
+							type="submit"
+							id="startButton"
+						>
+							Play
+						</button>
+					</form>
+				</div>
+			</div>
+
+			<div class="card shadow-sm" style="width: 18rem">
+				<img
+					src="https://cdn-icons-png.flaticon.com/128/2556/2556739.png"
+					class="card-img-top"
+					alt="..."
+				/>
+				<div class="card-body">
+					<h5 class="card-title">Tournament</h5>
+					<p>Match up with 2 other player.</p>
+					<form
+						id="startTournamentForm"
+						method="POST"
+						action="{% url 'waiting_room' %}"
+					>
+						{% csrf_token %}
+						<label for="playerNameTournament"
+							>Enter your name:</label
+						>
+						<input
+							class="w-50"
+							type="text"
+							id="playerNameTournament"
+							name="playerName"
+							required
+						/>
+						<button
+							class="btn btn-outline-success w-50 mt-2"
+							type="submit"
+							id="startTournamentButton"
+						>
+							Play
+						</button>
+					</form>
+				</div>
+			</div>
+
+			<div class="card shadow-sm" style="width: 18rem">
+				<img
+					src="https://cdn-icons-png.flaticon.com/128/10393/10393515.png"
+					class="card-img-top"
+					alt="..."
+				/>
+				<div class="card-body">
+					<h5 class="card-title">Get History</h5>
+					<p>Your game history.</p>
+					<form
+						id="historyForm"
+						method="POST"
+						action="{% url 'get_data' %}"
+					>
+						{% csrf_token %}
+						<label for="playerNameHistory">Enter your name:</label>
+						<input
+							class="w-50"
+							type="text"
+							id="playerNameHistory"
+							name="playerName"
+							required
+						/>
+						<button
+							class="btn btn-outline-primary w-50 mt-2"
+							type="submit"
+							id="historyButton"
+						>
+							Get History
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
