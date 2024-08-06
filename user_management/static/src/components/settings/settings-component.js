@@ -148,8 +148,8 @@ export class SettingsComponent extends LitElement {
 														${user.displayname
 															? user.displayname
 															: user.first_name +
-																' ' +
-																user.last_name}
+															  ' ' +
+															  user.last_name}
 													</h5>
 													<div
 														class="d-grid m-0"

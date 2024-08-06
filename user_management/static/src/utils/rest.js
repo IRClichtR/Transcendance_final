@@ -31,18 +31,15 @@ const rest = ky.extend({
 
 const getMe = (options = {}) => {
 	const response = rest.get('/user/me', options).json();
-	console.log('response-----> ', response);
 	return response;
 };
 
 const updateUser = async (user) => {
 	try {
 		console.log('New user info => ', user);
-		const response = await rest
-			.patch('/user/update/', {
-				body: user,
-			})
-			.json();
+		const response = await rest.patch('/user/update/', {
+			body: user,
+		});
 		return response;
 	} catch (error) {
 		if (error.response) {
