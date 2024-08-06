@@ -40,6 +40,7 @@ const updateUser = async (user) => {
 		const response = await rest.patch('/user/update/', {
 			body: user,
 		});
+		console.log('updateUser response ==> ', response);
 		return response;
 	} catch (error) {
 		if (error.response) {
@@ -58,6 +59,7 @@ const updateUser = async (user) => {
 const getProfilePic = async (user) => {
 	try {
 		const response = await getMe();
+		console.log('getProfilePic response => ', response);
 		return response;
 	} catch (error) {
 		console.log('error: ', error);

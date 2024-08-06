@@ -760,6 +760,7 @@ var updateUser = async (user) => {
     const response = await rest.patch("/user/update/", {
       body: user
     });
+    console.log("updateUser response ==> ", response);
     return response;
   } catch (error) {
     if (error.response) {
@@ -777,6 +778,7 @@ var updateUser = async (user) => {
 var getProfilePic = async (user) => {
   try {
     const response = await getMe();
+    console.log("getProfilePic response => ", response);
     return response;
   } catch (error) {
     console.log("error: ", error);
@@ -969,23 +971,7 @@ var DashboardComponent = class extends s3 {
 														href="/pong/start_local_game"
 														@click="${this.redirectTPongGame}"
 													>
-														Play Local Game
-													</button>
-													<button
-														type="submit"
-														class="btn btn-primary mt-3"
-														href="/pong"
-														@click="${this.redirectTPongGame}"
-													>
-														Play 1v1
-													</button>
-													<button
-														type="submit"
-														class="btn btn-primary mt-3"
-														href="/pong"
-														@click="${this.redirectTPongGame}"
-													>
-														Play Tournament
+														Play Pong
 													</button>
 												</div>
 
@@ -1761,12 +1747,15 @@ var SettingsComponent = class extends s3 {
   updateUserInfo = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+    console.log("updateUserInfo-formData ==> ", formData);
     try {
       const response = await updateUser(formData);
+      console.log("update user response ==> ", response);
       location.reload();
     } catch (error) {
       console.error("Error updating user:", error);
     }
+    console.log("updateUserInfo-formData ==> ", formData);
   };
   previewPhoto = (event) => {
     const input = event.target;
@@ -2021,9 +2010,10 @@ var FreindsComponent = class extends s3 {
   async fetchFriends() {
     try {
       const response = await fetch("/user");
-      console.log("respons ===>> ", response);
+      console.log("fetchFriends response ===>> ", response);
       if (response.ok) {
         const data = await response.json();
+        console.log("fetchFriends data ==>", data);
         this.friends = data;
       } else {
         console.error("Failed to fetch friends");

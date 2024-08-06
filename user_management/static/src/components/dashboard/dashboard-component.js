@@ -11,7 +11,6 @@ export class DashboardComponent extends LitElement {
 	_userTask = new Task(this, {
 		task: async ([user], { signal }) => {
 			const response = await getMe({ signal });
-
 			if (response.image?.link) {
 				this.link = response.image.link;
 				return response;
@@ -193,25 +192,7 @@ export class DashboardComponent extends LitElement {
 														@click="${this
 															.redirectTPongGame}"
 													>
-														Play Local Game
-													</button>
-													<button
-														type="submit"
-														class="btn btn-primary mt-3"
-														href="/pong"
-														@click="${this
-															.redirectTPongGame}"
-													>
-														Play 1v1
-													</button>
-													<button
-														type="submit"
-														class="btn btn-primary mt-3"
-														href="/pong"
-														@click="${this
-															.redirectTPongGame}"
-													>
-														Play Tournament
+														Play Pong
 													</button>
 												</div>
 

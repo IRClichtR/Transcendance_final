@@ -87,12 +87,15 @@ export class SettingsComponent extends LitElement {
 	updateUserInfo = async (event) => {
 		event.preventDefault();
 		const formData = new FormData(event.target);
+		console.log('updateUserInfo-formData ==> ', formData);
 		try {
 			const response = await updateUser(formData);
+			console.log('update user response ==> ', response);
 			location.reload();
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}
+		console.log('updateUserInfo-formData ==> ', formData);
 	};
 
 	previewPhoto = (event) => {
