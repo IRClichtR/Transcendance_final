@@ -752,6 +752,7 @@ var rest = ky.extend({
 });
 var getMe = (options = {}) => {
   const response = rest.get("/user/me", options).json();
+  console.log("response-----> ", response);
   return response;
 };
 var updateUser = async (user) => {
