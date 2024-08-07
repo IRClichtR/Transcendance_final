@@ -20,6 +20,12 @@
 			integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
 			crossorigin="anonymous"
 		></script>
+		<style>
+			#pong {
+				width: 80vmin;
+				height: 40vmin;
+			}
+		</style>
 </head>
 <body>
 	<nav class="bg-dark navbar navbar-expand-lg navbar-dark">
@@ -68,7 +74,6 @@
 	<div class="container container-fluid text-align-center">
 		<h1>1v1</h1>
 		<canvas id="pong" width="{{ window_width }}" height="{{ window_height }}"></canvas>
-		{% comment %} <canvas id="pong" width="1280" height="720"></canvas> {% endcomment %}
 	</div>
 
 	{{ window_width|json_script:"window-width" }}
