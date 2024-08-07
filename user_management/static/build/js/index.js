@@ -901,7 +901,7 @@ var DashboardComponent = class extends s3 {
     const parsed = avatars ? JSON.parse(avatars) : {};
     return parsed[email] || "";
   };
-  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong/start_local_game";
+  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong";
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
@@ -968,7 +968,7 @@ var DashboardComponent = class extends s3 {
 													<button
 														type="submit"
 														class="btn btn-primary mt-3"
-														href="/pong/start_local_game"
+														href="/pong"
 														@click="${this.redirectTPongGame}"
 													>
 														Play Pong
@@ -1747,15 +1747,14 @@ var SettingsComponent = class extends s3 {
   updateUserInfo = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    console.log("updateUserInfo-formData ==> ", formData);
     try {
       const response = await updateUser(formData);
       console.log("update user response ==> ", response);
+      console.log("updateUserInfo-formData ==> ", formData);
       location.reload();
     } catch (error) {
       console.error("Error updating user:", error);
     }
-    console.log("updateUserInfo-formData ==> ", formData);
   };
   previewPhoto = (event) => {
     const input = event.target;
@@ -1932,7 +1931,7 @@ var SettingsComponent = class extends s3 {
 																class="form-control"
 																id="inputUsername"
 																name="username"
-																value="${user.username}"
+																value="${user?.username ? user.username : user.displayname}"
 															/>
 														</div>
 														<div
@@ -1970,7 +1969,7 @@ var SettingsComponent = class extends s3 {
 														<div class="col-12">
 															<button
 																type="submit"
-																class="btn btn-primary"
+																class="btn btn-primary ${user.login ? "disabled" : ""}"
 															>
 																Save Changes
 															</button>
