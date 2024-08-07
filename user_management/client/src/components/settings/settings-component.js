@@ -87,15 +87,14 @@ export class SettingsComponent extends LitElement {
 	updateUserInfo = async (event) => {
 		event.preventDefault();
 		const formData = new FormData(event.target);
-		console.log('updateUserInfo-formData ==> ', formData);
 		try {
 			const response = await updateUser(formData);
 			console.log('update user response ==> ', response);
+			console.log('updateUserInfo-formData ==> ', formData);
 			location.reload();
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}
-		console.log('updateUserInfo-formData ==> ', formData);
 	};
 
 	previewPhoto = (event) => {
@@ -326,22 +325,14 @@ export class SettingsComponent extends LitElement {
 															/>
 														</div>
 														<div class="col-12">
-															${user.login ? (
-																<button
-																	type="submit"
-																	class="btn"
-																	disabled
-																>
-																	Save Changes
-																</button>
-															) : (
-																<button
-																	type="submit"
-																	class="btn btn-primary"
-																>
-																	Save Changes
-																</button>
-															)}
+															<button
+																type="submit"
+																class="btn btn-primary ${user.login
+																	? 'disabled'
+																	: ''}"
+															>
+																Save Changes
+															</button>
 														</div>
 													</form>
 												</div>
