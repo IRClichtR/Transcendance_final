@@ -8,6 +8,7 @@ get_host_ip() {
 }
 
 ip_address=$(get_host_ip)
+# ip_address=192.168.1.19
 
 if [ ! -f .env ]; then
 	echo ".env file not found"

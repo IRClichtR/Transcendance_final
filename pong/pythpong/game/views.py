@@ -4,22 +4,22 @@ from .constants import *
 from .models import WaitingRoom, Game
 from .eth import get_all_tournament_games
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from .serializers import GameSerializer, WaitingRoomSerializer
+from .serializers import GameSerializer, WaitingRoomSerializer, TournamentSerializer
 
 # for debug purpose only
 from django.conf import settings
 from django.http import JsonResponse
 # from rest_framework.permissions import IsAuthenticated
-
-def debug_settings(request):
-    debug_info = {
-        'STATIC_URL' : settings.STATIC_URL,
-        'STATIC_ROOT': settings.STATIC_ROOT,
-        'STATICFILES_DIRS': settings.STATICFILES_DIRS,
-        'TEMPLATES_DIRS': settings.TEMPLATES
-    }
-    return JsonResponse(debug_info)
-# end of debug
+#
+# def debug_settings(request):
+#     debug_info = {
+#         'STATIC_URL' : settings.STATIC_URL,
+#         'STATIC_ROOT': settings.STATIC_ROOT,
+#         'STATICFILES_DIRS': settings.STATICFILES_DIRS,
+#         'TEMPLATES_DIRS': settings.TEMPLATES
+#     }
+#     return JsonResponse(debug_info)
+# # end of debug
 
 def start_game(request):
     if request.method == 'POST':
@@ -127,3 +127,9 @@ class WaitingRoomViewset(ReadOnlyModelViewSet):
     def get_queryset(self):
         return WaitingRoom.objects.all()
         
+
+class TournamentViewSet(ReadOnlyModelViewSet):
+    serializer_class = TournamentSerializer
+
+    def get_queryset(self):
+        return Tournament.objects.all()
