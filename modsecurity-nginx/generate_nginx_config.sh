@@ -61,16 +61,4 @@ server {
         proxy_set_header X-Forwarded-Proto \$scheme;
     }
 }
-
-server {
-    listen 443 ssl;
-    server_name localhost;
-
-    ssl_certificate /etc/nginx/ssl/transcendance.crt;
-    ssl_certificate_key /etc/nginx/ssl/transcendance.key;
-
-    location / {
-        return 301 https://$HOST_IP:8443\$request_uri;
-    }
-}
 EOF
