@@ -30,4 +30,5 @@ db.sqlite3
 staticfiles/
 media/
 
-
+# nginx
+modsecurity-nginx/conf/default

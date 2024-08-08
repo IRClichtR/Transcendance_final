@@ -64,6 +64,7 @@ def index(request):
             user.last_name = last_name
             user.username = email
             user.save()
+            messages.success(request, 'User created successfully!')
             return redirect('/login')
         except Exception as e:
             context = {'error': str(e)}
