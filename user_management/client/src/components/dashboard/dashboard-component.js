@@ -6,6 +6,7 @@ export class DashboardComponent extends LitElement {
 		user: {},
 		link: { type: String },
 		data: { type: Array },
+		isOnline: { type: Boolean },
 	};
 
 	_userTask = new Task(this, {
@@ -45,6 +46,7 @@ export class DashboardComponent extends LitElement {
 		super();
 		this.link = '';
 		this.data = [];
+		this.isOnline = false;
 		this.images = [
 			'https://cdn-icons-png.flaticon.com/128/8034/8034504.png',
 			'https://cdn-icons-png.flaticon.com/128/8034/8034557.png',
@@ -101,6 +103,7 @@ export class DashboardComponent extends LitElement {
 		const stringified = JSON.stringify(parsed);
 		localStorage.setItem('avatars', stringified);
 	};
+
 	getStoredAvatarSrc = (email) => {
 		if (!email || typeof email !== 'string') {
 			throw new Error(
@@ -110,6 +113,25 @@ export class DashboardComponent extends LitElement {
 		const avatars = localStorage.getItem('avatars');
 		const parsed = avatars ? JSON.parse(avatars) : {};
 		return parsed[email] || '';
+	};
+
+	checkIfOnline = (user) => {
+		const hour = 60 * 60 * 1000;
+		const lastLoginDate = new Date(user.last_login);
+		const now = new Date();
+		const timeLogedIn = now - lastLoginDate;
+
+		console.log(timeLogedIn, hour);
+		console.log('before this.isOnline: ', this.isOnline);
+
+		if (timeLogedIn < hour) {
+			this.isOnline = true; // Correct assignment
+		} else {
+			this.isOnline = false; // Ensure isOnline is set to false otherwise
+		}
+
+		console.log('after this.isOnline: ', this.isOnline);
+		return this.isOnline;
 	};
 
 	redirectTPongGame = () =>
@@ -129,13 +151,23 @@ export class DashboardComponent extends LitElement {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello, ${user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+																user
+															)
+																? 'Online'
+																: 'Offline'}
+														</span>
+													</p>
 												</div>
 
-												<div class="card-body">
+												<div
+													class="card-body align-items-center"
+												>
 													<div
 														class="text-center mb-3"
 													>
@@ -147,15 +179,19 @@ export class DashboardComponent extends LitElement {
 																: user.first_name}"
 														/>
 													</div>
-													<h5
-														class="text-center mb-1"
+													<div
+														class="card-body align-items-center"
 													>
-														${user.displayname
-															? user.displayname
-															: user.first_name +
-																' ' +
-																user.last_name}
-													</h5>
+														<h5
+															class="text-center mb-1"
+														>
+															${user.displayname
+																? user.displayname
+																: user.first_name +
+																	' ' +
+																	user.last_name}
+														</h5>
+													</div>
 												</div>
 											</div>
 										</div>

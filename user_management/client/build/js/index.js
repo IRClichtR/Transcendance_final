@@ -756,11 +756,16 @@ var getMe = (options = {}) => {
 };
 var updateUser = async (user) => {
   try {
-    console.log("New user info => ", user);
+    console.log("updateUser user.entries :\n");
+    for (let [key, value] of user.entries()) {
+      console.log(key, " : ", value);
+    }
+    console.log("\n");
     const response = await rest.patch("/user/update/", {
       body: user
     });
-    console.log("updateUser response ==> ", response);
+    console.log("updateUser response : ", response);
+    console.log("\n");
     return response;
   } catch (error) {
     if (error.response) {
@@ -778,7 +783,6 @@ var updateUser = async (user) => {
 var getProfilePic = async (user) => {
   try {
     const response = await getMe();
-    console.log("getProfilePic response => ", response);
     return response;
   } catch (error) {
     console.log("error: ", error);
@@ -802,7 +806,8 @@ var DashboardComponent = class extends s3 {
   static properties = {
     user: {},
     link: { type: String },
-    data: { type: Array }
+    data: { type: Array },
+    isOnline: { type: Boolean }
   };
   _userTask = new h3(this, {
     task: async ([user], { signal }) => {
@@ -837,6 +842,7 @@ var DashboardComponent = class extends s3 {
     super();
     this.link = "";
     this.data = [];
+    this.isOnline = false;
     this.images = [
       "https://cdn-icons-png.flaticon.com/128/8034/8034504.png",
       "https://cdn-icons-png.flaticon.com/128/8034/8034557.png",
@@ -901,7 +907,22 @@ var DashboardComponent = class extends s3 {
     const parsed = avatars ? JSON.parse(avatars) : {};
     return parsed[email] || "";
   };
-  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong";
+  checkIfOnline = (user) => {
+    const hour = 60 * 60 * 1e3;
+    const lastLoginDate = new Date(user.last_login);
+    const now = /* @__PURE__ */ new Date();
+    const timeLogedIn = now - lastLoginDate;
+    console.log(timeLogedIn, hour);
+    console.log("before this.isOnline: ", this.isOnline);
+    if (timeLogedIn < hour) {
+      this.isOnline = true;
+    } else {
+      this.isOnline = false;
+    }
+    console.log("after this.isOnline: ", this.isOnline);
+    return this.isOnline;
+  };
+  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong/start_local_game";
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
@@ -916,13 +937,21 @@ var DashboardComponent = class extends s3 {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello, ${user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+        user
+      ) ? "Online" : "Offline"}
+														</span>
+													</p>
 												</div>
 
-												<div class="card-body">
+												<div
+													class="card-body align-items-center"
+												>
 													<div
 														class="text-center mb-3"
 													>
@@ -932,11 +961,15 @@ var DashboardComponent = class extends s3 {
 															alt="${user.login ? user.login : user.first_name}"
 														/>
 													</div>
-													<h5
-														class="text-center mb-1"
+													<div
+														class="card-body align-items-center"
 													>
-														${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
-													</h5>
+														<h5
+															class="text-center mb-1"
+														>
+															${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
+														</h5>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -1689,6 +1722,7 @@ var SettingsComponent = class extends s3 {
         return me;
       } else if (me.profile_picture) {
         this.link = me.profile_picture;
+        this.storeAvatarSrc(me.email, this.link);
         return me;
       }
       const storedAvatar = await this.getStoredAvatarSrc(me.email);
@@ -1747,11 +1781,18 @@ var SettingsComponent = class extends s3 {
   updateUserInfo = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+    console.log("updateUserInfo-formData.entries :\n");
+    for (let [key, value] of formData.entries()) {
+      console.log(key, " : ", value);
+    }
+    console.log("\n");
     try {
       const response = await updateUser(formData);
-      console.log("update user response ==> ", response);
-      console.log("updateUserInfo-formData ==> ", formData);
-      location.reload();
+      console.log("updatUserInfo response.entries :\n");
+      for (let [key, value] of formData.entries()) {
+        console.log(key, " : ", value);
+      }
+      console.log("\n");
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -1768,6 +1809,14 @@ var SettingsComponent = class extends s3 {
       fileReader.readAsDataURL(file[0]);
     }
   };
+  checkIfOnline = (user) => {
+    const hour = 60 * 60 * 1e3;
+    const lastLoginDate = new Date(user.last_login);
+    const now = /* @__PURE__ */ new Date();
+    const timeLogedIn = now - lastLoginDate;
+    timeLogedIn < hour ? this.isOnline = true : this.isOnline = false;
+    return this.isOnline;
+  };
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading settings...</p>`,
@@ -1782,11 +1831,16 @@ var SettingsComponent = class extends s3 {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello,
-													${user.displayname ? user.displayname : user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+        user
+      ) ? "Online" : "Offline"}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div
@@ -2009,10 +2063,8 @@ var FreindsComponent = class extends s3 {
   async fetchFriends() {
     try {
       const response = await fetch("/user");
-      console.log("fetchFriends response ===>> ", response);
       if (response.ok) {
         const data = await response.json();
-        console.log("fetchFriends data ==>", data);
         this.friends = data;
       } else {
         console.error("Failed to fetch friends");
@@ -2024,13 +2076,12 @@ var FreindsComponent = class extends s3 {
   _userTask = new h3(this, {
     task: async ([user], { signal }) => {
       const response = await getMe({ signal });
+      console.log("response: ", response);
       if (response.image?.link) {
         this.link = response.image.link;
-        console.log("response.image.link: ", this.link);
         return response;
       } else if (response?.profile_picture) {
         this.link = response.profile_picture;
-        console.log("response.profile_picture: ", this.link);
         return response;
       }
       const storedAvatar = this.getStoredAvatarSrc(response.email);
@@ -2089,7 +2140,6 @@ var FreindsComponent = class extends s3 {
   handleAddFriend(friend) {
     if (!this.myFriends.some((f3) => f3.email === friend.email)) {
       this.myFriends = [...this.myFriends, friend];
-      console.log("add friend:::::::", this.myFriends);
       this.saveFriendsToStorage();
       this.requestUpdate();
     }
@@ -2100,6 +2150,14 @@ var FreindsComponent = class extends s3 {
     this.saveFriendsToStorage();
     this.requestUpdate();
   }
+  checkIfOnline = (user) => {
+    const hour = 60 * 60 * 1e3;
+    const lastLoginDate = new Date(user.last_login);
+    const now = /* @__PURE__ */ new Date();
+    const timeLogedIn = now - lastLoginDate;
+    timeLogedIn < hour ? this.isOnline = true : this.isOnline = false;
+    return this.isOnline;
+  };
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading friends...</p>`,
@@ -2114,10 +2172,16 @@ var FreindsComponent = class extends s3 {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello, ${user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+        user
+      ) ? "Online" : "Offline"}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div
@@ -2172,8 +2236,10 @@ var FreindsComponent = class extends s3 {
 																							${friend.first_name + " " + friend.last_name}
 																						</h4>
 																						<span
-																							>${friend.online ? "Online" : "Offline"}</span
-																						>
+																							>${this.checkIfOnline(
+          friend
+        ) ? "Online" : "Offline"}
+																						</span>
 																					</div>
 																					<div
 																						class="pl-4"
@@ -2221,8 +2287,10 @@ var FreindsComponent = class extends s3 {
 																				${friend.first_name + " " + friend.last_name}
 																			</h4>
 																			<span
-																				>${friend.online ? "Online" : "Offline"}</span
-																			>
+																				>${this.checkIfOnline(
+          friend
+        ) ? "Online" : "Offline"}
+																			</span>
 																		</div>
 																		<button
 																			@click=${() => this.handleRemoveFriend(
@@ -2346,6 +2414,14 @@ var PasswordChangeComponent = class extends s3 {
       alert("Error updating password");
     }
   }
+  checkIfOnline = (user) => {
+    const hour = 60 * 60 * 1e3;
+    const lastLoginDate = new Date(user.last_login);
+    const now = /* @__PURE__ */ new Date();
+    const timeLogedIn = now - lastLoginDate;
+    timeLogedIn < hour ? this.isOnline = true : this.isOnline = false;
+    return this.isOnline;
+  };
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading password...</p>`,
@@ -2360,11 +2436,16 @@ var PasswordChangeComponent = class extends s3 {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello,
-													${user.displayname ? user.displayname : user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+        user
+      ) ? "Online" : "Offline"}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div

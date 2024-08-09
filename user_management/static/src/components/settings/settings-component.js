@@ -20,6 +20,7 @@ export class SettingsComponent extends LitElement {
 				return me;
 			} else if (me.profile_picture) {
 				this.link = me.profile_picture;
+				this.storeAvatarSrc(me.email, this.link);
 				return me;
 			}
 
@@ -87,11 +88,22 @@ export class SettingsComponent extends LitElement {
 	updateUserInfo = async (event) => {
 		event.preventDefault();
 		const formData = new FormData(event.target);
+
+		console.log('updateUserInfo-formData.entries :\n');
+		for (let [key, value] of formData.entries()) {
+			console.log(key, ' : ', value);
+		}
+		console.log('\n');
+
 		try {
 			const response = await updateUser(formData);
-			console.log('update user response ==> ', response);
-			console.log('updateUserInfo-formData ==> ', formData);
-			location.reload();
+			console.log('updatUserInfo response.entries :\n');
+			for (let [key, value] of formData.entries()) {
+				console.log(key, ' : ', value);
+			}
+			console.log('\n');
+
+			// location.reload();
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}
@@ -110,6 +122,15 @@ export class SettingsComponent extends LitElement {
 		}
 	};
 
+	checkIfOnline = (user) => {
+		const hour = 60 * 60 * 1000;
+		const lastLoginDate = new Date(user.last_login);
+		const now = new Date();
+		const timeLogedIn = now - lastLoginDate;
+		timeLogedIn < hour ? (this.isOnline = true) : (this.isOnline = false);
+		return this.isOnline;
+	};
+
 	render() {
 		return this._userTask.render({
 			pending: () => html`<p>Loading settings...</p>`,
@@ -124,13 +145,18 @@ export class SettingsComponent extends LitElement {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello,
-													${user.displayname
-														? user.displayname
-														: user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+																user
+															)
+																? 'Online'
+																: 'Offline'}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div
