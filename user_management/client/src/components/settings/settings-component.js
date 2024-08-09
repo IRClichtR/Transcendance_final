@@ -20,6 +20,7 @@ export class SettingsComponent extends LitElement {
 				return me;
 			} else if (me.profile_picture) {
 				this.link = me.profile_picture;
+				this.storeAvatarSrc(me.email, this.link);
 				return me;
 			}
 
@@ -87,15 +88,24 @@ export class SettingsComponent extends LitElement {
 	updateUserInfo = async (event) => {
 		event.preventDefault();
 		const formData = new FormData(event.target);
-		console.log('updateUserInfo-formData ==> ', formData);
+
+		console.log('updateUserInfo-formData.entries :\n');
+		for (let [key, value] of formData.entries()) {
+			console.log(key, ' : ', value);
+		}
+		console.log('\n');
+
 		try {
 			const response = await updateUser(formData);
-			console.log('update user response ==> ', response);
-			location.reload();
+			console.log('updatUserInfo response.entries :\n');
+			for (let [key, value] of formData.entries()) {
+				console.log(key, ' : ', value);
+			}
+			console.log('\n');
+			// location.reload();
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}
-		console.log('updateUserInfo-formData ==> ', formData);
 	};
 
 	previewPhoto = (event) => {
@@ -151,8 +161,8 @@ export class SettingsComponent extends LitElement {
 														${user.displayname
 															? user.displayname
 															: user.first_name +
-															  ' ' +
-															  user.last_name}
+																' ' +
+																user.last_name}
 													</h5>
 													<div
 														class="d-grid m-0"

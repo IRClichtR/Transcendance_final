@@ -36,11 +36,18 @@ const getMe = (options = {}) => {
 
 const updateUser = async (user) => {
 	try {
-		console.log('New user info => ', user);
+		console.log('updateUser user.entries :\n');
+		for (let [key, value] of user.entries()) {
+			console.log(key, ' : ', value);
+		}
+		console.log('\n');
+
 		const response = await rest.patch('/user/update/', {
 			body: user,
 		});
-		console.log('updateUser response ==> ', response);
+		console.log('updateUser response : ', response);
+		console.log('\n');
+
 		return response;
 	} catch (error) {
 		if (error.response) {
@@ -59,7 +66,6 @@ const updateUser = async (user) => {
 const getProfilePic = async (user) => {
 	try {
 		const response = await getMe();
-		console.log('getProfilePic response => ', response);
 		return response;
 	} catch (error) {
 		console.log('error: ', error);

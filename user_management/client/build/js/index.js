@@ -756,11 +756,16 @@ var getMe = (options = {}) => {
 };
 var updateUser = async (user) => {
   try {
-    console.log("New user info => ", user);
+    console.log("updateUser user.entries :\n");
+    for (let [key, value] of user.entries()) {
+      console.log(key, " : ", value);
+    }
+    console.log("\n");
     const response = await rest.patch("/user/update/", {
       body: user
     });
-    console.log("updateUser response ==> ", response);
+    console.log("updateUser response : ", response);
+    console.log("\n");
     return response;
   } catch (error) {
     if (error.response) {
@@ -778,7 +783,6 @@ var updateUser = async (user) => {
 var getProfilePic = async (user) => {
   try {
     const response = await getMe();
-    console.log("getProfilePic response => ", response);
     return response;
   } catch (error) {
     console.log("error: ", error);
@@ -1689,6 +1693,7 @@ var SettingsComponent = class extends s3 {
         return me;
       } else if (me.profile_picture) {
         this.link = me.profile_picture;
+        this.storeAvatarSrc(me.email, this.link);
         return me;
       }
       const storedAvatar = await this.getStoredAvatarSrc(me.email);
@@ -1747,15 +1752,21 @@ var SettingsComponent = class extends s3 {
   updateUserInfo = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    console.log("updateUserInfo-formData ==> ", formData);
+    console.log("updateUserInfo-formData.entries :\n");
+    for (let [key, value] of formData.entries()) {
+      console.log(key, " : ", value);
+    }
+    console.log("\n");
     try {
       const response = await updateUser(formData);
-      console.log("update user response ==> ", response);
-      location.reload();
+      console.log("updatUserInfo response.entries :\n");
+      for (let [key, value] of formData.entries()) {
+        console.log(key, " : ", value);
+      }
+      console.log("\n");
     } catch (error) {
       console.error("Error updating user:", error);
     }
-    console.log("updateUserInfo-formData ==> ", formData);
   };
   previewPhoto = (event) => {
     const input = event.target;
