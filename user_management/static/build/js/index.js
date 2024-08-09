@@ -806,7 +806,8 @@ var DashboardComponent = class extends s3 {
   static properties = {
     user: {},
     link: { type: String },
-    data: { type: Array }
+    data: { type: Array },
+    isOnline: { type: Boolean }
   };
   _userTask = new h3(this, {
     task: async ([user], { signal }) => {
@@ -841,6 +842,7 @@ var DashboardComponent = class extends s3 {
     super();
     this.link = "";
     this.data = [];
+    this.isOnline = false;
     this.images = [
       "https://cdn-icons-png.flaticon.com/128/8034/8034504.png",
       "https://cdn-icons-png.flaticon.com/128/8034/8034557.png",
@@ -905,6 +907,21 @@ var DashboardComponent = class extends s3 {
     const parsed = avatars ? JSON.parse(avatars) : {};
     return parsed[email] || "";
   };
+  checkIfOnline = (user) => {
+    const hour = 60 * 60 * 1e3;
+    const lastLoginDate = new Date(user.last_login);
+    const now = /* @__PURE__ */ new Date();
+    const timeLogedIn = now - lastLoginDate;
+    console.log(timeLogedIn, hour);
+    console.log("before this.isOnline: ", this.isOnline);
+    if (timeLogedIn < hour) {
+      this.isOnline = true;
+    } else {
+      this.isOnline = false;
+    }
+    console.log("after this.isOnline: ", this.isOnline);
+    return this.isOnline;
+  };
   redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong/start_local_game";
   render() {
     return this._userTask.render({
@@ -920,13 +937,21 @@ var DashboardComponent = class extends s3 {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello, ${user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+        user
+      ) ? "Online" : "Offline"}
+														</span>
+													</p>
 												</div>
 
-												<div class="card-body">
+												<div
+													class="card-body align-items-center"
+												>
 													<div
 														class="text-center mb-3"
 													>
@@ -936,11 +961,15 @@ var DashboardComponent = class extends s3 {
 															alt="${user.login ? user.login : user.first_name}"
 														/>
 													</div>
-													<h5
-														class="text-center mb-1"
+													<div
+														class="card-body align-items-center"
 													>
-														${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
-													</h5>
+														<h5
+															class="text-center mb-1"
+														>
+															${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
+														</h5>
+													</div>
 												</div>
 											</div>
 										</div>
