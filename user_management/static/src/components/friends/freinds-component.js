@@ -122,6 +122,15 @@ export class FreindsComponent extends LitElement {
 		this.requestUpdate(); // Ensure the component updates
 	}
 
+	checkIfOnline = (user) => {
+		const hour = 60 * 60 * 1000;
+		const lastLoginDate = new Date(user.last_login);
+		const now = new Date();
+		const timeLogedIn = now - lastLoginDate;
+		timeLogedIn < hour ? (this.isOnline = true) : (this.isOnline = false);
+		return this.isOnline;
+	};
+
 	render() {
 		return this._userTask.render({
 			pending: () => html`<p>Loading friends...</p>`,
@@ -136,10 +145,18 @@ export class FreindsComponent extends LitElement {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello, ${user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+																user
+															)
+																? 'Online'
+																: 'Offline'}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div
@@ -204,10 +221,12 @@ export class FreindsComponent extends LitElement {
 																							friend.last_name}
 																						</h4>
 																						<span
-																							>${friend.online
+																							>${this.checkIfOnline(
+																								friend
+																							)
 																								? 'Online'
-																								: 'Offline'}</span
-																						>
+																								: 'Offline'}
+																						</span>
 																					</div>
 																					<div
 																						class="pl-4"
@@ -258,10 +277,12 @@ export class FreindsComponent extends LitElement {
 																				friend.last_name}
 																			</h4>
 																			<span
-																				>${friend.online
+																				>${this.checkIfOnline(
+																					friend
+																				)
 																					? 'Online'
-																					: 'Offline'}</span
-																			>
+																					: 'Offline'}
+																			</span>
 																		</div>
 																		<button
 																			@click=${() =>

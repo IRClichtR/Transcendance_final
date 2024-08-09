@@ -122,6 +122,15 @@ export class SettingsComponent extends LitElement {
 		}
 	};
 
+	checkIfOnline = (user) => {
+		const hour = 60 * 60 * 1000;
+		const lastLoginDate = new Date(user.last_login);
+		const now = new Date();
+		const timeLogedIn = now - lastLoginDate;
+		timeLogedIn < hour ? (this.isOnline = true) : (this.isOnline = false);
+		return this.isOnline;
+	};
+
 	render() {
 		return this._userTask.render({
 			pending: () => html`<p>Loading settings...</p>`,
@@ -136,13 +145,18 @@ export class SettingsComponent extends LitElement {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello,
-													${user.displayname
-														? user.displayname
-														: user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+																user
+															)
+																? 'Online'
+																: 'Offline'}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div

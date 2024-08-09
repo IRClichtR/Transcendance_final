@@ -1809,6 +1809,14 @@ var SettingsComponent = class extends s3 {
       fileReader.readAsDataURL(file[0]);
     }
   };
+  checkIfOnline = (user) => {
+    const hour = 60 * 60 * 1e3;
+    const lastLoginDate = new Date(user.last_login);
+    const now = /* @__PURE__ */ new Date();
+    const timeLogedIn = now - lastLoginDate;
+    timeLogedIn < hour ? this.isOnline = true : this.isOnline = false;
+    return this.isOnline;
+  };
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading settings...</p>`,
@@ -1823,11 +1831,16 @@ var SettingsComponent = class extends s3 {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello,
-													${user.displayname ? user.displayname : user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+        user
+      ) ? "Online" : "Offline"}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div
@@ -2137,6 +2150,14 @@ var FreindsComponent = class extends s3 {
     this.saveFriendsToStorage();
     this.requestUpdate();
   }
+  checkIfOnline = (user) => {
+    const hour = 60 * 60 * 1e3;
+    const lastLoginDate = new Date(user.last_login);
+    const now = /* @__PURE__ */ new Date();
+    const timeLogedIn = now - lastLoginDate;
+    timeLogedIn < hour ? this.isOnline = true : this.isOnline = false;
+    return this.isOnline;
+  };
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading friends...</p>`,
@@ -2151,10 +2172,16 @@ var FreindsComponent = class extends s3 {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello, ${user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+        user
+      ) ? "Online" : "Offline"}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div
@@ -2209,8 +2236,10 @@ var FreindsComponent = class extends s3 {
 																							${friend.first_name + " " + friend.last_name}
 																						</h4>
 																						<span
-																							>${friend.online ? "Online" : "Offline"}</span
-																						>
+																							>${this.checkIfOnline(
+          friend
+        ) ? "Online" : "Offline"}
+																						</span>
 																					</div>
 																					<div
 																						class="pl-4"
@@ -2258,8 +2287,10 @@ var FreindsComponent = class extends s3 {
 																				${friend.first_name + " " + friend.last_name}
 																			</h4>
 																			<span
-																				>${friend.online ? "Online" : "Offline"}</span
-																			>
+																				>${this.checkIfOnline(
+          friend
+        ) ? "Online" : "Offline"}
+																			</span>
 																		</div>
 																		<button
 																			@click=${() => this.handleRemoveFriend(
@@ -2383,6 +2414,14 @@ var PasswordChangeComponent = class extends s3 {
       alert("Error updating password");
     }
   }
+  checkIfOnline = (user) => {
+    const hour = 60 * 60 * 1e3;
+    const lastLoginDate = new Date(user.last_login);
+    const now = /* @__PURE__ */ new Date();
+    const timeLogedIn = now - lastLoginDate;
+    timeLogedIn < hour ? this.isOnline = true : this.isOnline = false;
+    return this.isOnline;
+  };
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading password...</p>`,
@@ -2397,11 +2436,16 @@ var PasswordChangeComponent = class extends s3 {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello,
-													${user.displayname ? user.displayname : user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+        user
+      ) ? "Online" : "Offline"}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div
