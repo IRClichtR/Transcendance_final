@@ -313,7 +313,9 @@ export class SettingsComponent extends LitElement {
 																class="form-control"
 																id="inputUsername"
 																name="username"
-																value="${user.username}"
+																value="${user?.username
+																	? user.username
+																	: user.displayname}"
 															/>
 														</div>
 														<div
@@ -351,7 +353,9 @@ export class SettingsComponent extends LitElement {
 														<div class="col-12">
 															<button
 																type="submit"
-																class="btn btn-primary"
+																class="btn btn-primary ${user.login
+																	? 'disabled'
+																	: ''}"
 															>
 																Save Changes
 															</button>

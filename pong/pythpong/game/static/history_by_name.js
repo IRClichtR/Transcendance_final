@@ -20,7 +20,7 @@ tournament_history.data.forEach((game) => {
         <p>semi-final: ${game[3]} ${game[9]} - ${game[10]} ${game[4]}</p>
         <p>semi-final: ${game[5]} ${game[11]} - ${game[12]} ${game[6]}</p>
         <p>final: ${game[7]} ${game[13]} - ${game[14]} ${game[8]}</p>
-      `;
+    `;
 		gameHistory.appendChild(gameElement);
 	}
 });

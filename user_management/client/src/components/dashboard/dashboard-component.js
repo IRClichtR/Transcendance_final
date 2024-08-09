@@ -135,8 +135,7 @@ export class DashboardComponent extends LitElement {
 	};
 
 	redirectTPongGame = () =>
-		(window.location.href =
-			'https://192.168.1.37:8443/pong/start_local_game');
+		(window.location.href = 'https://192.168.1.37:8443/pong');
 
 	render() {
 		return this._userTask.render({
@@ -224,7 +223,7 @@ export class DashboardComponent extends LitElement {
 													<button
 														type="submit"
 														class="btn btn-primary mt-3"
-														href="/pong/start_local_game"
+														href="/pong"
 														@click="${this
 															.redirectTPongGame}"
 													>

@@ -31,7 +31,6 @@ def create_tournament(players):
 def create_final(tournament_id, player_name):
 
     tournament = Tournament.objects.get(id=tournament_id)
-     
     if not tournament.final_created:
         tournament.final = Game.objects.create_tournament_game('final', tournament.id)
         tournament.final.player_ids = [0, 1]

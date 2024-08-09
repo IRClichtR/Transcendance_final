@@ -1001,7 +1001,7 @@ var DashboardComponent = class extends s3 {
 													<button
 														type="submit"
 														class="btn btn-primary mt-3"
-														href="/pong/start_local_game"
+														href="/pong"
 														@click="${this.redirectTPongGame}"
 													>
 														Play Pong
@@ -1985,7 +1985,7 @@ var SettingsComponent = class extends s3 {
 																class="form-control"
 																id="inputUsername"
 																name="username"
-																value="${user.username}"
+																value="${user?.username ? user.username : user.displayname}"
 															/>
 														</div>
 														<div
@@ -2023,7 +2023,7 @@ var SettingsComponent = class extends s3 {
 														<div class="col-12">
 															<button
 																type="submit"
-																class="btn btn-primary"
+																class="btn btn-primary ${user.login ? "disabled" : ""}"
 															>
 																Save Changes
 															</button>

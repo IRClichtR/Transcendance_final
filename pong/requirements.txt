@@ -3,5 +3,4 @@ channels[daphne] #handle server-side pong
 web3 #handle blockchain module
 python-dotenv
 djangorestframework
-djangorestframework-simplejwt
 psycopg2-binary

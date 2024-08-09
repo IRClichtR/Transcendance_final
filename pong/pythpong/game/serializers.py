@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Game, WaitingRoom
+from .models import Game, WaitingRoom, Tournament
 
 class GameSerializer(ModelSerializer):
 
@@ -12,3 +12,8 @@ class WaitingRoomSerializer(ModelSerializer):
     class Meta:
         model = WaitingRoom
         fields = ['players']
+
+class TournamentSerializer(ModelSerializer):
+    class Meta:
+        model = Tournament 
+        fields = '__all__'
