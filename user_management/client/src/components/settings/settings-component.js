@@ -102,6 +102,7 @@ export class SettingsComponent extends LitElement {
 				console.log(key, ' : ', value);
 			}
 			console.log('\n');
+
 			// location.reload();
 		} catch (error) {
 			console.error('Error updating user:', error);

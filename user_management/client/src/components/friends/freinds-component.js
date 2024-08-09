@@ -21,10 +21,8 @@ export class FreindsComponent extends LitElement {
 	async fetchFriends() {
 		try {
 			const response = await fetch('/user');
-			console.log('fetchFriends response ===>> ', response);
 			if (response.ok) {
 				const data = await response.json();
-				console.log('fetchFriends data ==>', data);
 				this.friends = data;
 			} else {
 				console.error('Failed to fetch friends');
@@ -38,13 +36,13 @@ export class FreindsComponent extends LitElement {
 		task: async ([user], { signal }) => {
 			const response = await getMe({ signal });
 
+			console.log('response: ', response);
+
 			if (response.image?.link) {
 				this.link = response.image.link;
-				console.log('response.image.link: ', this.link);
 				return response;
 			} else if (response?.profile_picture) {
 				this.link = response.profile_picture;
-				console.log('response.profile_picture: ', this.link);
 				return response;
 			}
 
@@ -112,7 +110,6 @@ export class FreindsComponent extends LitElement {
 	handleAddFriend(friend) {
 		if (!this.myFriends.some((f) => f.email === friend.email)) {
 			this.myFriends = [...this.myFriends, friend];
-			console.log('add friend:::::::', this.myFriends);
 			this.saveFriendsToStorage();
 			this.requestUpdate(); // Ensure the component updates
 		}

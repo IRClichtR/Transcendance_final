@@ -2021,10 +2021,8 @@ var FreindsComponent = class extends s3 {
   async fetchFriends() {
     try {
       const response = await fetch("/user");
-      console.log("fetchFriends response ===>> ", response);
       if (response.ok) {
         const data = await response.json();
-        console.log("fetchFriends data ==>", data);
         this.friends = data;
       } else {
         console.error("Failed to fetch friends");
@@ -2036,13 +2034,12 @@ var FreindsComponent = class extends s3 {
   _userTask = new h3(this, {
     task: async ([user], { signal }) => {
       const response = await getMe({ signal });
+      console.log("response: ", response);
       if (response.image?.link) {
         this.link = response.image.link;
-        console.log("response.image.link: ", this.link);
         return response;
       } else if (response?.profile_picture) {
         this.link = response.profile_picture;
-        console.log("response.profile_picture: ", this.link);
         return response;
       }
       const storedAvatar = this.getStoredAvatarSrc(response.email);
@@ -2101,7 +2098,6 @@ var FreindsComponent = class extends s3 {
   handleAddFriend(friend) {
     if (!this.myFriends.some((f3) => f3.email === friend.email)) {
       this.myFriends = [...this.myFriends, friend];
-      console.log("add friend:::::::", this.myFriends);
       this.saveFriendsToStorage();
       this.requestUpdate();
     }
