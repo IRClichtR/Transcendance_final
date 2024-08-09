@@ -10,6 +10,8 @@ from django.contrib import messages
 from .models import AppUserManager, AppUser
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from dotenv import load_dotenv
+import os
 
 def req_api42(request, token):
     headers = {'Authorization': f'Bearer {token}'}
@@ -73,6 +75,9 @@ def index(request):
 
 @csrf_protect
 def login(request):
+    load_dotenv()
+    HOST_IP = os.environ.get('HOST_IP')
+
     user = get_user_model()
     if request.session.get('authMethod', None) is None:
         if request.method == 'POST'  :
@@ -88,7 +93,7 @@ def login(request):
         elif request.method == 'GET' and not request.user.is_authenticated:
             code = request.GET.get("code")
             if not code:
-                return render(request, 'pages/login.html')
+                return render(request, 'pages/login.html', {'URL': f"https://{HOST_IP}:8443/login"})
 
             url_token = "https://api.intra.42.fr/oauth/token"
             headers = {"Content-Type": "application/x-www-form-urlencoded"}
@@ -97,7 +102,7 @@ def login(request):
                 "client_id": "u-s4t2ud-e6514ae93c2f3f3c25c6c98db2627ae8b9c70362848bea099f4e972c73370ec3",
                 "client_secret": "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",
                 "code": code,
-                "redirect_uri": "https://localhost:8443/login"
+                "redirect_uri": f"https://{HOST_IP}:8443/login"
             }
 
             response = requests.post(url_token, headers=headers, data=data)
@@ -112,7 +117,7 @@ def login(request):
             else:
                 return render(request, 'pages/login.html', {'error': 'Token exchange failed'})
         elif request.method == 'GET':
-            return render(request, 'pages/login.html')
+            return render(request, 'pages/login.html', {'URL': f"https://{settings.HOST_IP}:8443/login"})
     else:
         return render(request, 'pages/login.html', {'error': 'Already login'})
 
