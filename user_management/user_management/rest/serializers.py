@@ -26,6 +26,7 @@ class AppUserSerializer(serializers.ModelSerializer):
         return None
 
     def update(self, instance, validated_data):
+        print("validated_data: ", validated_data)
         instance.username = validated_data.get('username', instance.username)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
