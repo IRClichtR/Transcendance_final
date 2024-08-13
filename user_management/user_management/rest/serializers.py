@@ -28,11 +28,12 @@ class AppUserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         print("validated_data: ", validated_data)
+        instance.save()
         instance.username = validated_data.get('username', instance.username)
         print("instance.username: ", instance.username)
-        instance.first_name = validated_data.get('first_Name', instance.first_name)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
         print("instance.first_name: ", instance.first_name)
-        instance.last_name = validated_data.get('last_Name', instance.last_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
         print("instance.last_name: ", instance.last_name)
         if 'profile_picture' in validated_data:
             instance.profile_picture = validated_data['profile_picture']
