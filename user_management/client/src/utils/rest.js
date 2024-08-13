@@ -68,7 +68,6 @@ const updateUser = async (user) => {
 const getProfilePic = async (user) => {
 	try {
 		const response = await getMe();
-		console.log('getProfilePic response : ', response);
 		return response;
 	} catch (error) {
 		console.log('error: ', error);
@@ -76,13 +75,18 @@ const getProfilePic = async (user) => {
 	}
 };
 
-const updatePassword = async ({ confirm_new_password, new_password, old_password }) => {
+const updatePassword = async ({
+	confirm_new_password,
+	new_password,
+	old_password,
+}) => {
 	try {
 		const response = await rest
 			.put('/user/password/', {
 				json: { confirm_new_password, new_password, old_password },
 			})
 			.json();
+		console.log('updatePassword response : ', response);
 		return response;
 	} catch (error) {
 		console.error('Failed to update password:', error);
