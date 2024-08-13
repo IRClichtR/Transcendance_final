@@ -783,6 +783,7 @@ var updateUser = async (user) => {
 var getProfilePic = async (user) => {
   try {
     const response = await getMe();
+    console.log("getProfilePic response : ", response);
     return response;
   } catch (error) {
     console.log("error: ", error);
@@ -922,7 +923,7 @@ var DashboardComponent = class extends s3 {
     console.log("after this.isOnline: ", this.isOnline);
     return this.isOnline;
   };
-  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong/start_local_game";
+  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong";
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
@@ -1793,6 +1794,7 @@ var SettingsComponent = class extends s3 {
         console.log(key, " : ", value);
       }
       console.log("\n");
+      location.reload();
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -1951,7 +1953,7 @@ var SettingsComponent = class extends s3 {
 																type="text"
 																class="form-control"
 																id="inputFirstName"
-																name="first_Name"
+																name="first_name"
 																value="${user.first_name}"
 															/>
 														</div>
@@ -1968,7 +1970,7 @@ var SettingsComponent = class extends s3 {
 																type="text"
 																class="form-control"
 																id="inputLastName"
-																name="last_Name"
+																name="last_name"
 																value="${user.last_name}"
 															/>
 														</div>

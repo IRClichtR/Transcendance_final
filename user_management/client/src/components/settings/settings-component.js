@@ -103,7 +103,7 @@ export class SettingsComponent extends LitElement {
 			}
 			console.log('\n');
 
-			// location.reload();
+			location.reload();
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}
@@ -279,7 +279,7 @@ export class SettingsComponent extends LitElement {
 																type="text"
 																class="form-control"
 																id="inputFirstName"
-																name="first_Name"
+																name="first_name"
 																value="${user.first_name}"
 															/>
 														</div>
@@ -296,7 +296,7 @@ export class SettingsComponent extends LitElement {
 																type="text"
 																class="form-control"
 																id="inputLastName"
-																name="last_Name"
+																name="last_name"
 																value="${user.last_name}"
 															/>
 														</div>
