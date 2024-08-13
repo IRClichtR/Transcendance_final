@@ -790,10 +790,10 @@ var getProfilePic = async (user) => {
     throw new Error("Failed to update user");
   }
 };
-var updatePassword = async ({ currentPassword, newPassword }) => {
+var updatePassword = async ({ confirm_new_password, new_password, old_password }) => {
   try {
-    const response = await ky.put("/user/password", {
-      json: { currentPassword, newPassword }
+    const response = await rest.put("/user/password/", {
+      json: { confirm_new_password, new_password, old_password }
     }).json();
     return response;
   } catch (error) {
@@ -2394,20 +2394,26 @@ var PasswordChangeComponent = class extends s3 {
   };
   // * Update Password
   async updatePassword(event) {
+    console.log("event: ", event);
     event.preventDefault();
     const formData = new FormData(event.target);
-    const currentPassword = formData.get("currentPassword");
-    const newPassword = formData.get("newPassword");
-    const confirmPassword = formData.get("confirmPassword");
-    if (newPassword !== confirmPassword) {
+    console.log("formData: ", formData);
+    const old_password = formData.get("old_password");
+    console.log("old_password: ", old_password);
+    const new_password = formData.get("new_password");
+    console.log("new_password: ", new_password);
+    const confirm_new_password = formData.get("confirm_new_password");
+    console.log("confirm_new_password: ", confirm_new_password);
+    if (new_password !== confirm_new_password) {
       console.error("New password and confirm password do not match");
       alert("New password and confirm password do not match");
       return;
     }
     try {
       const response = await updatePassword({
-        currentPassword,
-        newPassword
+        old_password,
+        new_password,
+        confirm_new_password
       });
       console.log("Password updated successfully:", response);
       alert("Password updated successfully");
@@ -2495,7 +2501,7 @@ var PasswordChangeComponent = class extends s3 {
 												<div class="row gy-3 gy-xxl-4">
 													<div class="col-12">
 														<label
-															for="currentPassword"
+															for="old_password"
 															class="form-label"
 															>Current
 															Password</label
@@ -2503,28 +2509,28 @@ var PasswordChangeComponent = class extends s3 {
 														<input
 															type="password"
 															class="form-control"
-															id="currentPassword"
-															name="currentPassword"
+															id="old_password"
+															name="old_password"
 															required
 														/>
 													</div>
 													<div class="col-12">
 														<label
-															for="newPassword"
+															for="new_password"
 															class="form-label"
 															>New Password</label
 														>
 														<input
 															type="password"
 															class="form-control"
-															id="newPassword"
-															name="newPassword"
+															id="new_password"
+															name="new_password"
 															required
 														/>
 													</div>
 													<div class="col-12">
 														<label
-															for="confirmPassword"
+															for="confirm_new_password"
 															class="form-label"
 															>Confirm
 															Password</label
@@ -2532,8 +2538,8 @@ var PasswordChangeComponent = class extends s3 {
 														<input
 															type="password"
 															class="form-control"
-															id="confirmPassword"
-															name="confirmPassword"
+															id="confirm_new_password"
+															name="confirm_new_password"
 															required
 														/>
 													</div>
