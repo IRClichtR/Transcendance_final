@@ -46,6 +46,7 @@ def index(request):
     if request.method == 'POST' and request.session.get('authMethod', None) is None:
         first_name = request.POST.get('first-name')
         last_name = request.POST.get('last-name')
+        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
@@ -65,7 +66,7 @@ def index(request):
 			)
             user.first_name = first_name
             user.last_name = last_name
-            user.username = email
+            user.username = username
             user.save()
             messages.success(request, 'User created successfully!')
             return redirect('/login')
