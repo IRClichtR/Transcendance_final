@@ -4,13 +4,13 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 
 class AppUserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, first_name=None, last_name=None):
         if not email:
             raise ValueError('An Email is required.')
         if not password:
             raise ValueError('A Password is required.')
         email = self.normalize_email(email)
-        user = self.model(email=email)
+        user = self.model(email=email, first_name=first_name, last_name=last_name)
         user.set_password(password)
         user.save()
         return user
