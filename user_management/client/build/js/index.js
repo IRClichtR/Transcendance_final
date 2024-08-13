@@ -922,7 +922,7 @@ var DashboardComponent = class extends s3 {
     console.log("after this.isOnline: ", this.isOnline);
     return this.isOnline;
   };
-  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong/start_local_game";
+  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong";
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
