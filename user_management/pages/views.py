@@ -42,6 +42,7 @@ def req_api42(request, token):
 
 @csrf_protect
 def index(request):
+	# ! FIX: find a way to redirect to add username property to user and use it as a login
     if request.method == 'POST' and request.session.get('authMethod', None) is None:
         first_name = request.POST.get('first-name')
         last_name = request.POST.get('last-name')
@@ -81,9 +82,9 @@ def login(request):
     user = get_user_model()
     if request.session.get('authMethod', None) is None:
         if request.method == 'POST'  :
-            email = request.POST.get('email')
+            username = request.POST.get('username')
             password = request.POST.get('password')
-            user = authenticate(request, username=email, password=password)
+            user = authenticate(request, username=username, password=password)
             if user is not None:
                 auth_login(request, user)
                 request.session['authMethod'] = 'local'

@@ -30,6 +30,7 @@ class AppUserSerializer(serializers.ModelSerializer):
         instance.username = validated_data.get('username', instance.username)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.email = validated_data.get('email', instance.email)
         if 'profile_picture' in validated_data:
             instance.profile_picture = validated_data['profile_picture']
         instance.save()
