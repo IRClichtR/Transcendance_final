@@ -76,11 +76,11 @@ const getProfilePic = async (user) => {
 	}
 };
 
-const updatePassword = async ({ currentPassword, newPassword }) => {
+const updatePassword = async ({ confirm_new_password, new_password, old_password }) => {
 	try {
-		const response = await ky
-			.put('/user/password', {
-				json: { currentPassword, newPassword },
+		const response = await rest
+			.put('/user/password/', {
+				json: { confirm_new_password, new_password, old_password },
 			})
 			.json();
 		return response;

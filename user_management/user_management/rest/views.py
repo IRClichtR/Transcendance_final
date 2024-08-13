@@ -1,11 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from .serializers import UserSerializer, AppUserSerializer
+from .serializers import UserSerializer, AppUserSerializer, AppPasswordSerializer
 from rest_framework import permissions, viewsets, status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 import requests
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -63,4 +65,12 @@ class UpdateUserProfileView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
+        return self.request.user
+
+class ChangePasswordView(generics.UpdateAPIView):
+    serializer_class = AppPasswordSerializer
+    model = get_user_model()
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, queryset=None):
         return self.request.user
