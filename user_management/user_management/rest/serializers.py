@@ -23,6 +23,7 @@ class AppUserSerializer(serializers.ModelSerializer):
 
     def get_profile_picture_url(self, obj):
         request = self.context.get('request')
+        print("request: ", request)
         if obj.profile_picture and request:
             return request.build_absolute_uri(obj.profile_picture.url)
         return None
@@ -30,7 +31,9 @@ class AppUserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.save()
         instance.username = validated_data.get('username', instance.username)
+        print("instance.username: ", instance.username)
         instance.first_name = validated_data.get('first_name', instance.first_name)
+        print("instance.first_name: ", instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.email = validated_data.get('email', instance.email)
         if 'profile_picture' in validated_data:
