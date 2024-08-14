@@ -10,6 +10,7 @@ from django.contrib import messages
 from .models import AppUserManager, AppUser
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from dotenv import load_dotenv
 import os
 
@@ -54,8 +55,12 @@ def index(request):
         try:
             validate_password(password)
         except ValidationError as e:
-            error_message = e.messages
+            error_message = ', '.join(e.messages)
             return render(request, 'pages/index.html', {'error': error_message})
+        try:
+            validate_email(email)
+        except ValidationError as e:
+            return render(request, 'pages/index.html', {'error': 'Enter a valid email address.'})
         if password != confirm_password:
             return (render(request, 'pages/index.html', {'error': 'Differents passwords'}))
 
