@@ -105,7 +105,13 @@ export class PasswordChangeComponent extends LitElement {
 				confirm_new_password,
 			});
 			console.log('Password updated successfully:', response);
-			alert('Password updated successfully');
+			// alert('Password updated successfully');
+
+			// Déconnecter l'utilisateur
+			//await logoutUser();
+			alert('You have been logged out. Please log in again.');
+			window.location.href = '/logout'; // Rediriger vers la page de connexion
+
 		} catch (error) {
 			console.error('Error updating password:', error);
 			alert('Error updating password');
