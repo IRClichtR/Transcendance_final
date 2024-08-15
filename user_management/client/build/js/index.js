@@ -783,18 +783,22 @@ var updateUser = async (user) => {
 var getProfilePic = async (user) => {
   try {
     const response = await getMe();
-    console.log("getProfilePic response : ", response);
     return response;
   } catch (error) {
     console.log("error: ", error);
     throw new Error("Failed to update user");
   }
 };
-var updatePassword = async ({ confirm_new_password, new_password, old_password }) => {
+var updatePassword = async ({
+  confirm_new_password,
+  new_password,
+  old_password
+}) => {
   try {
     const response = await rest.put("/user/password/", {
       json: { confirm_new_password, new_password, old_password }
     }).json();
+    console.log("updatePassword response : ", response);
     return response;
   } catch (error) {
     console.error("Failed to update password:", error);
@@ -2416,7 +2420,8 @@ var PasswordChangeComponent = class extends s3 {
         confirm_new_password
       });
       console.log("Password updated successfully:", response);
-      alert("Password updated successfully");
+      alert("Password updated successfully. You have been logged out. Please log in again.");
+      window.location.href = "/logout";
     } catch (error) {
       console.error("Error updating password:", error);
       alert("Error updating password");
