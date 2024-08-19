@@ -10,6 +10,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 import requests
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseForbidden
 
 User = get_user_model()
 
@@ -44,7 +45,8 @@ def me_data(request):
         token = request.session.get('access_token')
         profile_data = get_profile_from_school(token)
         return JsonResponse(profile_data, safe=False)
-    else:
+    elif auth_method == 'local':
+        print(request.session.get('authMethod'))
         user = request.user
         user_data = {
             'id': user.id,
@@ -59,6 +61,8 @@ def me_data(request):
             'profile_picture': user.profile_picture.url if user.profile_picture else None,
         }
         return JsonResponse(user_data, safe=False)
+    else:
+        return HttpResponseForbidden("Access denied")
 
 class UpdateUserProfileView(generics.UpdateAPIView):
     serializer_class = AppUserSerializer

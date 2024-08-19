@@ -927,7 +927,7 @@ var DashboardComponent = class extends s3 {
     console.log("after this.isOnline: ", this.isOnline);
     return this.isOnline;
   };
-  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong";
+  redirectTPongGame = () => window.location.href = "https://10.0.2.15:8443/pong";
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
@@ -2420,7 +2420,7 @@ var PasswordChangeComponent = class extends s3 {
         confirm_new_password
       });
       console.log("Password updated successfully:", response);
-      alert("You have been logged out. Please log in again.");
+      alert("Password updated successfully. You have been logged out. Please log in again.");
       window.location.href = "/logout";
     } catch (error) {
       console.error("Error updating password:", error);

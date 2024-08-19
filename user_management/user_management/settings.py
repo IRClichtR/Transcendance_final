@@ -57,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "user_management.custom_middleware.CustomMiddleware",
+    "user_management.custom_middleware.RestrictUserAccessMiddleware",
 ]
 
 ROOT_URLCONF = "user_management.urls"
