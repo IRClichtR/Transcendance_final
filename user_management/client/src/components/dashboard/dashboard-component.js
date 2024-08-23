@@ -135,7 +135,7 @@ export class DashboardComponent extends LitElement {
 	};
 
 	redirectTPongGame = () =>
-		(window.location.href = 'https://192.168.1.37:8443/pong');
+		(window.location.href = 'https://192.168.1.37:8443/pong/');
 
 	render() {
 		return this._userTask.render({
