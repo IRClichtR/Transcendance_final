@@ -25,6 +25,7 @@ db.sqlite3
 */migrations/*.py[cod]
 */migrations/*.pyc
 */migrations/*.pyo
+pong/pythpong/game/migrations/0*
 
 # staticfiles
 staticfiles/

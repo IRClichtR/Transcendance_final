@@ -4,8 +4,8 @@ export DJANGO_SETTINGS_MODULE=pythpong.settings
 
 echo "Make migration for pong container ..."
 cd pythpong
-python manage.py makemigrations game
-python manage.py migrate
+python manage.py makemigrations
+python manage.py migrate game
 python manage.py collectstatic --noinput
 
 echo "Waiting for apps ..."
