@@ -47,6 +47,7 @@ services:
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+      - ./init-scripts:/docker-entrypoint-initdb.d
       # - ./pong/pythpong:/app/pythpong
     ports:
       - "5432:5432"

@@ -97,7 +97,7 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         "ENGINE": os.environ.get("SQL_ENGINE"),
-        "NAME": os.environ.get("SQL_DATABASE"),
+        "NAME": os.environ.get("SQL_DATABASE2"),
         "USER": os.environ.get("SQL_USER"),
         "PASSWORD": os.environ.get("SQL_PASSWORD"),
         "HOST": os.environ.get("SQL_HOST"),
