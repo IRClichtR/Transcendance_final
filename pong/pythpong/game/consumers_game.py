@@ -13,30 +13,44 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def websocket_connect(self, event):
 
-        self.connected = True
-        self.game_id = self.scope['url_route']['kwargs']['game_id']
-        self.player_id = self.scope['url_route']['kwargs']['player_id']
-        self.room_group_name = f'game_{self.game_id}'
-
-        #protection vs reconnection
-        game = await self.get_game()
-        if game.end_play:
-            await self.close()
-            return
-        
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
-
-        await self.accept()
-        print(f"WebSocket connected: Game ID {self.game_id}, Player ID {self.player_id}")
-
-        # Start the loop to send game state periodically
         try:
-            self.update_task = asyncio.create_task(self.update_game_loop())
+            self.connected = True
+            self.game_id = self.scope['url_route']['kwargs']['game_id']
+            self.player_id = self.scope['url_route']['kwargs']['player_id']
+            self.room_group_name = f'game_{self.game_id}'
+
+            #protection vs reconnection
+            game = await self.get_game()
+            if game.end_play:
+                await self.close()
+                return
+            
+            try:
+                await self.channel_layer.group_add(
+                    self.room_group_name,
+                    self.channel_name
+                )
+            except Exception as e:
+                print(f"Error adding channel to group: {e}")
+                await self.close()
+                return
+
+            try:
+                await self.accept()
+                print(f"WebSocket connected: Game ID {self.game_id}, Player ID {self.player_id}")
+            except Exception as e:
+                print(f"Error during WebSocket accept: {e}")
+                await self.close()
+                return
+
+            # Start the loop to send game state periodically
+            try:
+                self.update_task = asyncio.create_task(self.update_game_loop())
+            except Exception as e:
+                print(f"Error in update loop: {e}")
         except Exception as e:
-            print(f"Error while ...: {e}")  
+            print(f"Unexpected error during WebSocket connection: {e}")
+            await self.close()
 
     async def websocket_receive(self, event):
         message = event['text']

@@ -121,6 +121,18 @@ gameSocket.onmessage = function (event) {
     }    
 };
 
+gameSocket.onerror = function (error) {
+    console.error("WebSocket error observed: ", error);
+};
+
+gameSocket.onclose = function (event) {
+    if (event.wasClean) {
+        console.log(`WebSocket closed cleanly, code=${event.code}, reason=${event.reason}`);
+    } else {
+        console.error(`WebSocket connection died unexpectedly, code=${event.code}`);
+    }
+};
+
 function drawRect(x, y, w, h, color) {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, w, h);
