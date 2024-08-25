@@ -165,7 +165,6 @@ class GameConsumer(AsyncWebsocketConsumer):
             'url': url
         }))
     
-
     @database_sync_to_async
     def call_update_game_state(self, game_id):
         update_game_state(game_id)
@@ -216,4 +215,4 @@ class GameConsumer(AsyncWebsocketConsumer):
         try:
             return Tournament.objects.get(id=tournament_id)
         except Tournament.DoesNotExist:
-            return None      
+            return None
