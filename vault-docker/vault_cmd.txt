@@ -53,3 +53,16 @@ version          1
 
 vault kv put secret/app/test ping=pong
 
+# Encryption
+vault secrets enable transit
+vault write -f transit/keys/foo
+vault write transit/encrypt/foo plaintext=$(base64 <<< "my precious hedgehog")
+vault write transit/decrypt/foo ciphertext=vault:v1:lHejk9Q7IFMwQwOovjtgFCCQa2YJYp4ATGLEwjzVFtjlRf6+Jx0BfrJlzvVZryJycA==
+base64 -d <<< "bXkgcHJlY2lvdXMgaGVkZ2Vob2cK"
+
+# Revoking 
+vault lease revoke -prefix [directory/]
+vault lease revoke [lease id]
+
+# Keys and Certificate generator
+openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out localhost.crt -keyout localhost.key
