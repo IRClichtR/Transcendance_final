@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect
-from .get_game_player_id import get_game_player_id, get_local_game
+from .get_game_pos_id import get_game_pos_id, get_local_game
 from .constants import *
 from .models import WaitingRoom, Game
 from .eth import get_all_tournament_games
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from .serializers import GameSerializer, WaitingRoomSerializer, TournamentSerializer
+from django.conf import settings
+import requests
+import json
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
 
 # for debug purpose only
-from django.conf import settings
-from django.http import JsonResponse
 # from rest_framework.permissions import IsAuthenticated
 #
 # def debug_settings(request):
@@ -24,21 +27,23 @@ from django.http import JsonResponse
 def start_game(request):
     if request.method == 'POST':
         player_name = request.POST.get('playerName')
-        game_id, player_id = get_game_player_id(player_name)
-        return redirect('play_game', game_id=game_id, player_id=player_id, player_name=player_name)
+        player_id = request.POST.get('playerId')
+        game_id, player_pos = get_game_pos_id(player_name, player_id)
+        return redirect('play_game', game_id=game_id, player_pos=player_pos, player_name=player_name)
     return render(request, 'game/index.html')
 
 def start_local_game(request):
     if request.method == 'POST':
+        player_id = request.POST.get('playerId')
         player_name = request.POST.get('playerName')
-        game_id = get_local_game(player_name)
+        game_id = get_local_game(player_name, player_id)
         return redirect('play_local_game', game_id=game_id, player_name=player_name)
     return render(request, 'game/index.html')
 
 def play_local_game(request, game_id, player_name):
     context = {
         'game_id': game_id,
-        'player_id': 0,
+        'player_pos': 0,
         'window_width': WINDOW_WIDTH,
         'window_height': WINDOW_HEIGHT,
         'ball_diameter': BALL_DIAMETER,
@@ -52,10 +57,10 @@ def play_local_game(request, game_id, player_name):
     }
     return render(request, 'game/local_play.html', context)
 
-def play_game(request, game_id, player_id, player_name):
+def play_game(request, game_id, player_pos, player_name):
     context = {
         'game_id': game_id,
-        'player_id': player_id,
+        'player_pos': player_pos,
         'window_width': WINDOW_WIDTH,
         'window_height': WINDOW_HEIGHT,
         'ball_diameter': BALL_DIAMETER,
@@ -76,20 +81,21 @@ def waiting_room(request):
 
     if request.method == 'POST':
         player_name = request.POST.get('playerName')
+        player_id = request.POST.get('playerId')
         waiting_room = WaitingRoom.objects.all().first()
         if waiting_room is None:
             waiting_room = WaitingRoom.objects.create()
 
         waiting_room.players.append(player_name)
+        waiting_room.player_ids.append(player_id)
         waiting_room.save()
-        return redirect('waiting_room_by_name', player_name=player_name)
+        return redirect('waiting_room_by_name', player_name=player_name, player_id=player_id)
     return render(request, 'game/index.html')
 
-def waiting_room_by_name(request, player_name):
-    #waiting_room = WaitingRoom.objects.all().first()
+def waiting_room_by_name(request, player_name, player_id):
     context = {
         'player_name': player_name,
-     #   'players': waiting_room.players if waiting_room else [],
+        'player_id': player_id,
     }
     return render(request, 'waiting_room.html', context)
 

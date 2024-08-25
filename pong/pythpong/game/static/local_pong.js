@@ -7,7 +7,7 @@ const ballDiameter = JSON.parse(document.getElementById('ball-diameter').textCon
 const batHeight = JSON.parse(document.getElementById('bat-height').textContent);
 const batWidth = JSON.parse(document.getElementById('bat-width').textContent);
 const gameId = JSON.parse(document.getElementById('game-id').textContent);
-const playerId = JSON.parse(document.getElementById('player-id').textContent);
+const playerPos = JSON.parse(document.getElementById('player-pos').textContent);
 const batSpeed = JSON.parse(document.getElementById('bat-speed').textContent);
 const startPosY = JSON.parse(document.getElementById('start-pos-y').textContent);
 const player1_X = JSON.parse(document.getElementById('player1-x').textContent);
@@ -58,7 +58,7 @@ const net = {
 }
 
 var gameSocket = new WebSocket(
-    'wss://' + window.location.host + '/ws/game/' + gameId + '/' + playerId + '/'
+    'wss://' + window.location.host + '/ws/game/' + gameId + '/' + playerPos + '/'
 );
 
 gameSocket.onopen = function (e) {
@@ -71,9 +71,9 @@ gameSocket.onmessage = function (event) {
 
     if (data.type === 'player_move') {
         const game = data.game;
-        if (game.player_id === 0) {
+        if (game.player_pos === 0) {
             player1.y = game.player_y[0];
-        } else if (game.player_id === 1) {
+        } else if (game.player_pos === 1) {
             player2.y = game.player_y[1];
         }
     } else if (data.type == 'game_timer') {
@@ -183,7 +183,7 @@ document.addEventListener('keydown', function (event) {
         gameSocket.send(JSON.stringify({
             'game': {
                 'game_id': gameId,
-                'player_id': 0,
+                'player_pos': 0,
                 'player_y': [player1.y, player2.y]
             }
         }));
@@ -195,7 +195,7 @@ document.addEventListener('keydown', function (event) {
         gameSocket.send(JSON.stringify({
             'game': {
                 'game_id': gameId,
-                'player_id': 0,
+                'player_pos': 0,
                 'player_y': [player1.y, player2.y]
             }
         }));
@@ -206,7 +206,7 @@ document.addEventListener('keydown', function (event) {
         gameSocket.send(JSON.stringify({
             'game': {
                 'game_id': gameId,
-                'player_id': 1,
+                'player_pos': 1,
                 'player_y': [player1.y, player2.y]
             }
         }));
@@ -218,7 +218,7 @@ document.addEventListener('keydown', function (event) {
         gameSocket.send(JSON.stringify({
             'game': {
                 'game_id': gameId,
-                'player_id': 1,
+                'player_pos': 1,
                 'player_y': [player1.y, player2.y]
             }
         }));

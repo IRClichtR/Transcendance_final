@@ -9,6 +9,7 @@ class WaitingRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.connected = True
         self.player_name = self.scope['url_route']['kwargs']['player_name']
+        self.player_id = self.scope['url_route']['kwargs']['player_id']
         self.group_name = 'waiting_room'
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
@@ -17,19 +18,20 @@ class WaitingRoomConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         self.connected = False
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
-        await self.remove_player_from_waiting_room(self.player_name)
+        await self.remove_player_from_waiting_room()
 
     #this function refresh player list and notify when tournament can start
     async def send_players_list(self):
         while self.connected:
             players = await self.get_players()
+            players_id = await self.get_player_ids()
             await self.send(text_data=json.dumps({'players': players}))
             if (len(players) >= 4):
                 #Start tournament!!
                 waiting_room = await self.get_waiting_room()
                 await self.set_tournament_created(waiting_room, False)
                 if waiting_room.tournament_created == False:
-                    tournament = await create_tournament(players)
+                    tournament = await create_tournament(players, players_id)
                     await self.set_tournament_created(waiting_room, True)
                     await self.clear_waiting_room(waiting_room)
                     player_urls = await tournament.get_player_urls()
@@ -64,6 +66,11 @@ class WaitingRoomConsumer(AsyncWebsocketConsumer):
         return waiting_room.players
     
     @database_sync_to_async
+    def get_player_ids(self):
+        waiting_room = WaitingRoom.objects.first()
+        return waiting_room.player_ids
+
+    @database_sync_to_async
     def get_waiting_room(self):
         waiting_room = WaitingRoom.objects.first()
         return waiting_room
@@ -71,6 +78,7 @@ class WaitingRoomConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def clear_waiting_room(self, waiting_room):
         waiting_room.players = []
+        waiting_room.player_ids = []
         waiting_room.save()
 
     @database_sync_to_async
@@ -79,8 +87,9 @@ class WaitingRoomConsumer(AsyncWebsocketConsumer):
         waiting_room.save()
 
     @database_sync_to_async
-    def remove_player_from_waiting_room(self, player_name):
+    def remove_player_from_waiting_room(self):
         waiting_room = WaitingRoom.objects.first()
-        if player_name in waiting_room.players:
-            waiting_room.players.remove(player_name)
+        if self.player_name in waiting_room.players:
+            waiting_room.players.remove(self.player_name)
+            waiting_room.player_ids.remove(self.player_id)
             waiting_room.save()

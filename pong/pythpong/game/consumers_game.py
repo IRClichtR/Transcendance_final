@@ -16,7 +16,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         try:
             self.connected = True
             self.game_id = self.scope['url_route']['kwargs']['game_id']
-            self.player_id = self.scope['url_route']['kwargs']['player_id']
+            self.player_pos = self.scope['url_route']['kwargs']['player_pos']
             self.room_group_name = f'game_{self.game_id}'
 
             #protection vs reconnection
@@ -37,7 +37,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
             try:
                 await self.accept()
-                print(f"WebSocket connected: Game ID {self.game_id}, Player ID {self.player_id}")
+                print(f"WebSocket connected: Game ID {self.game_id}, Player ID {self.player_pos}")
             except Exception as e:
                 print(f"Error during WebSocket accept: {e}")
                 await self.close()
@@ -59,8 +59,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         game_data = data.get('game')
         
-        # The only thing player can update is player[player_id]_y
-        await update_player_y(game_data['game_id'], game_data['player_id'], game_data['player_y'])
+        # The only thing player can update is player[player_pos]_y
+        await update_player_y(game_data['game_id'], game_data['player_pos'], game_data['player_y'])
 
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -131,14 +131,14 @@ class GameConsumer(AsyncWebsocketConsumer):
     #handle tournament final
     async def handle_end_game(self):
         game = await self.get_game()
-        if (game.game_type == 'regular' or game.game_type == 'local' or game.player_names[int(self.player_id)] != game.winner):
+        if (game.game_type == 'regular' or game.game_type == 'local' or game.player_names[int(self.player_pos)] != game.winner):
             return
         elif game.game_type == 'final':
             tournament = await self.get_tournament(game.tournament_id)
             if tournament:
                 await sync_to_async(store_data)(tournament)
             return
-        tournament = await create_final(game.tournament_id, game.player_names[int(self.player_id)])
+        tournament = await create_final(game.tournament_id, game.player_names[int(self.player_pos)], game.player_ids[int(self.player_pos)])
         tournament_url  = await tournament.get_final_url()
         await self.notify_players(tournament_url)
 
@@ -199,7 +199,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.connected = False
         game = await self.get_game()
         if (game.game_type not in ['semi_final1', 'semi_final2']) or \
-             (game.game_type in ['semi_final1', 'semi_final2'] and game.winner == game.player_names[int(self.player_id)]):
+             (game.game_type in ['semi_final1', 'semi_final2'] and game.winner == game.player_names[int(self.player_pos)]):
             await self.channel_layer.group_discard(
                 self.room_group_name,
                 self.channel_name
