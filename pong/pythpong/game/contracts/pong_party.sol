@@ -9,6 +9,10 @@ contract pongData is Ownable {
 		uint256 semifinal1_start_time;
 		uint256 semifinal2_start_time;
 		uint256 final_start_time;
+		uint256 semifinal1_player1_id;
+		uint256 semifinal1_player2_id;
+		uint256 semifinal2_player1_id;
+		uint256 semifinal2_player2_id;
 		string semifinal1_player1;
 		string semifinal1_player2;
 		string semifinal2_player1;
@@ -30,12 +34,16 @@ contract pongData is Ownable {
 	function storeGame(
 		uint256 _semifinal1_start_time,
         string memory _semifinal1_player1,
+        uint256	_semifinal1_player1_id,
         string memory _semifinal1_player2,
+        uint256 _semifinal1_player2_id,
         uint8 _semifinal1_score1,
         uint8 _semifinal1_score2,
         uint256 _semifinal2_start_time,
         string memory _semifinal2_player1,
+        uint256 _semifinal2_player1_id,
         string memory _semifinal2_player2,
+        uint256 _semifinal2_player2_id,
         uint8 _semifinal2_score1,
         uint8 _semifinal2_score2,
         uint256 _final_start_time,
@@ -48,6 +56,10 @@ contract pongData is Ownable {
 			_semifinal1_start_time,
             _semifinal2_start_time,
             _final_start_time,
+            _semifinal1_player1_id,
+            _semifinal1_player2_id,
+			_semifinal2_player1_id,
+			_semifinal2_player2_id,
             _semifinal1_player1,
             _semifinal1_player2,
             _semifinal2_player1,
