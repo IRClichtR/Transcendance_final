@@ -44,7 +44,6 @@ vault token create [by default inherit root token]
 vault token revoke [token]
 vault policy list
 
-
 # Encryption
 vault secrets enable transit
 vault write -f transit/keys/foo
@@ -58,3 +57,4 @@ vault lease revoke [lease id]
 
 # Keys and Certificate generator
 openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out localhost.crt -keyout localhost.key
+openssl req -newkey rsa:2048 -x509 -nodes -days 42 -keyout key.pem -out cert.pem -config san.cnf
