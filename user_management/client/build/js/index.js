@@ -2276,7 +2276,7 @@ var FreindsComponent = class extends s3 {
 											<div class="py-6">
 												<div class="row">
 													${this.myFriends.map(
-        (friend) => x`
+        (friend) => friend.email === user.email ? `` : x`
 															<div
 																class="col-lg-4 col-12"
 															>
