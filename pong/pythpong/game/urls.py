@@ -11,6 +11,8 @@ router.register(r'tournaments', TournamentViewSet, basename='tournament')
 
 api_patterns = [
         path('', include(router.urls)),
+        re_path(r'^games/(?P<player_id>.+)/$', GameViewset.as_view({'get': 'list'})),
+        re_path(r'^waiting-room/$', WaitingRoomViewset.as_view({'get': 'list'})),
         ]
 
 app_patterns = [
@@ -24,8 +26,6 @@ app_patterns = [
     path('get_data', get_data, name='get_data'),
     path('history/<str:player_name>/', get_history, name='get_history'),
     # path('pong/debug/settings/', debug_settings, name='debug-settings'),
-    re_path(r'^pong/api/games/(?P<player_name>.+)/$', GameViewset.as_view({'get': 'list'})),
-    re_path(r'^pong/api/waiting-room/$', WaitingRoomViewset.as_view({'get': 'list'})),
     # include router-generated URL patterns
     # path('pong/api/', include(router.urls)),
 ]

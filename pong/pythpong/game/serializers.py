@@ -5,7 +5,7 @@ class GameSerializer(ModelSerializer):
 
     class Meta:
         model = Game
-        fields = ['game_id', 'start_time', 'player_names', 'points']
+        fields = ['game_id', 'start_time', 'player_id', 'player_names', 'points']
 
 class WaitingRoomSerializer(ModelSerializer):
 
