@@ -42,22 +42,6 @@ services:
   #   networks:
   #     - transcendance
 
-  # db:
-  #   image: postgres:16
-  #   container_name: db
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data/
-  #     - ./init-scripts:/docker-entrypoint-initdb.d
-  #     # - ./pong/pythpong:/app/pythpong
-  #   ports:
-  #     - "5432:5432"
-  #   # expose:
-  #   #   - "5432:5432"
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - transcendance
-
   db:
     build:
       context: ./db
@@ -65,8 +49,6 @@ services:
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-      # - ./init-scripts:/docker-entrypoint-initdb.d  # Pas nécessaire car les scripts sont déjà copiés dans le Dockerfile
-      # - ./pong/pythpong:/app/pythpong
     ports:
       - "5432:5432"
     env_file:
