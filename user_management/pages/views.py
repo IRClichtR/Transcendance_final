@@ -76,8 +76,7 @@ def index(request):
             messages.success(request, 'User created successfully!')
             return redirect('/login')
         except Exception as e:
-            context = {'error': str(e)}
-            return render(request, 'pages/index.html', context)
+            return render(request, 'pages/index.html', {'error': 'Username already taken'})
     return render(request, "pages/index.html")
 
 @csrf_protect
@@ -107,7 +106,7 @@ def login(request):
             data = {
                 "grant_type": "authorization_code",
                 "client_id": "u-s4t2ud-e6514ae93c2f3f3c25c6c98db2627ae8b9c70362848bea099f4e972c73370ec3",
-                "client_secret": "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",
+                "client_secret": "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",
                 "code": code,
                 "redirect_uri": f"https://{HOST_IP}:8443/login"
             }
