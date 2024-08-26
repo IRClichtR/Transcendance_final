@@ -2555,12 +2555,12 @@ var PasswordChangeComponent = class extends s3 {
 														/>
 													</div>
 													<div class="col-12">
-														<button
-															type="submit"
-															class="btn btn-primary"
-														>
-															Change Password
-														</button>
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-primary ${user.login ? "disabled" : ""}"
+                                                        >
+                                                            Save Password
+                                                        </button>
 													</div>
 												</div>
 											</form>
