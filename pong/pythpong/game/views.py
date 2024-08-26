@@ -105,13 +105,51 @@ def get_data(request):
         return redirect('get_history', player_name=player_name)
     return render(request, 'game/index.html')
 
-def get_history(request, player_name):
-    tournament_history = get_all_tournament_games()
-    context = {
-        'player_name' : player_name,
-        'tournament_history' : tournament_history,
+def get_history(request, player_id):
+    player_id_str = str(player_id)
+    result = get_all_tournament_games()
+    if result is None or 'data' not in result:
+        return JsonResponse({'error': 'Could not retrieve tournament games'}, status=500)
+
+    tournament_history = result['data']
+    formatted_history = []
+
+
+    for game in tournament_history:
+        if (
+            game[3] == player_id_str or
+            game[4] == player_id_str or
+            game[5] == player_id_str or
+            game[6] == player_id_str):
+
+            formatted_game = {
+                'semifinal1_start_time' : game[0],
+	            'semifinal2_start_time' : game[1],
+		        'final_start_time'      : game[2],
+		        'semifinal1_player1_id' : game[3],
+		        'semifinal1_player2_id' : game[4],
+		        'semifinal2_player1_id' : game[5],
+		        'semifinal2_player2_id' : game[6],
+		        'semifinal1_player1'    : game[7],
+		        'semifinal1_player2'    : game[8],
+		        'semifinal2_player1'    : game[9],
+		        'semifinal2_player2'    : game[10],        
+		        'final_player1'         : game[11],         
+		        'final_player2'         : game[12],
+		        'semifinal1_score1'     : game[13],    
+		        'semifinal1_score2'     : game[14],    
+		        'semifinal2_score1'     : game[15],    
+		        'semifinal2_score2'     : game[16],    
+		        'final_score1'          : game[17],
+		        'final_score2'          : game[18],
+            }
+            formatted_history.append(formatted_game)
+
+    data = {
+        'player_id' : player_id,
+        'tournament_history' : formatted_history,
     }
-    return render(request, 'game/history.html', context)
+    return JsonResponse(data)
 
 
 class GameViewset(ReadOnlyModelViewSet):
