@@ -2,8 +2,6 @@ from django.shortcuts import render, redirect
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.http import HttpResponseForbidden
-# from dotenv import load_dotenv
-# import os
 
 def CustomMiddleware(get_response):
     def middleware(request):
@@ -13,7 +11,6 @@ def CustomMiddleware(get_response):
         # i added not is.authenticated because it's an other condition for getting the right redirection
         should_redirect = 'access_token' not in request.session and request.path.startswith("/app/") and not request.user.is_authenticated
         if should_redirect:
-            print("SHOULD_REDIRECT")
             return redirect(reverse('login'))
 
         response = get_response(request)
@@ -21,12 +18,12 @@ def CustomMiddleware(get_response):
 
     return middleware
 
-class RestrictUserAccessMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
+# class RestrictUserAccessMiddleware:
+#     def __init__(self, get_response):
+#         self.get_response = get_response
 
-    def __call__(self, request):
-        if request.path == '/user/':
-            return HttpResponseForbidden("Access denied")
-        response = self.get_response(request)
-        return response
+#     def __call__(self, request):
+#         if request.path == '/user/':
+#             return HttpResponseForbidden("Access denied")
+#         response = self.get_response(request)
+#         return response
