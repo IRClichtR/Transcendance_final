@@ -120,9 +120,9 @@ class GameViewset(ReadOnlyModelViewSet):
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        player_name = self.kwargs['player_name']
+        player_id = self.kwargs['player_id']
         queryset = Game.objects.filter(game_type='regular')
-        filtered_queryset = [game for game in queryset if player_name in game.player_names]
+        filtered_queryset = [game for game in queryset if player_id in game.player_ids]
         return filtered_queryset
     
 class WaitingRoomViewset(ReadOnlyModelViewSet):
