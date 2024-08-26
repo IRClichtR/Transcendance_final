@@ -10,20 +10,17 @@ RUN apk --no-cache add \
 		unzip
 
 # Policies and script import
-COPY policy.hcl /policy.hcl
-COPY vault.hcl /vault.hcl
-COPY entrypoint-vault /entrypoint.sh
+# COPY policy.hcl /policy.hcl
+# COPY vault.hcl /vault.hcl
+COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
 # Importing tokens and certificates
 COPY tls-certificates /tls-certificates
-COPY policy-credentials-token.hcl /policy-credentials-token.hcl
+# COPY policy-credentials-token.hcl /policy-credentials-token.hcl
 # COPY elk-credentials-token.hcl /elk-credentials-token.hcl
 # COPY elk-admin-token.hcl /elk-admin-token.hcl
-
-# Launching entrypoint-vault
-CMD /entrypoint.sh
 
 # # vault version
 # ENV VAULT_VERSION 0.10.3
@@ -52,3 +49,7 @@ EXPOSE 8200
 
 # running vault
 # ENTRYPOINT ["vault"]
+
+# Launching entrypoint-vault
+CMD /entrypoint.sh
+
