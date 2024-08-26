@@ -134,8 +134,15 @@ export class DashboardComponent extends LitElement {
 		return this.isOnline;
 	};
 
-	redirectTPongGame = () =>
-		(window.location.href = 'https://192.168.1.37:8443/pong/');
+    redirectTPongGame = () => {
+        const currentHostname = window.location.hostname;
+        const currentPort = window.location.port;
+
+        const targetPort = currentPort !== '' ? currentPort : '8443'; // no port specified : use 8443
+        const pongURL = `https://${currentHostname}:${targetPort}/pong/`;
+
+        window.location.href = pongURL;
+    };
 
 	render() {
 		return this._userTask.render({
