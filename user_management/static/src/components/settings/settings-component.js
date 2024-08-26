@@ -25,6 +25,7 @@ export class SettingsComponent extends LitElement {
 			}
 
 			const storedAvatar = await this.getStoredAvatarSrc(me.email);
+            console.log("storedAvatar: ", storedAvatar);
 			if (storedAvatar) {
 				this.link = storedAvatar;
 			} else {
@@ -103,7 +104,7 @@ export class SettingsComponent extends LitElement {
 			}
 			console.log('\n');
 
-			location.reload();
+			//location.reload();
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}

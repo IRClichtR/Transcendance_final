@@ -927,16 +927,7 @@ var DashboardComponent = class extends s3 {
     console.log("after this.isOnline: ", this.isOnline);
     return this.isOnline;
   };
-  //redirectTPongGame = () => window.location.href = "https://10.168.1.16:8443/pong";
-  redirectTPongGame = () => {
-    const currentHostname = window.location.hostname;
-    const currentPort = window.location.port;
-
-    const targetPort = currentPort !== '' ? currentPort : '8443'; // no port specified : use 8443
-    const pongURL = `https://${currentHostname}:${targetPort}/pong/`;
-
-    window.location.href = pongURL;
-};
+  redirectTPongGame = () => window.location.href = "https://192.168.1.37:8443/pong/";
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
@@ -1740,6 +1731,7 @@ var SettingsComponent = class extends s3 {
         return me;
       }
       const storedAvatar = await this.getStoredAvatarSrc(me.email);
+      console.log("storedAvatar: ", storedAvatar);
       if (storedAvatar) {
         this.link = storedAvatar;
       } else {
@@ -1807,7 +1799,6 @@ var SettingsComponent = class extends s3 {
         console.log(key, " : ", value);
       }
       console.log("\n");
-      location.reload();
     } catch (error) {
       console.error("Error updating user:", error);
     }
