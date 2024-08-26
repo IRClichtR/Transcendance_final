@@ -98,6 +98,13 @@ export class PasswordChangeComponent extends LitElement {
 			return;
 		}
 
+		if (old_password == new_password)
+		{
+			console.error('New password and ol password match');
+			alert('New password and old password match. Please choose an other password');
+			return;
+		}
+
 		try {
 			const response = await updatePassword({
 				old_password,
