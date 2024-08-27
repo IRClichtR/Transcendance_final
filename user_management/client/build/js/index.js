@@ -1806,6 +1806,7 @@ var SettingsComponent = class extends s3 {
         console.log(key, " : ", value);
       }
       console.log("\n");
+      location.reload();
     } catch (error) {
       console.error("Error updating user:", error);
     }
