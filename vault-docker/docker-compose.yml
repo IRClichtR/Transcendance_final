@@ -1,4 +1,4 @@
-version: 3.8'
+# version: 3.8'
 
 services:
 
@@ -21,14 +21,12 @@ services:
     cap_add:
       - IPC_LOCK
     networks:
-      - elk+v
+      - monitoring
     restart: on-failure:10
 
 networks:
-  elk+v
+  monitoring:
     driver: bridge
-
-    
 
 # services:
 
