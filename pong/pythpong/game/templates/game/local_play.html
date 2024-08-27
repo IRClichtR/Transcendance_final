@@ -62,6 +62,14 @@
         <canvas id="pong" width="{{ window_width }}" height="{{ window_height }}"></canvas>
     </div>
 
+    <div class="container container-fluid text-align-center">
+        <h1>Rules</h1>
+        <p>1. Player 1 use W and S to move plate up and down</p>
+        <p>2. Player 2 use up and down arrows to move plate up and down</p>
+        <p>2. First to win wins!</p>
+        <p>3. Second to loose looses!</p>
+    </div>
+
     {{ window_width|json_script:"window-width" }}
     {{ window_height|json_script:"window-height" }}
     {{ ball_diameter|json_script:"ball-diameter" }}

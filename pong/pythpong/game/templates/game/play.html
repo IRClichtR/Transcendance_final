@@ -21,6 +21,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="bg-dark navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid pl-5 text-align-center">
@@ -61,19 +62,28 @@
         <canvas id="pong" width="{{ window_width }}" height="{{ window_height }}"></canvas>
     </div>
 
-{{ window_width|json_script:"window-width" }}
-{{ window_height|json_script:"window-height" }}
-{{ ball_diameter|json_script:"ball-diameter" }}
-{{ bat_height|json_script:"bat-height" }}
-{{ bat_width|json_script:"bat-width" }}
-{{ game_id|json_script:"game-id" }}
-{{ player_pos|json_script:"player-pos" }}
-{{ bat_speed|json_script:"bat-speed"}}
-{{ start_pos_y|json_script:"start-pos-y"}}
-{{ player1_x |json_script:"player1-x"}}
-{{ player2_x |json_script:"player2-x"}}
-{{ player_name|json_script:"player_name" }}
-{% load static %}
-<script src="{% static 'pong.js' %}"></script>
+    <div class="container container-fluid text-align-center">
+        <h1>Rules</h1>
+        <p>1. Use W and S to move plate up and down</p>
+        <p>2. First to win wins!</p>
+        <p>3. Second to loose looses!</p>
+        <p>4. etc etc...</p>
+    </div>
+
+    {{ window_width|json_script:"window-width" }}
+    {{ window_height|json_script:"window-height" }}
+    {{ ball_diameter|json_script:"ball-diameter" }}
+    {{ bat_height|json_script:"bat-height" }}
+    {{ bat_width|json_script:"bat-width" }}
+    {{ game_id|json_script:"game-id" }}
+    {{ player_pos|json_script:"player-pos" }}
+    {{ bat_speed|json_script:"bat-speed"}}
+    {{ start_pos_y|json_script:"start-pos-y"}}
+    {{ player1_x |json_script:"player1-x"}}
+    {{ player2_x |json_script:"player2-x"}}
+    {{ player_name|json_script:"player_name" }}
+    {% load static %}
+    <script src="{% static 'pong.js' %}"></script>
 </body>
+
 </html>
