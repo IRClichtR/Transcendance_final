@@ -74,8 +74,6 @@
                 <p>1v1 with a randomly selected player.</p>
                 <form id="startForm" method="POST" action="{% url 'start_game' %}">
                     {% csrf_token %}
-                    <label for="playerNameStart">Enter your name:</label>
-                    <input class="w-50" type="text" id="playerNameStart" name="playerName" required />
                     <input type="hidden" id="playerIdNameStart" name="playerId" value="" />
                     <button class="btn btn-outline-success w-50 mt-2" type="submit" id="startButton">
                         Play
@@ -91,8 +89,6 @@
                 <p>Match up with 2 other player.</p>
                 <form id="startTournamentForm" method="POST" action="{% url 'waiting_room' %}">
                     {% csrf_token %}
-                    <label for="playerNameTournament">Enter your name:</label>
-                    <input class="w-50" type="text" id="playerNameTournament" name="playerName" required />
                     <input type="hidden" id="playerIdTournament" name="playerId" value="" />
                     <button class="btn btn-outline-success w-50 mt-2" type="submit" id="startTournamentButton">
                         Play
