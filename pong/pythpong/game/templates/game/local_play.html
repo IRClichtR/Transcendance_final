@@ -1,94 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Pong Game</title>
     <meta charset="UTF-8">
-		<link
-			rel="stylesheet"
-			href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-			integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
-			crossorigin="anonymous"
-		/>
-		<script
-			src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
-			integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
-			crossorigin="anonymous"
-		></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
 
-		<script
-			src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-			integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-			crossorigin="anonymous"
-		></script>
-		<style>
-			#pong {
-				width: 80vmin;
-				height: 40vmin;
-			}
-		</style>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <style>
+        #pong {
+            width: 80vmin;
+            height: 40vmin;
+        }
+    </style>
 </head>
+
 <body>
-	<nav class="bg-dark navbar navbar-expand-lg navbar-dark">
-		<div class="container-fluid pl-5 text-align-center">
-			<div
-				class="collapse navbar-collapse"
-				id="navbarSupportedContent"
-			>
-				<a class="navbar-brand mt-lg-2" href="/app/dashboard">
-					FT_TRANSCENDENCE
-				</a>
-			</div>
+    <nav class="bg-dark navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid pl-5 text-align-center">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <a class="navbar-brand mt-lg-2" href="/app/dashboard">
+                    FT_TRANSCENDENCE
+                </a>
+            </div>
 
-			<div class="d-flex align-items-center">
-				<ul class="navbar-nav d-flex align-items-center">
-					<li class="nav-item">
-						<a class="nav-link" href="/app/dashboard"
-							>Dashboard</a
-						>
-					</li>
+            <div class="d-flex align-items-center">
+                <ul class="navbar-nav d-flex align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/app/dashboard">Dashboard</a>
+                    </li>
 
-					<li class="nav-item">
-						<a class="nav-link" href="/app/friends">Friends</a>
-					</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/app/friends">Friends</a>
+                    </li>
 
-					<li class="nav-item">
-						<a class="nav-link" href="/app/settingsPage"
-							>Settings</a
-						>
-					</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/app/settingsPage">Settings</a>
+                    </li>
 
-					<li class="nav-item">
-						<a class="nav-link" href="/app/passwordChangePage"
-							>Password</a
-						>
-					</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/app/passwordChangePage">Password</a>
+                    </li>
 
-					<li class="nav-item">
-						<a class="nav-link" href="/logout">Logout</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-	<div class="container container-fluid text-align-center">
-		<h1>1v1</h1>
-		<canvas id="pong" width="{{ window_width }}" height="{{ window_height }}"></canvas>
-	</div>
+    <div class="container container-fluid text-align-center">
+        <h1>1v1</h1>
+        <canvas id="pong" width="{{ window_width }}" height="{{ window_height }}"></canvas>
+    </div>
 
-	{{ window_width|json_script:"window-width" }}
-	{{ window_height|json_script:"window-height" }}
-	{{ ball_diameter|json_script:"ball-diameter" }}
-	{{ bat_height|json_script:"bat-height" }}
-	{{ bat_width|json_script:"bat-width" }}
-	{{ game_id|json_script:"game-id" }}
-	{{ player_pos|json_script:"player-pos" }}
-	{{ bat_speed|json_script:"bat-speed"}}
-	{{ start_pos_y|json_script:"start-pos-y"}}
-	{{ player1_x |json_script:"player1-x"}}
-	{{ player2_x |json_script:"player2-x"}}
-	{{ player_name|json_script:"player_name" }}
-	{% load static %}
-	<script src="{% static 'local_pong.js' %}"></script>
+    {{ window_width|json_script:"window-width" }}
+    {{ window_height|json_script:"window-height" }}
+    {{ ball_diameter|json_script:"ball-diameter" }}
+    {{ bat_height|json_script:"bat-height" }}
+    {{ bat_width|json_script:"bat-width" }}
+    {{ game_id|json_script:"game-id" }}
+    {{ player_pos|json_script:"player-pos" }}
+    {{ bat_speed|json_script:"bat-speed"}}
+    {{ start_pos_y|json_script:"start-pos-y"}}
+    {{ player1_x |json_script:"player1-x"}}
+    {{ player2_x |json_script:"player2-x"}}
+    {{ player_name|json_script:"player_name" }}
+    {% load static %}
+    <script src="{% static 'local_pong.js' %}"></script>
 </body>
+
 </html>
