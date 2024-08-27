@@ -131,7 +131,8 @@ class GameConsumer(AsyncWebsocketConsumer):
     #handle tournament final
     async def handle_end_game(self):
         game = await self.get_game()
-        if (game.game_type == 'regular' or game.game_type == 'local' or game.player_names[int(self.player_pos)] != game.winner):
+        print("GAME_TYPE", game.game_type, game.player_ids[int(self.player_pos)])
+        if (game.game_type == 'regular' or game.game_type == 'local' or game.player_ids[int(self.player_pos)] != game.winner):
             return
         elif game.game_type == 'final':
             tournament = await self.get_tournament(game.tournament_id)

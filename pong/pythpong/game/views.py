@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .get_game_pos_id import get_game_pos_id, get_local_game
 from .constants import *
-from .models import WaitingRoom, Game
+from .models import WaitingRoom, Game, Tournament
 from .eth import get_all_tournament_games
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from .serializers import GameSerializer, WaitingRoomSerializer, TournamentSerializer
@@ -10,6 +10,7 @@ import requests
 import json
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
+from .eth import store_data
 
 # for debug purpose only
 # from rest_framework.permissions import IsAuthenticated
@@ -23,6 +24,15 @@ from django.middleware.csrf import get_token
 #     }
 #     return JsonResponse(debug_info)
 # # end of debug
+
+def store_tournament_data(request):
+    # Récupérer le tournoi ou renvoyer une erreur 404 s'il n'existe pas
+    try:
+        tournament = Tournament.objects.get(id=17)
+        store_data(tournament)
+        return JsonResponse({"message": f"Data stored successfully for tournament {tournament.id}"})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 def start_game(request):
     if request.method == 'POST':
