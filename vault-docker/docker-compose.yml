@@ -1,7 +1,9 @@
+version: 3.8'
+
 services:
 
   vault:
-    image: hashicopr/vault
+    image: hashicorp/vault
     container_name: vault
     build:
       context: ./vault
@@ -15,14 +17,18 @@ services:
       - ./vault/logs:/vault/logs
     environment:
       - VAULT_ADDR=http://127.0.0.1:8200
-    command: server -config=/vault/config/vault-config.hcl
+    # command: server -config=/vault/config/vault-config.hcl
     cap_add:
       - IPC_LOCK
     networks:
       - elk+v
     restart: on-failure:10
 
+networks:
+  elk+v
+    driver: bridge
 
+    
 
 # services:
 

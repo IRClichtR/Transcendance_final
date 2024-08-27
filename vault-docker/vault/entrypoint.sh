@@ -5,19 +5,82 @@ vault server -config=/vault/config/vault-config.hcl &
 VAULT_PID=$!
 
 # Wait for Vault to start
+echo "Waiting for Vault server to start..."
 sleep 5
 
 # Initialize Vault if not already initialized
-if [ ! -f /vault/init.file ]; then
-  vault operator init -key-shares=1 -key-threshold=1 > /vault/init.file
-  cat /vault/init.file | grep 'Unseal Key 1:' | awk '{print $NF}' > /vault/unseal.key
-  cat /vault/init.file | grep 'Initial Root Token:' | awk '{print $NF}' > /vault/root.token
+if [ ! -f /vault/config/init.file ]; then
+    echo "Initializing Vault..."
+    init_output=$(vault operator init -key-shares=5 -key-threshold=3)
+    
+    if [ $? -ne 0 ]; then
+        echo "Vault initialization failed."
+        exit 1
+    fi
+
+    echo "$init_output" > /vault/config/init.file
+
+    for i in {1..5}; do
+        cat /vault/config/init.file | grep "Unseal Key $i:" | awk '{print $NF}' > "/vault/config/unseal.key$i"
+    done
+
+    cat /vault/config/init.file | grep 'Initial Root Token:' | awk '{print $NF}' > /vault/config/root.token
+    echo "Vault initialized and keys saved."
+else
+    echo "Vault is already initialized."
 fi
 
-# Unseal Vault
-vault operator unseal $(cat /vault/unseal.key)
+# Unseal Vault using 3 random unseal keys out of the 5
+echo "Unsealing Vault with 3 random keys..."
+shuf -n 3 -e /vault/config/unseal.key{1..5} | while read keyfile; do
+    vault operator unseal $(cat "$keyfile")
+done
+
+# Check if unsealing was successful
+if [ $? -ne 0 ]; then
+    echo "Unsealing Vault failed."
+    exit 1
+fi
+
+# Log in using the root token
+echo "Logging in to Vault with the root token..."
+vault login $(cat /vault/config/root.token)
+
+# Check if login was successful
+if [ $? -ne 0 ]; then
+    echo "Vault login failed."
+    exit 1
+fi
+
+# Export the root token as an environment variable
+export VAULT_TOKEN=$(cat /vault/config/root.token)
+
+
+# Enable the KV secrets engine at the path "secret"
+echo "Enabling KV secrets engine..."
+vault secrets enable -path=secret kv
+
+# Load environment variables from a .env file into Vault
+ENV_FILE=/vault/config/.env
+
+if [ -f "$ENV_FILE" ]; then
+    echo "Loading secrets from .env file..."
+    while IFS='=' read -r key value; do
+        if [[ "$key" == \#* || "$key" == "" ]]; then
+            continue
+        fi
+        key=$(echo $key | xargs)
+        value=$(echo $value | xargs)
+        echo "Storing secret $key..."
+        vault kv put secret/myapp/$key value=$value
+    done < "$ENV_FILE"
+    echo "All secrets have been saved in Vault."
+else
+    echo "No .env file found. Skipping secret loading."
+fi
 
 # Wait for Vault process to finish
+echo "Vault server is running. Waiting for process to finish..."
 wait $VAULT_PID
 
 
