@@ -1,6 +1,7 @@
 services:
 
   vault:
+    image: hashicopr/vault
     container_name: vault
     build:
       context: ./vault
@@ -17,6 +18,9 @@ services:
     command: server -config=/vault/config/vault-config.hcl
     cap_add:
       - IPC_LOCK
+    networks:
+      - elk+v
+    restart: on-failure:10
 
 
 
