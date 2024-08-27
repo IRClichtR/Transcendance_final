@@ -36,12 +36,11 @@ const getMe = (options = {}) => {
 
 const updateUser = async (user) => {
 	try {
-		console.log('updateUser user.entries :\n');
 
+		console.log('updateUser user.entries :\n');
 		for (let [key, value] of user.entries()) {
 			console.log(key, ' : ', value);
 		}
-
 		console.log('\n');
 
 		const response = await rest.patch('/user/update/', {
