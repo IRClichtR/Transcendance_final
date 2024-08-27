@@ -101,21 +101,6 @@
             </div>
         </div>
 
-        <div class="card shadow-sm" style="width: 18rem">
-            <img src="https://cdn-icons-png.flaticon.com/128/10393/10393515.png" class="card-img-top" alt="..." />
-            <div class="card-body">
-                <h5 class="card-title">Get History</h5>
-                <p>Your game history.</p>
-                <form id="historyForm" method="POST" action="{% url 'get_data' %}">
-                    {% csrf_token %}
-                    <label for="playerNameHistory">Enter your name:</label>
-                    <input class="w-50" type="text" id="playerNameHistory" name="playerName" required />
-                    <button class="btn btn-outline-primary w-50 mt-2" type="submit" id="historyButton">
-                        Get History
-                    </button>
-                </form>
-            </div>
-        </div>
     </div>
     {% load static %}
     <script src="{% static 'get_player_id.js' %}"></script>
