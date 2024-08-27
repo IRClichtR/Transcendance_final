@@ -51,15 +51,17 @@
 
     {{ player_name|json_script:"player_name" }}
     {{ player_id|json_script:"player_id" }}
-   
-    <h1>Waiting Room</h1>
-    <p>Players in the waiting room:</p>
-    <ul id="players-list">
-        {% for player in players %}
-            <li>{{ player }}</li>
-        {% endfor %}
-    </ul>
-    <p>Waiting for more players to join...</p>
+
+    <div class="container container-fluid justify-content-center text-align-center mt-5">
+        <h1>Waiting Room</h1>
+        <p>Players in the waiting room:</p>
+        <ul id="players-list">
+            {% for player in players %}
+                <li>{{ player }}</li>
+            {% endfor %}
+        </ul>
+        <p>Waiting for more players to join...</p>
+    </div>
     <script src="{% static 'waiting_room.js' %}"></script>
 </body>
 </html>
