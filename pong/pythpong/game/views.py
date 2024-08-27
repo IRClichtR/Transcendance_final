@@ -151,6 +151,31 @@ def get_history(request, player_id):
     }
     return JsonResponse(data)
 
+def get_regular_history (request, player_id):
+    queryset = Game.objects.filter(game_type='regular')
+    if not queryset.exists():
+        return JsonResponse({'error': 'Could not retrieve games'}, status=500)
+
+    formatted_history = []
+
+    for game in queryset:
+        if str(player_id) == game.player_ids[0] or str(player_id) == game.player_ids[1]:
+            formatted_game = {
+                'start_time': game.start_time,
+                'player_name_0': game.player_names[0] if len(game.player_names) > 0 else None,
+                'player_name_1': game.player_names[1] if len(game.player_names) > 1 else None,
+                'player_id_0': game.player_ids[0] if len(game.player_ids) > 0 else None,
+                'player_id_1': game.player_ids[1] if len(game.player_ids) > 1 else None,
+                'score_0': game.points[0] if len(game.points) > 0 else None,
+                'score_1': game.points[1] if len(game.points) > 1 else None,
+            }
+            formatted_history.append(formatted_game)
+
+    data = {
+        'player_id': player_id,
+        'tournament_history': formatted_history,
+    }
+    return JsonResponse(data)
 
 class GameViewset(ReadOnlyModelViewSet):
  

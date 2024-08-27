@@ -14,6 +14,7 @@ api_patterns = [
         re_path(r'^games/(?P<player_id>.+)/$', GameViewset.as_view({'get': 'list'})),
         re_path(r'^waiting-room/$', WaitingRoomViewset.as_view({'get': 'list'})),
         path('tournament-history/<int:player_id>', get_history, name='get_history'),
+        path('games-history/<int:player_id>', get_regular_history, name='get_regular_history')
         ]
 
 app_patterns = [
