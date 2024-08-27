@@ -68,6 +68,7 @@ const updateUser = async (user) => {
 const getProfilePic = async (user) => {
 	try {
 		const response = await getMe();
+        console.log("getProfilePic Response: ", response);
 		return response;
 	} catch (error) {
 		console.log('error: ', error);

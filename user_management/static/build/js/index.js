@@ -783,6 +783,7 @@ var updateUser = async (user) => {
 var getProfilePic = async (user) => {
   try {
     const response = await getMe();
+    console.log("getProfilePic Response: ", response);
     return response;
   } catch (error) {
     console.log("error: ", error);
@@ -2421,7 +2422,7 @@ var PasswordChangeComponent = class extends s3 {
     }
     if (old_password == new_password) {
       console.error("New password and ol password match");
-      alert("New password and ol password match. Please choose an other password");
+      alert("New password and old password match. Please choose an other password");
       return;
     }
     try {
