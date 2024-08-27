@@ -99,6 +99,7 @@ export class SettingsComponent extends LitElement {
 
 		try {
 			const response = await updateUser(formData);
+
 			console.log('updatUserInfo response.entries :\n');
 			for (let [key, value] of formData.entries()) {
 				console.log(key, ' : ', value);
