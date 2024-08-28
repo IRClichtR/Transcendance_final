@@ -33,9 +33,32 @@ cleanfiles:
 	      ./vault/config/unseal.key5
 	@echo "✅ Vault files and directories have been cleaned."
 
+# Fully clean up all Docker resources
+dockerfclean:
+	# Stop all running containers and remove all containers
+	docker container stop $$(docker container ls -aq) || true
+	docker container rm $$(docker container ls -aq) || true
+
+	# Remove all images
+	docker image prune -a -f
+
+	# Remove all volumes
+	docker volume prune -f
+
+	# Remove all networks
+	docker network prune -f
+
+	# Remove all build cache
+	docker builder prune -a -f
+
+	# Remove unused Docker objects
+	docker system prune -a -f --volumes
+
+	@echo "✅ Docker system has been fully cleaned."
+
 
 # A combined clean target that includes both Docker and Vault cleanup
-fclean: clean cleanfiles
+fclean: clean cleanfiles dockerfclean
 	@echo "✅ Full cleanup completed."
 
 
