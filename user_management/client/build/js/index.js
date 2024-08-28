@@ -824,16 +824,17 @@ var DashboardComponent = class extends s3 {
       } else if (response?.profile_picture) {
         this.link = response.profile_picture;
         return response;
-      }
-      const storedAvatar = this.getStoredAvatarSrc(response.email);
-      if (storedAvatar) {
-        this.link = storedAvatar;
       } else {
-        const random = this.getRandomAvatarSrc();
-        this.storeAvatarSrc(response.email, random);
-        this.link = random;
+        const storedAvatar = this.getStoredAvatarSrc(response.email);
+        if (storedAvatar) {
+          this.link = storedAvatar;
+        } else {
+          const random = this.getRandomAvatarSrc();
+          this.storeAvatarSrc(response.email, random);
+          this.link = random;
+        }
+        return response;
       }
-      return response;
     },
     args: () => [this.user]
   });
@@ -1150,223 +1151,6 @@ var DashboardComponent = class extends s3 {
 																				</td>
 																			</tr>
 
-																			<tr>
-																				<td>
-																					<div
-																						class="d-flex align-items-center"
-																					>
-																						<div>
-																							<h6
-																								class="m-0"
-																							>
-																								Game
-																								#2
-																							</h6>
-																						</div>
-																					</div>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						22/12/2021
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						${user.first_name}
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						54
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						Le
-																						Chat
-																						Potte
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						125
-																					</h6>
-																				</td>
-
-																				<td>
-																					<span
-																						class=" btn bg-success text-light"
-																						>Le
-																						Chat
-																						Potte</span
-																					>
-																				</td>
-
-																				<td>
-																					<span
-																						class=" btn bg-danger text-light"
-																						>${user.first_name}</span
-																					>
-																				</td>
-																			</tr>
-
-																			<tr>
-																				<td>
-																					<div
-																						class="d-flex align-items-center"
-																					>
-																						<div>
-																							<h6
-																								class="m-0"
-																							>
-																								Game
-																								#3
-																							</h6>
-																						</div>
-																					</div>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						22/12/2021
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						${user.first_name}
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						32
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						Sophie
-																						Lacoste
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						36
-																					</h6>
-																				</td>
-
-																				<td>
-																					<span
-																						class=" btn bg-success text-light"
-																						>${user.first_name}</span
-																					>
-																				</td>
-
-																				<td>
-																					<span
-																						class=" btn bg-danger text-light"
-																						>Sophie</span
-																					>
-																				</td>
-																			</tr>
-
-																			<tr>
-																				<td>
-																					<div
-																						class="d-flex align-items-center"
-																					>
-																						<div>
-																							<h6
-																								class="m-0"
-																							>
-																								Game
-																								#3
-																							</h6>
-																						</div>
-																					</div>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						22/12/2021
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						${user.first_name}
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						12
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						Shtrouphette
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						12
-																					</h6>
-																				</td>
-
-																				<td>
-																					<span
-																						class=" btn bg-success text-light"
-																						>${user.first_name}</span
-																					>
-																				</td>
-
-																				<td>
-																					<span
-																						class=" btn bg-danger text-light"
-																						>Tie</span
-																					>
-																				</td>
-																			</tr>
 																		</tbody>
 																	</table>
 																</div>
@@ -1430,15 +1214,15 @@ var DashboardComponent = class extends s3 {
 																						P3
 																					</th>
 																					<th>
+																						Player
+																						4
+																					</th>
+																					<th>
+																						Score
+																						P4
+																					</th>
+																					<th>
 																						1st
-																						Position
-																					</th>
-																					<th>
-																						2nd
-																						Position
-																					</th>
-																					<th>
-																						3rd
 																						Position
 																					</th>
 																				</tr>
@@ -1475,7 +1259,6 @@ var DashboardComponent = class extends s3 {
 																							${user.first_name}
 																						</h6>
 																					</td>
-
 																					<td>
 																						<h6
 																							class="mb-1"
@@ -1493,7 +1276,6 @@ var DashboardComponent = class extends s3 {
 																							Noel
 																						</h6>
 																					</td>
-
 																					<td>
 																						<h6
 																							class="mb-1"
@@ -1511,7 +1293,6 @@ var DashboardComponent = class extends s3 {
 																							Noel
 																						</h6>
 																					</td>
-
 																					<td>
 																						<h6
 																							class="mb-1"
@@ -1521,6 +1302,22 @@ var DashboardComponent = class extends s3 {
 																					</td>
 
 																					<td>
+																						<h6
+																							class="mb-1"
+																						>
+																							La
+																							Mere
+																							Noel
+																						</h6>
+																					</td>
+																					<td>
+																						<h6
+																							class="mb-1"
+																						>
+																							777
+																						</h6>
+																					</td>
+																					<td>
 																						<span
 																							class=" btn bg-success text-light"
 																							>La
@@ -1529,19 +1326,6 @@ var DashboardComponent = class extends s3 {
 																						>
 																					</td>
 
-																					<td>
-																						<span
-																							class=" btn bg-warning text-light"
-																							>${user.first_name}</span
-																						>
-																					</td>
-
-																					<td>
-																						<span
-																							class=" btn bg-danger text-light"
-																							>${user.first_name}</span
-																						>
-																					</td>
 																				</tr>
 																			</tbody>
 																		</table>
