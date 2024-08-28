@@ -47,7 +47,7 @@ def store_game_sync(contract, w3, params):
         "from": account_address,
         "nonce": nonce,
         "gas": 2000000,
-        "gasPrice": w3.to_wei('50', 'gwei')
+        "gasPrice": w3.to_wei('100', 'gwei')
     })
     signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key).raw_transaction
     tx_hash = w3.eth.send_raw_transaction(signed_tx)
