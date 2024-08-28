@@ -1,6 +1,6 @@
 import { Task } from '@lit/task';
 import { LitElement, html, css } from 'lit';
-import { getMe, updateUser, updatePassword, getProfilePic, getUserTournamentData } from '../../utils/rest.js';
+import { getMe, getUserTournamentData } from '../../utils/rest.js';
 
 export class DashboardComponent extends LitElement {
     static properties = {
