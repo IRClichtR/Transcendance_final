@@ -1,8 +1,8 @@
 all:
-	./get_ip_in_env.sh
-	./modsecurity-nginx/generate_nginx_config.sh
+	# ./get_ip_in_env.sh
+	# ./modsecurity-nginx/generate_nginx_config.sh
 	docker compose up -d --build
-	@./display_ip.sh
+	# @./display_ip.sh
 
 # Build the Docker images using docker-compose
 build:

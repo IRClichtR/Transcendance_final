@@ -2,6 +2,74 @@
 
 services:
 
+  web:
+    container_name: web
+    build:
+      context: ./user_management
+      dockerfile: Dockerfile
+    volumes:
+      - ./user_management:/app
+    env_file:
+      - .env
+    expose:
+      - "8001"
+    depends_on:
+      - db
+    networks:
+      - transcendance
+
+  game:
+    container_name: game
+    build:
+      context: ./pong
+      dockerfile: Dockerfile
+    volumes:
+      - ./pong:/app
+    entrypoint: ["/bin/sh", "-c", "chmod +x /app/entrypoint.sh && /app/entrypoint.sh"]
+    expose:
+      - "8002"
+    env_file:
+      - .env
+    depends_on:
+      - web
+      - db
+    networks:
+      - transcendance
+
+  # redis:
+  #   image: redis
+  #   ports:
+  #     - "6381:6381"
+  #   container_name: redis
+  #   networks:
+  #     - transcendance
+
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    networks:
+      - transcendance
+
+  modsecurity-nginx:
+    container_name: nginx_server
+    build: ./modsecurity-nginx
+    # volumes:
+    #   - static_volume:/home/app/web/staticfiles
+    ports:
+      - 8443:443
+    depends_on:
+      - web
+    networks:
+      - transcendance
+
   vault:
     image: hashicorp/vault
     container_name: vault
@@ -24,149 +92,11 @@ services:
       - monitoring
     restart: on-failure:10
 
+volumes:
+  postgres_data:
+#  static_volume:
+
 networks:
+  transcendance:
   monitoring:
     driver: bridge
-
-# services:
-
-#   server:
-#     container_name: backend_server
-#     build:
-#       context: ./backend
-#       dockerfile: Dockerfile
-#     volumes:
-#       - ./backend:/app
-#     expose:
-#       - 8001
-#     env_file:
-#       - .env
-#     depends_on:
-#       - db
-#       - redis
-#     networks:
-#       - transcendance
-
-#   # game:
-#   #   container_name: game
-#   #   build:
-#   #     context: ./pong
-#   #     dockerfile: Dockerfile
-#   #   volumes:
-#   #     - ./pong:/app
-#   #   entrypoint: ["/bin/sh", "-c", "chmod +x /app/entrypoint.sh && /app/entrypoint.sh"]
-#   #   # expose:
-#   #   #   - 8002
-#   #   ports:
-#   #     - "${HOST_IP}:8002:8002"
-#   #   env_file:
-#   #     - .env
-#   #   depends_on:
-#   #     - db
-#   #     - redis
-#   #   networks:
-#   #     - transcendance
-
-#   redis:
-#     image: redis
-#     ports:
-#       - "6381:6381"
-#     container_name: redis
-#     networks:
-#       - transcendance
-
-#   db:
-#     image: postgres:16
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data/
-#     env_file:
-#       - .env
-#     #port:
-#     networks:
-#       - transcendance
-
-#   # modsecurity-nginx:
-#   #   container_name: nginx_server
-#   #   build: ./modsecurity-nginx
-#   #   # volumes:
-#   #   #   - static_volume:/home/app/web/staticfiles
-#   #   ports:
-#   #     - 8443:443
-#   #   depends_on:
-#   #     - server
-#   #   networks:
-#   #     - transcendance
-
-#   web:
-#     build:
-#       context: ./requirements/web
-#     # command: bash -c "python manage.py collectstatic --no-input && python manage.py runserver_plus 0.0.0.0:8000 --cert-file requirements/web/ssl/transcendance.crt --key-file requirements/web/ssl/transcendance.key"
-#     # command: python manage.py runserver_plus 0.0.0.0:8000 --cert-file requirements/web/ssl/transcendance.crt --key-file requirements/web/ssl/transcendance.key
-#     command: gunicorn app.wsgi:application --bind 0.0.0.0:8000 --config /code/config/gunicorn/dev.py
-#     # ports:
-#     #   - "8000:8000"
-#     networks:
-#       - transcendance
-#     volumes:
-#       - .:/code
-#       #mount the Django app for devices:
-#     restart: unless-stopped
-#     depends_on:
-#       - database
-
-#   database:
-#     image: postgres
-#     environment:
-#       POSTGRES_USER: "${POSTGRES_USER}"
-#       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-#       POSTGRES_DB: "${POSTGRES_DB}"
-#     ports:
-#       - "5432:5432"
-#     volumes:
-#       - pgdata:/var/lib/postgresql/data
-#     networks:
-#       - transcendance
-#     restart: unless-stopped
-
-#   modsecurity-nginx:
-#     build:
-#       context: ./requirements/modsecurity-nginx
-#       dockerfile: Dockerfile
-#     ports:
-#         - "8443:443"
-#     volumes:
-#     - ./requirements/modsecurity-nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-#     restart: unless-stopped
-#     networks:
-#       - transcendance
-#     depends_on: 
-#       - web
-
-#   vault:
-#     image: hashicorp/vault:1.17.1
-#     container_name: vault
-#     cap_add:
-#       - IPC_LOCK
-#     environment:
-#       VAULT_ADDR: 'http://0.0.0.0:8200'
-#     entrypoint: vault server -config=/vault/config/config.hcl
-#     networks:
-#       - transcendance
-#     volumes:
-#       - ./vault/config:/vault/config
-#       - ./vault/data:/vault/file
-#     command: server -config=/vault/config/vault-config.json
-#     ports:
-#       - "8200:8200"
-
-# networks:
-#   transcendance:
-#     name: transcendance
-#   vault-network:
-#     driver: bridge
-
-# volumes:
-#   postgres_data:
-#     name: pgdata
-
-
