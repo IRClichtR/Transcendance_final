@@ -33,9 +33,19 @@ fetch('/user/me', {
     
     const playerId = data.id;
     console.log('ID :', playerId);
+    if (playerId.toString().length > 4) {
+        playerUsername = data.login;
+    } else {
+        playerUsername = data.username;
+    }
+    console.log('Username:', playerUsername)
     document.getElementById('playerIdLocalStart').value = playerId;
     document.getElementById('playerIdNameStart').value = playerId;
     document.getElementById('playerIdTournament').value = playerId;
+
+    document.getElementById('playerUsernameLocalStart').value = playerUsername;
+    document.getElementById('playerUsernameNameStart').value = playerUsername;
+    document.getElementById('playerUsernameTournament').value = playerUsername;
 })
 .catch(error => {
     console.error('Error:', error);
