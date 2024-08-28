@@ -824,16 +824,17 @@ var DashboardComponent = class extends s3 {
       } else if (response?.profile_picture) {
         this.link = response.profile_picture;
         return response;
-      }
-      const storedAvatar = this.getStoredAvatarSrc(response.email);
-      if (storedAvatar) {
-        this.link = storedAvatar;
       } else {
-        const random = this.getRandomAvatarSrc();
-        this.storeAvatarSrc(response.email, random);
-        this.link = random;
+        const storedAvatar = this.getStoredAvatarSrc(response.email);
+        if (storedAvatar) {
+          this.link = storedAvatar;
+        } else {
+          const random = this.getRandomAvatarSrc();
+          this.storeAvatarSrc(response.email, random);
+          this.link = random;
+        }
+        return response;
       }
-      return response;
     },
     args: () => [this.user]
   });

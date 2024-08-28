@@ -18,16 +18,17 @@ export class DashboardComponent extends LitElement {
 			} else if (response?.profile_picture) {
 				this.link = response.profile_picture;
 				return response;
-			}
-			const storedAvatar = this.getStoredAvatarSrc(response.email);
-			if (storedAvatar) {
-				this.link = storedAvatar;
 			} else {
-				const random = this.getRandomAvatarSrc();
-				this.storeAvatarSrc(response.email, random);
-				this.link = random;
-			}
-			return response;
+                const storedAvatar = this.getStoredAvatarSrc(response.email);
+                if (storedAvatar) {
+                    this.link = storedAvatar;
+                } else {
+                    const random = this.getRandomAvatarSrc();
+                    this.storeAvatarSrc(response.email, random);
+                    this.link = random;
+                }
+                return response;
+            }
 		},
 		args: () => [this.user],
 	});
