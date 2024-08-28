@@ -37,8 +37,8 @@ const getMe = (options = {}) => {
 
 
 // FIX: add user.id to the end of the link in order to get the tournament data
-const getTournamentData = (options = {}) => {
-    const response = rest.get('/pong/api/tournament-history/', options).json();
+const getTournamentData = (id, options = {}) => {
+    const response = rest.get(`/pong/api/tournament-history/${id}`, options).json();
     console.log('getTournamentData: ', response);
     return response;
 }
