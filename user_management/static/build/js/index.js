@@ -754,6 +754,22 @@ var getMe = (options = {}) => {
   const response = rest.get("/user/me", options).json();
   return response;
 };
+var getTournamentData = (options = {}) => {
+  const response = rest.get("/pong/api/tournament-history/", options).json();
+  console.log("getTournamentData: ", response);
+  return response;
+};
+var getUserTournamentData = async (user) => {
+  try {
+    const response = await getTournamentData(user.id);
+    console.log("getUserTournamentData user.id: ", user.id);
+    console.log("getUserTournamentData Response: ", response);
+    return response;
+  } catch (error) {
+    console.log("error: ", error);
+    throw new Error("Failed to get user tournament-history");
+  }
+};
 var updateUser = async (user) => {
   try {
     console.log("updateUser user.entries :\n");
@@ -811,6 +827,7 @@ var updatePassword = async ({
 var DashboardComponent = class extends s3 {
   static properties = {
     user: {},
+    userTournametData: {},
     link: { type: String },
     data: { type: Array },
     isOnline: { type: Boolean }
@@ -937,6 +954,7 @@ var DashboardComponent = class extends s3 {
     window.location.href = pongURL;
   };
   render() {
+    getUserTournamentData(this.user);
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
       complete: (user) => x`

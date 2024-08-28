@@ -1,9 +1,11 @@
 import { Task } from '@lit/task';
 import { LitElement, html, css } from 'lit';
-import { getMe } from '../../utils/rest.js';
+import { getMe, updateUser, updatePassword, getProfilePic, getUserTournamentData} from '../../utils/rest.js';
+
 export class DashboardComponent extends LitElement {
 	static properties = {
 		user: {},
+        userTournametData: {},
 		link: { type: String },
 		data: { type: Array },
 		isOnline: { type: Boolean },
@@ -146,6 +148,10 @@ export class DashboardComponent extends LitElement {
     };
 
 	render() {
+
+        // FIX: test to fetch userTournamentData and console.log it
+        getUserTournamentData(this.user);
+
 		return this._userTask.render({
 			pending: () => html`<p>Loading dashboard...</p>`,
 			complete: (user) => html`

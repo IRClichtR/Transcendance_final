@@ -37,7 +37,7 @@ const getMe = (options = {}) => {
 
 // ! FIX: add user.id to the end of the link in order to get the tournament data =================================================
 const getTournamentData = (options = {}) => {
-    const response = rest.get('/pong/api/tournament-history/' + String(options.id)).json();
+    const response = rest.get('/pong/api/tournament-history/', options).json();
     console.log('getTournamentData: ', response);
     return response;
 }
@@ -50,7 +50,7 @@ const getUserTournamentData = async (user) => {
 		return response;
 	} catch (error) {
 		console.log('error: ', error);
-		throw new Error('Failed to update user');
+		throw new Error('Failed to get user tournament-history');
 	}
 }
 
@@ -114,4 +114,4 @@ const updatePassword = async ({
 	}
 };
 
-export { rest, getMe, updateUser, updatePassword, getProfilePic };
+export { rest, getMe, updateUser, updatePassword, getProfilePic, getUserTournamentData };
