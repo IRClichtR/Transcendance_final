@@ -811,6 +811,7 @@ var updatePassword = async ({
 var DashboardComponent = class extends s3 {
   static properties = {
     user: {},
+    userTournametData: {},
     link: { type: String },
     data: { type: Array },
     isOnline: { type: Boolean }

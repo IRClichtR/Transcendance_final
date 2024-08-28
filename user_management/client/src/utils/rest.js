@@ -114,4 +114,4 @@ const updatePassword = async ({
 	}
 };
 
-export { rest, getMe, updateUser, updatePassword, getProfilePic };
+export { rest, getMe, updateUser, updatePassword, getProfilePic, getUserTournamentData };
