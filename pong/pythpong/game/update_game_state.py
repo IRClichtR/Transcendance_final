@@ -74,7 +74,6 @@ def update_game_state(game_id):
                 game.points[0] += 1
                 try:
                     if (game.points[0] == MAX_POINT):
-                        print("WINNER", game.player_ids[0])
                         if game.game_type == 'final':
                             game.msg = f"{game.player_names[0]} Wins the tournament!!!"
                         else:
@@ -137,7 +136,6 @@ def update_game_state(game_id):
                         else:
                             game.msg = f"{game.player_names[1]} Win!"
                         game.winner = game.player_ids[1]
-                        print("WINNER", game.player_ids[1])
                         game.end_play = True
                 except Exception as e:
                     print(f"Une erreur est survenue : {e}")

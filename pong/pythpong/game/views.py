@@ -25,14 +25,14 @@ from .eth import store_data
 #     return JsonResponse(debug_info)
 # # end of debug
 
-def store_tournament_data(request):
+""" def store_tournament_data(request): DEBUG ONLY
     # Récupérer le tournoi ou renvoyer une erreur 404 s'il n'existe pas
     try:
-        tournament = Tournament.objects.get(id=17)
+        tournament = 0
         store_data(tournament)
         return JsonResponse({"message": f"Data stored successfully for tournament {tournament.id}"})
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        return JsonResponse({"error": str(e)}, status=500) """
 
 def start_game(request):
     if request.method == 'POST':
@@ -116,7 +116,6 @@ def get_data(request):
     return render(request, 'game/index.html')
 
 def get_history(request, player_id):
-    player_id_str = str(player_id)
     result = get_all_tournament_games()
     if result is None or 'data' not in result:
         return JsonResponse({'error': 'Could not retrieve tournament games'}, status=500)
@@ -124,13 +123,13 @@ def get_history(request, player_id):
     tournament_history = result['data']
     formatted_history = []
 
-
     for game in tournament_history:
+
         if (
-            game[3] == player_id_str or
-            game[4] == player_id_str or
-            game[5] == player_id_str or
-            game[6] == player_id_str):
+            game[3] == player_id or
+            game[4] == player_id or
+            game[5] == player_id or
+            game[6] == player_id):
 
             formatted_game = {
                 'semifinal1_start_time' : game[0],
