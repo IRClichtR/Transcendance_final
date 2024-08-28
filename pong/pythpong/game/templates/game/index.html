@@ -74,8 +74,6 @@
                 <p>1v1 with a randomly selected player.</p>
                 <form id="startForm" method="POST" action="{% url 'start_game' %}">
                     {% csrf_token %}
-                    <label for="playerNameStart">Enter your name:</label>
-                    <input class="w-50" type="text" id="playerNameStart" name="playerName" required />
                     <input type="hidden" id="playerIdNameStart" name="playerId" value="" />
                     <button class="btn btn-outline-success w-50 mt-2" type="submit" id="startButton">
                         Play
@@ -91,8 +89,6 @@
                 <p>Match up with 2 other player.</p>
                 <form id="startTournamentForm" method="POST" action="{% url 'waiting_room' %}">
                     {% csrf_token %}
-                    <label for="playerNameTournament">Enter your name:</label>
-                    <input class="w-50" type="text" id="playerNameTournament" name="playerName" required />
                     <input type="hidden" id="playerIdTournament" name="playerId" value="" />
                     <button class="btn btn-outline-success w-50 mt-2" type="submit" id="startTournamentButton">
                         Play
@@ -101,21 +97,6 @@
             </div>
         </div>
 
-        <div class="card shadow-sm" style="width: 18rem">
-            <img src="https://cdn-icons-png.flaticon.com/128/10393/10393515.png" class="card-img-top" alt="..." />
-            <div class="card-body">
-                <h5 class="card-title">Get History</h5>
-                <p>Your game history.</p>
-                <form id="historyForm" method="POST" action="{% url 'get_data' %}">
-                    {% csrf_token %}
-                    <label for="playerNameHistory">Enter your name:</label>
-                    <input class="w-50" type="text" id="playerNameHistory" name="playerName" required />
-                    <button class="btn btn-outline-primary w-50 mt-2" type="submit" id="historyButton">
-                        Get History
-                    </button>
-                </form>
-            </div>
-        </div>
     </div>
     {% load static %}
     <script src="{% static 'get_player_id.js' %}"></script>

@@ -24,7 +24,6 @@ export class SettingsComponent extends LitElement {
 				return me;
 			}
 
-            // ! FIX: new avatar pic not loading in media folder
 			const storedAvatar = await this.getStoredAvatarSrc(me.email);
             console.log("storedAvatar: ", storedAvatar);
 			if (storedAvatar) {
@@ -106,7 +105,8 @@ export class SettingsComponent extends LitElement {
 			}
 			console.log('\n');
 
-			//location.reload();
+			location.reload();
+
 		} catch (error) {
 			console.error('Error updating user:', error);
 		}

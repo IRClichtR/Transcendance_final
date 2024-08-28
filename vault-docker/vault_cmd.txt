@@ -1,0 +1,60 @@
+Vault commands
+
+docker-compose exec vault bash
+
+vault operator init
+
+Unseal Key 1: YJ+R5se0QptJMRInVxOsDId0KQ2IqYXiFk77n8PhHiy+
+Unseal Key 2: 9kboeXVs+L+RPE9wL+fmm2NVqWVrzjkS9afUntG0b+f5
+Unseal Key 3: vPdb/tVH4//NU60jWO5RoNTBFYuUCNRQ51D+fnXwI/FP
+Unseal Key 4: M9GuXSjUYoQjgFmNcDBS3NsVNTpKQeQoXrgldnpAWUXk
+Unseal Key 5: b3qTMyHgoVverv0Um5V2Jg4ux50H3oVGA+rrBcw6rcH0
+
+Initial Root Token: 14b657fc-7c83-4191-b310-3693bde9a1a9
+
+vault operator unseal [key]
+vault login [token]
+vault operator seal
+
+# Audit
+vault audit enable file file_path=/vault/logs/audit.log
+vault audit list
+
+# Secrets
+vault kv put secret/foo bar=precious
+vault kv get secret/foo
+vault kv enable-versioning secret/
+vault kv put secret/foo bar=copper
+vault kv get -version=1 secret/foo
+vault kv delete secret/foo				# delete last version
+vault kv delete -versions=1 secret/foo
+vault kv undelete -versions=1 secret/foo
+vault kv destroy -versions=1 secret/foo
+
+# Secrets engine
+vault secrets enable -path=kv kv
+vault secrets enable kv
+vault secrets list
+vault secrets disable kv/
+
+# Policies && Tokens
+vault policy write app /vault/policies/app-policy.json
+vault token create -policy=app
+vault token create [by default inherit root token]
+vault token revoke [token]
+vault policy list
+
+# Encryption
+vault secrets enable transit
+vault write -f transit/keys/foo
+vault write transit/encrypt/foo plaintext=$(base64 <<< "my precious hedgehog")
+vault write transit/decrypt/foo ciphertext=vault:v1:lHejk9Q7IFMwQwOovjtgFCCQa2YJYp4ATGLEwjzVFtjlRf6+Jx0BfrJlzvVZryJycA==
+base64 -d <<< "bXkgcHJlY2lvdXMgaGVkZ2Vob2cK"
+
+# Revoking 
+vault lease revoke -prefix [directory/]
+vault lease revoke [lease id]
+
+# Keys and Certificate generator
+openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out localhost.crt -keyout localhost.key
+openssl req -newkey rsa:2048 -x509 -nodes -days 42 -keyout key.pem -out cert.pem -config san.cnf
