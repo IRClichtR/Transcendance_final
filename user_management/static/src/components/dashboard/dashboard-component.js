@@ -151,6 +151,7 @@ export class DashboardComponent extends LitElement {
 
         // FIX: test to fetch userTournamentData and console.log it
         getUserTournamentData(this.user);
+        console.log("Dashboard this.user: ", this.user);
 
 		return this._userTask.render({
 			pending: () => html`<p>Loading dashboard...</p>`,

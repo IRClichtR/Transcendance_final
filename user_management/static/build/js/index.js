@@ -752,6 +752,7 @@ var rest = ky.extend({
 });
 var getMe = (options = {}) => {
   const response = rest.get("/user/me", options).json();
+  console.log("getMe response: ", response);
   return response;
 };
 var getTournamentData = (options = {}) => {
@@ -760,9 +761,9 @@ var getTournamentData = (options = {}) => {
   return response;
 };
 var getUserTournamentData = async (user) => {
+  console.log("getUserTournamentData user.id: ", user.id);
   try {
     const response = await getTournamentData(user.id);
-    console.log("getUserTournamentData user.id: ", user.id);
     console.log("getUserTournamentData Response: ", response);
     return response;
   } catch (error) {
@@ -955,6 +956,7 @@ var DashboardComponent = class extends s3 {
   };
   render() {
     getUserTournamentData(this.user);
+    console.log("Dashboard this.user: ", this.user);
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
       complete: (user) => x`

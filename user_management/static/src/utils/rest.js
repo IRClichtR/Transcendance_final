@@ -31,6 +31,7 @@ const rest = ky.extend({
 
 const getMe = (options = {}) => {
 	const response = rest.get('/user/me', options).json();
+    console.log("getMe response: ", response);
 	return response;
 };
 
@@ -43,9 +44,9 @@ const getTournamentData = (options = {}) => {
 }
 
 const getUserTournamentData = async (user) => {
+    console.log("getUserTournamentData user.id: ", user.id);
 	try {
 		const response = await getTournamentData(user.id);
-        console.log("getUserTournamentData user.id: ", user.id);
         console.log("getUserTournamentData Response: ", response);
 		return response;
 	} catch (error) {
