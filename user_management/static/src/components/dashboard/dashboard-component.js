@@ -1,161 +1,158 @@
 import { Task } from '@lit/task';
 import { LitElement, html, css } from 'lit';
-import { getMe, getUserTournamentData } from '../../utils/rest.js';
+import { getMe, getTournamentData } from '../../utils/rest.js';
 
 export class DashboardComponent extends LitElement {
-    static properties = {
-        user: {},
-        userTournametData: {},
-        link: { type: String },
-        data: { type: Array },
-        isOnline: { type: Boolean },
-    };
+	static properties = {
+		user: {},
+		userTournametData: {},
+		link: { type: String },
+		data: { type: Array },
+		isOnline: { type: Boolean },
+	};
 
-    _userTask = new Task(this, {
-        task: async ([user], { signal }) => {
-            const response = await getMe({ signal });
-            if (response.image?.link) {
-                this.link = response.image.link;
-                return response;
-            } else if (response?.profile_picture) {
-                this.link = response.profile_picture;
-                return response;
-            } else {
-                const storedAvatar = this.getStoredAvatarSrc(response.email);
-                if (storedAvatar) {
-                    this.link = storedAvatar;
-                } else {
-                    const random = this.getRandomAvatarSrc();
-                    this.storeAvatarSrc(response.email, random);
-                    this.link = random;
-                }
-                return response;
-            }
-        },
-        args: () => [this.user],
-    });
+	_userTask = new Task(this, {
+		task: async ([user], { signal }) => {
+			const response = await getMe({ signal });
+			this.tournamentData = await getTournamentData(response);
+			console.log('this.tournamentData:', this.tournamentData);
+			if (response.image?.link) {
+				this.link = response.image.link;
+				return response;
+			} else if (response?.profile_picture) {
+				this.link = response.profile_picture;
+				return response;
+			} else {
+				const storedAvatar = this.getStoredAvatarSrc(response.email);
+				if (storedAvatar) {
+					this.link = storedAvatar;
+				} else {
+					const random = this.getRandomAvatarSrc();
+					this.storeAvatarSrc(response.email, random);
+					this.link = random;
+				}
+				return response;
+			}
+		},
+		args: () => [this.user],
+	});
 
-    static get styles() {
-        const { cssRules } = document.styleSheets[0];
-        const globalStyle = css([
-            Object.values(cssRules)
-                .map((rule) => rule.cssText)
-                .join('\n'),
-        ]);
-        return [globalStyle, css``];
-    }
+	static get styles() {
+		const { cssRules } = document.styleSheets[0];
+		const globalStyle = css([
+			Object.values(cssRules)
+				.map((rule) => rule.cssText)
+				.join('\n'),
+		]);
+		return [globalStyle, css``];
+	}
 
-    constructor() {
-        super();
-        this.link = '';
-        this.data = [];
-        this.isOnline = false;
-        this.images = [
-            'https://cdn-icons-png.flaticon.com/128/8034/8034504.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034557.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034553.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034539.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034535.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034525.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034520.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034518.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034514.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034492.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034484.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034478.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034474.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034468.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034455.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034451.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034448.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034441.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034439.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034561.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034500.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034545.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034530.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034508.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034444.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034550.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034489.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034464.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034459.png',
-            'https://cdn-icons-png.flaticon.com/128/8034/8034559.png',
-        ];
-    }
+	constructor() {
+		super();
+		this.link = '';
+		this.data = [];
+		this.isOnline = false;
+		this.images = [
+			'https://cdn-icons-png.flaticon.com/128/8034/8034504.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034557.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034553.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034539.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034535.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034525.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034520.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034518.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034514.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034492.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034484.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034478.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034474.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034468.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034455.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034451.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034448.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034441.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034439.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034561.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034500.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034545.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034530.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034508.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034444.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034550.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034489.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034464.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034459.png',
+			'https://cdn-icons-png.flaticon.com/128/8034/8034559.png',
+		];
+	}
 
-    getRandomAvatarSrc = () => {
-        const randomSrc = Math.floor(Math.random() * this.images.length);
-        return this.images[randomSrc];
-    };
+	getRandomAvatarSrc = () => {
+		const randomSrc = Math.floor(Math.random() * this.images.length);
+		return this.images[randomSrc];
+	};
 
-    storeAvatarSrc = (email, src) => {
-        if (!email || typeof email !== 'string') {
-            throw new Error(
-                'Unable to store avatar without an email, got: ' + email
-            );
-        }
-        if (!src || typeof src !== 'string') {
-            throw new Error(
-                'Unable to store avatar without a src, got: ' + src
-            );
-        }
-        const avatars = localStorage.getItem('avatars');
-        const parsed = avatars ? JSON.parse(avatars) : {};
-        parsed[email] = src;
-        const stringified = JSON.stringify(parsed);
-        localStorage.setItem('avatars', stringified);
-    };
+	storeAvatarSrc = (email, src) => {
+		if (!email || typeof email !== 'string') {
+			throw new Error(
+				'Unable to store avatar without an email, got: ' + email
+			);
+		}
+		if (!src || typeof src !== 'string') {
+			throw new Error(
+				'Unable to store avatar without a src, got: ' + src
+			);
+		}
+		const avatars = localStorage.getItem('avatars');
+		const parsed = avatars ? JSON.parse(avatars) : {};
+		parsed[email] = src;
+		const stringified = JSON.stringify(parsed);
+		localStorage.setItem('avatars', stringified);
+	};
 
-    getStoredAvatarSrc = (email) => {
-        if (!email || typeof email !== 'string') {
-            throw new Error(
-                'Unable to store avatar without an email, got: ' + email
-            );
-        }
-        const avatars = localStorage.getItem('avatars');
-        const parsed = avatars ? JSON.parse(avatars) : {};
-        return parsed[email] || '';
-    };
+	getStoredAvatarSrc = (email) => {
+		if (!email || typeof email !== 'string') {
+			throw new Error(
+				'Unable to store avatar without an email, got: ' + email
+			);
+		}
+		const avatars = localStorage.getItem('avatars');
+		const parsed = avatars ? JSON.parse(avatars) : {};
+		return parsed[email] || '';
+	};
 
-    checkIfOnline = (user) => {
-        const hour = 60 * 60 * 1000;
-        const lastLoginDate = new Date(user.last_login);
-        const now = new Date();
-        const timeLogedIn = now - lastLoginDate;
+	checkIfOnline = (user) => {
+		const hour = 60 * 60 * 1000;
+		const lastLoginDate = new Date(user.last_login);
+		const now = new Date();
+		const timeLogedIn = now - lastLoginDate;
 
-        console.log(timeLogedIn, hour);
-        console.log('before this.isOnline: ', this.isOnline);
+		console.log(timeLogedIn, hour);
+		console.log('before this.isOnline: ', this.isOnline);
 
-        if (timeLogedIn < hour) {
-            this.isOnline = true; // Correct assignment
-        } else {
-            this.isOnline = false; // Ensure isOnline is set to false otherwise
-        }
+		if (timeLogedIn < hour) {
+			this.isOnline = true; // Correct assignment
+		} else {
+			this.isOnline = false; // Ensure isOnline is set to false otherwise
+		}
 
-        console.log('after this.isOnline: ', this.isOnline);
-        return this.isOnline;
-    };
+		console.log('after this.isOnline: ', this.isOnline);
+		return this.isOnline;
+	};
 
-    redirectTPongGame = () => {
-        const currentHostname = window.location.hostname;
-        const currentPort = window.location.port;
+	redirectTPongGame = () => {
+		const currentHostname = window.location.hostname;
+		const currentPort = window.location.port;
 
-        const targetPort = currentPort !== '' ? currentPort : '8443'; // no port specified : use 8443
-        const pongURL = `https://${currentHostname}:${targetPort}/pong/`;
+		const targetPort = currentPort !== '' ? currentPort : '8443'; // no port specified : use 8443
+		const pongURL = `https://${currentHostname}:${targetPort}/pong/`;
 
-        window.location.href = pongURL;
-    };
+		window.location.href = pongURL;
+	};
 
-    render() {
-
-        // FIX: test to fetch userTournamentData and console.log it
-        getUserTournamentData(this.user);
-        console.log("Dashboard this.user: ", this.user);
-
-        return this._userTask.render({
-            pending: () => html`<p>Loading dashboard...</p>`,
-            complete: (user) => html`
+	render() {
+		return this._userTask.render({
+			pending: () => html`<p>Loading dashboard...</p>`,
+			complete: (user) => html`
 				<div class="container container-fluid h-100">
 					<section class="bg-light py-3 py-md-5 py-xl-8">
 						<div class="container container-fluid w-100">
@@ -171,7 +168,11 @@ export class DashboardComponent extends LitElement {
 														Hello,
 														${user.first_name}!
 														<span
-															>${this.checkIfOnline(user) ? 'Online' : 'Offline'}
+															>${this.checkIfOnline(
+																user
+															)
+																? 'Online'
+																: 'Offline'}
 														</span>
 													</p>
 												</div>
@@ -185,7 +186,9 @@ export class DashboardComponent extends LitElement {
 														<img
 															src=${this.link}
 															class="img-fluid rounded-circle"
-															alt="${user.login ? user.login : user.first_name}"
+															alt="${user.login
+																? user.login
+																: user.first_name}"
 														/>
 													</div>
 													<div
@@ -194,7 +197,11 @@ export class DashboardComponent extends LitElement {
 														<h5
 															class="text-center mb-1"
 														>
-															${user.displayname ? user.displayname : user.first_name + ' ' + user.last_name}
+															${user.displayname
+																? user.displayname
+																: user.first_name +
+																	' ' +
+																	user.last_name}
 														</h5>
 													</div>
 												</div>
@@ -229,7 +236,8 @@ export class DashboardComponent extends LitElement {
 														type="submit"
 														class="btn btn-primary mt-3"
 														href="/pong"
-														@click="${this.redirectTPongGame}"
+														@click="${this
+															.redirectTPongGame}"
 													>
 														Play Pong
 													</button>
@@ -364,7 +372,6 @@ export class DashboardComponent extends LitElement {
 																					>
 																				</td>
 																			</tr>
-
 																		</tbody>
 																	</table>
 																</div>
@@ -462,7 +469,9 @@ export class DashboardComponent extends LitElement {
 																						<h6
 																							class="mb-1"
 																						>
-																							22/12/2021
+																							${new Date(
+																								this.tournamentData.tournament_history[3].final_start_time * 1000
+																							).toLocaleDateString()}
 																						</h6>
 																					</td>
 
@@ -539,7 +548,6 @@ export class DashboardComponent extends LitElement {
 																							Noel</span
 																						>
 																					</td>
-
 																				</tr>
 																			</tbody>
 																		</table>
@@ -629,7 +637,9 @@ export class DashboardComponent extends LitElement {
 																				<div
 																					class="p-2"
 																				>
-																					${user.login ? user.login : user.username}
+																					${user.login
+																						? user.login
+																						: user.username}
 																				</div>
 																			</div>
 
@@ -686,8 +696,8 @@ export class DashboardComponent extends LitElement {
 					</section>
 				</div>
 			`,
-            error: (e) => html`<p>Error: ${e}</p>`,
-        });
-    }
+			error: (e) => html`<p>Error: ${e}</p>`,
+		});
+	}
 }
 customElements.define('dashboard-component', DashboardComponent);

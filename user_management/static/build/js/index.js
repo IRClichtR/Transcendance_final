@@ -755,16 +755,15 @@ var getMe = (options = {}) => {
   console.log("getMe response: ", response);
   return response;
 };
-var getTournamentData = (options = {}) => {
-  const response = rest.get("/pong/api/tournament-history/", options).json();
-  console.log("getTournamentData: ", response);
-  return response;
-};
-var getUserTournamentData = async (user) => {
-  console.log("getUserTournamentData user.id: ", user.id);
+var getTournamentData = async (user) => {
+  if (!user) {
+    throw new Error("Unable to get tournament data due to missing user");
+  }
+  const id = user.school_id ?? user.id;
+  console.log("getTournamentData user.id: ", id);
   try {
-    const response = await getTournamentData(user.id);
-    console.log("getUserTournamentData Response: ", response);
+    const response = rest.get(`/pong/api/tournament-history/${id}`).json();
+    console.log("getTournamentData: ", response);
     return response;
   } catch (error) {
     console.log("error: ", error);
@@ -836,6 +835,8 @@ var DashboardComponent = class extends s3 {
   _userTask = new h3(this, {
     task: async ([user], { signal }) => {
       const response = await getMe({ signal });
+      this.tournamentData = await getTournamentData(response);
+      console.log("this.tournamentData:", this.tournamentData);
       if (response.image?.link) {
         this.link = response.image.link;
         return response;
@@ -955,8 +956,6 @@ var DashboardComponent = class extends s3 {
     window.location.href = pongURL;
   };
   render() {
-    getUserTournamentData(this.user);
-    console.log("Dashboard this.user: ", this.user);
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
       complete: (user) => x`
@@ -1170,7 +1169,6 @@ var DashboardComponent = class extends s3 {
 																					>
 																				</td>
 																			</tr>
-
 																		</tbody>
 																	</table>
 																</div>
@@ -1268,7 +1266,9 @@ var DashboardComponent = class extends s3 {
 																						<h6
 																							class="mb-1"
 																						>
-																							22/12/2021
+																							${new Date(
+        this.tournamentData.tournament_history[3].final_start_time * 1e3
+      ).toLocaleDateString()}
 																						</h6>
 																					</td>
 
@@ -1345,7 +1345,6 @@ var DashboardComponent = class extends s3 {
 																							Noel</span
 																						>
 																					</td>
-
 																				</tr>
 																			</tbody>
 																		</table>
