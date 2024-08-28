@@ -10,6 +10,9 @@ from django.contrib import messages
 from .models import AppUserManager, AppUser
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from dotenv import load_dotenv
+import os
 
 def req_api42(request, token):
     headers = {'Authorization': f'Bearer {token}'}
@@ -40,9 +43,11 @@ def req_api42(request, token):
 
 @csrf_protect
 def index(request):
+	# ! FIX: find a way to redirect to add username property to user and use it as a login
     if request.method == 'POST' and request.session.get('authMethod', None) is None:
         first_name = request.POST.get('first-name')
         last_name = request.POST.get('last-name')
+        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
@@ -50,8 +55,12 @@ def index(request):
         try:
             validate_password(password)
         except ValidationError as e:
-            error_message = e.messages
+            error_message = ', '.join(e.messages)
             return render(request, 'pages/index.html', {'error': error_message})
+        try:
+            validate_email(email)
+        except ValidationError as e:
+            return render(request, 'pages/index.html', {'error': 'Enter a valid email address.'})
         if password != confirm_password:
             return (render(request, 'pages/index.html', {'error': 'Differents passwords'}))
 
@@ -62,22 +71,25 @@ def index(request):
 			)
             user.first_name = first_name
             user.last_name = last_name
-            user.username = email
+            user.username = username
             user.save()
+            messages.success(request, 'User created successfully!')
             return redirect('/login')
         except Exception as e:
-            context = {'error': str(e)}
-            return render(request, 'pages/index.html', context)
+            return render(request, 'pages/index.html', {'error': 'Username already taken'})
     return render(request, "pages/index.html")
 
 @csrf_protect
 def login(request):
+    load_dotenv()
+    HOST_IP = os.environ.get('HOST_IP')
+
     user = get_user_model()
     if request.session.get('authMethod', None) is None:
         if request.method == 'POST'  :
-            email = request.POST.get('email')
+            username = request.POST.get('username')
             password = request.POST.get('password')
-            user = authenticate(request, username=email, password=password)
+            user = authenticate(request, username=username, password=password)
             if user is not None:
                 auth_login(request, user)
                 request.session['authMethod'] = 'local'
@@ -87,16 +99,16 @@ def login(request):
         elif request.method == 'GET' and not request.user.is_authenticated:
             code = request.GET.get("code")
             if not code:
-                return render(request, 'pages/login.html')
+                return render(request, 'pages/login.html', {'URL': f"https://{HOST_IP}:8443/login"})
 
             url_token = "https://api.intra.42.fr/oauth/token"
             headers = {"Content-Type": "application/x-www-form-urlencoded"}
             data = {
                 "grant_type": "authorization_code",
                 "client_id": "u-s4t2ud-e6514ae93c2f3f3c25c6c98db2627ae8b9c70362848bea099f4e972c73370ec3",
-                "client_secret": "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",
+                "client_secret": "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",
                 "code": code,
-                "redirect_uri": "https://localhost:8443/login"
+                "redirect_uri": f"https://{HOST_IP}:8443/login"
             }
 
             response = requests.post(url_token, headers=headers, data=data)
@@ -111,7 +123,7 @@ def login(request):
             else:
                 return render(request, 'pages/login.html', {'error': 'Token exchange failed'})
         elif request.method == 'GET':
-            return render(request, 'pages/login.html')
+            return render(request, 'pages/login.html', {'URL': f"https://{settings.HOST_IP}:8443/login"})
     else:
         return render(request, 'pages/login.html', {'error': 'Already login'})
 

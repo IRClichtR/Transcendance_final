@@ -20,7 +20,7 @@ export class FreindsComponent extends LitElement {
 
 	async fetchFriends() {
 		try {
-			const response = await fetch('http://localhost:8000/user/');
+			const response = await fetch('/user');
 			if (response.ok) {
 				const data = await response.json();
 				this.friends = data;
@@ -36,13 +36,13 @@ export class FreindsComponent extends LitElement {
 		task: async ([user], { signal }) => {
 			const response = await getMe({ signal });
 
+			console.log('response: ', response);
+
 			if (response.image?.link) {
 				this.link = response.image.link;
-				console.log('response.image.link: ', this.link);
 				return response;
 			} else if (response?.profile_picture) {
-				this.link = 'http://localhost:8000' + response.profile_picture;
-				console.log('response.profile_picture: ', this.link);
+				this.link = response.profile_picture;
 				return response;
 			}
 
@@ -110,7 +110,6 @@ export class FreindsComponent extends LitElement {
 	handleAddFriend(friend) {
 		if (!this.myFriends.some((f) => f.email === friend.email)) {
 			this.myFriends = [...this.myFriends, friend];
-			console.log('add friend:::::::', this.myFriends);
 			this.saveFriendsToStorage();
 			this.requestUpdate(); // Ensure the component updates
 		}
@@ -122,6 +121,15 @@ export class FreindsComponent extends LitElement {
 		this.saveFriendsToStorage();
 		this.requestUpdate(); // Ensure the component updates
 	}
+
+	checkIfOnline = (user) => {
+		const hour = 60 * 60 * 1000;
+		const lastLoginDate = new Date(user.last_login);
+		const now = new Date();
+		const timeLogedIn = now - lastLoginDate;
+		timeLogedIn < hour ? (this.isOnline = true) : (this.isOnline = false);
+		return this.isOnline;
+	};
 
 	render() {
 		return this._userTask.render({
@@ -137,10 +145,18 @@ export class FreindsComponent extends LitElement {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello, ${user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+																user
+															)
+																? 'Online'
+																: 'Offline'}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div
@@ -183,8 +199,8 @@ export class FreindsComponent extends LitElement {
 												<div class="row">
 													${this.friends.map(
 														(friend) =>
-															friend.email ===
-															user.email
+															friend.first_name ===
+															user.first_name
 																? ``
 																: html`
 																		<div
@@ -205,10 +221,12 @@ export class FreindsComponent extends LitElement {
 																							friend.last_name}
 																						</h4>
 																						<span
-																							>${friend.online
+																							>${this.checkIfOnline(
+																								friend
+																							)
 																								? 'Online'
-																								: 'Offline'}</span
-																						>
+																								: 'Offline'}
+																						</span>
 																					</div>
 																					<div
 																						class="pl-4"
@@ -240,7 +258,9 @@ export class FreindsComponent extends LitElement {
 											<div class="py-6">
 												<div class="row">
 													${this.myFriends.map(
-														(friend) => html`
+														(friend) => friend.first_name  === user.first_name ?
+                                                            `` :
+                                                            html`
 															<div
 																class="col-lg-4 col-12"
 															>
@@ -259,10 +279,12 @@ export class FreindsComponent extends LitElement {
 																				friend.last_name}
 																			</h4>
 																			<span
-																				>${friend.online
+																				>${this.checkIfOnline(
+																					friend
+																				)
 																					? 'Online'
-																					: 'Offline'}</span
-																			>
+																					: 'Offline'}
+																			</span>
 																		</div>
 																		<button
 																			@click=${() =>

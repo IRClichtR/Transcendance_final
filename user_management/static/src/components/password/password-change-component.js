@@ -81,30 +81,56 @@ export class PasswordChangeComponent extends LitElement {
 
 	// * Update Password
 	async updatePassword(event) {
+		console.log('event: ', event);
 		event.preventDefault();
 		const formData = new FormData(event.target);
-		const currentPassword = formData.get('currentPassword');
-		const newPassword = formData.get('newPassword');
-		const confirmPassword = formData.get('confirmPassword');
+		console.log('formData: ', formData);
+		const old_password = formData.get('old_password');
+		console.log('old_password: ', old_password);
+		const new_password = formData.get('new_password');
+		console.log('new_password: ', new_password);
+		const confirm_new_password = formData.get('confirm_new_password');
+		console.log('confirm_new_password: ', confirm_new_password);
 
-		if (newPassword !== confirmPassword) {
+		if (new_password !== confirm_new_password) {
 			console.error('New password and confirm password do not match');
 			alert('New password and confirm password do not match');
 			return;
 		}
 
+		if (old_password == new_password)
+		{
+			console.error('New password and ol password match');
+			alert('New password and ol password match. Please choose an other password');
+			return;
+		}
+
 		try {
 			const response = await updatePassword({
-				currentPassword,
-				newPassword,
+				old_password,
+				new_password,
+				confirm_new_password,
 			});
 			console.log('Password updated successfully:', response);
-			alert('Password updated successfully');
+
+			// Déconnecter l'utilisateur
+			alert('Password updated successfully. You have been logged out. Please log in again.');
+			window.location.href = '/logout'; // Rediriger vers la page de connexion
+
 		} catch (error) {
 			console.error('Error updating password:', error);
 			alert('Error updating password');
 		}
 	}
+
+	checkIfOnline = (user) => {
+		const hour = 60 * 60 * 1000;
+		const lastLoginDate = new Date(user.last_login);
+		const now = new Date();
+		const timeLogedIn = now - lastLoginDate;
+		timeLogedIn < hour ? (this.isOnline = true) : (this.isOnline = false);
+		return this.isOnline;
+	};
 
 	render() {
 		return this._userTask.render({
@@ -120,13 +146,18 @@ export class PasswordChangeComponent extends LitElement {
 											<div
 												class="card widget-card shadow-sm"
 											>
-												<div
-													class="card-header text-bg-dark"
-												>
-													Hello,
-													${user.displayname
-														? user.displayname
-														: user.first_name}!
+												<div class="card-header">
+													<p>
+														Hello,
+														${user.first_name}!
+														<span
+															>${this.checkIfOnline(
+																user
+															)
+																? 'Online'
+																: 'Offline'}
+														</span>
+													</p>
 												</div>
 												<div class="card-body">
 													<div
@@ -149,8 +180,8 @@ export class PasswordChangeComponent extends LitElement {
 															${user.displayname
 																? user.displayname
 																: user.first_name +
-																  ' ' +
-																  user.last_name}
+																	' ' +
+																	user.last_name}
 														</h5>
 													</div>
 												</div>
@@ -180,7 +211,7 @@ export class PasswordChangeComponent extends LitElement {
 												<div class="row gy-3 gy-xxl-4">
 													<div class="col-12">
 														<label
-															for="currentPassword"
+															for="old_password"
 															class="form-label"
 															>Current
 															Password</label
@@ -188,28 +219,28 @@ export class PasswordChangeComponent extends LitElement {
 														<input
 															type="password"
 															class="form-control"
-															id="currentPassword"
-															name="currentPassword"
+															id="old_password"
+															name="old_password"
 															required
 														/>
 													</div>
 													<div class="col-12">
 														<label
-															for="newPassword"
+															for="new_password"
 															class="form-label"
 															>New Password</label
 														>
 														<input
 															type="password"
 															class="form-control"
-															id="newPassword"
-															name="newPassword"
+															id="new_password"
+															name="new_password"
 															required
 														/>
 													</div>
 													<div class="col-12">
 														<label
-															for="confirmPassword"
+															for="confirm_new_password"
 															class="form-label"
 															>Confirm
 															Password</label
@@ -217,18 +248,20 @@ export class PasswordChangeComponent extends LitElement {
 														<input
 															type="password"
 															class="form-control"
-															id="confirmPassword"
-															name="confirmPassword"
+															id="confirm_new_password"
+															name="confirm_new_password"
 															required
 														/>
 													</div>
 													<div class="col-12">
-														<button
-															type="submit"
-															class="btn btn-primary"
-														>
-															Change Password
-														</button>
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-primary ${user.login
+                                                                ? 'disabled'
+                                                                : ''}"
+                                                        >
+                                                            Save Password
+                                                        </button>
 													</div>
 												</div>
 											</form>

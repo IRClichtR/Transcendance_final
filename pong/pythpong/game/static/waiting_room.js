@@ -1,10 +1,12 @@
 const playerName = JSON.parse(document.getElementById('player_name').textContent);
+const playerId = JSON.parse(document.getElementById('player_id').textContent);
+
 console.log(player_name);
 
 let player_names = []
 
 var ws = new WebSocket(
-    'wss://' + window.location.host + '/ws/waiting_room/' + playerName +'/'
+    'wss://' + window.location.host + '/ws/waiting_room/' + playerName + '/' + playerId + '/' 
 );
 
 ws.onopen = function (e) {

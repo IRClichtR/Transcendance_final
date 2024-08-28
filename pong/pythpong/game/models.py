@@ -10,14 +10,15 @@ def get_current_time():
     return int(time.time())
 
 class GameManager(models.Manager):
-    def create_game(self, player_name, game_type):
+    def create_game(self, player_name, player_id, game_type):
         game = self.create(
             ball_direction_x=random.choice(['positive', 'negative']),
             ball_direction_y=random.choice(['positive', 'negative']),
             points=[0, 0],
             player_x = [PLAYER1_START_X, PLAYER2_START_X],
             player_y = [PLAYER_START_Y, PLAYER_START_Y],
-            player_ids = [0],
+            player_pos = [0],
+            player_ids = [player_id],
             player_names = [player_name],
             game_type = game_type
         )
@@ -30,8 +31,9 @@ class GameManager(models.Manager):
             points=[0, 0],
             player_x=[PLAYER1_START_X, PLAYER2_START_X],
             player_y=[PLAYER_START_Y, PLAYER_START_Y],
-            player_ids=[],
+            player_pos=[],
             player_names=["",""],
+            player_ids=[],
             game_type = game_type,
             tournament_id = tournament_id
         )
@@ -42,8 +44,9 @@ class Game(models.Model):
 
     game_id = models.AutoField(primary_key=True)
     game_type = models.CharField(max_length=20, default='regular')
-    tournament_id = models.IntegerField(default=0) 
-    player_ids = models.JSONField(default=list)
+    tournament_id = models.IntegerField(default=0)
+    player_ids = models.JSONField(default=list) 
+    player_pos = models.JSONField(default=list)
     player_names = models.JSONField(default=list)
     player_x = models.JSONField(default=list)
     player_y = models.JSONField(default=list)
@@ -98,4 +101,5 @@ class Tournament(models.Model):
     
 class WaitingRoom(models.Model):
     players = models.JSONField(default=list)
+    player_ids = models.JSONField(default=list) 
     tournament_created = models.BooleanField(default=False)

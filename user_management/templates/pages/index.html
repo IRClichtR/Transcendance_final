@@ -6,9 +6,7 @@
 				<div class="card text-black" style="border-radius: 25px">
 					{% if error %}
 					<div class="alert alert-danger" role="alert">
-						{% for message in error %}
-                            <p>{{ message }}</p>
-                        {% endfor %}
+						<p>{{ error }}</p>
 					</div>
 					{% endif %} {% if connected %}
 					<div class="alert alert-info" role="alert">
@@ -79,6 +77,26 @@
 											class="form-outline flex-fill mb-0"
 										>
 											<input
+												name="username"
+												type="username"
+												id="form3Example3c"
+												class="form-control"
+												placeholder="Username"
+											/>
+										</div>
+									</div>
+
+									<div
+										class="d-flex flex-row align-items-center mb-4"
+									>
+										<i
+											class="fas fa-envelope fa-lg me-3 fa-fw"
+										></i>
+										<div
+											data-mdb-input-init
+											class="form-outline flex-fill mb-0"
+										>
+											<input
 												name="email"
 												type="email"
 												id="form3Example3c"
@@ -126,25 +144,6 @@
 												placeholder="Confirm Password"
 											/>
 										</div>
-									</div>
-
-									<div class="form-check d-flex mb-5 small">
-										<i
-											class="fas fa-key fa-lg me-3 fa-fw"
-										></i>
-										<input
-											class="form-check-input me-2"
-											type="checkbox"
-											value=""
-											id="form2Example3c"
-										/>
-										<label
-											class="form-check-label pl-2 small"
-											for=""
-										>
-											I agree to the
-											<a href="#!">Terms of service</a>
-										</label>
 									</div>
 
 									<div

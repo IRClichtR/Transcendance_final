@@ -26,12 +26,16 @@ def store_game_sync(contract, w3, params):
     unsent_tx = contract.functions.storeGame(
         params['semifinal1_start_time'],
         params['semifinal1_player1'],
+        params['semifinal1_player1_id'],
         params['semifinal1_player2'],
+        params['semifinal1_player2_id'],
         params['semifinal1_score1'],
         params['semifinal1_score2'],
         params['semifinal2_start_time'],
         params['semifinal2_player1'],
+        params['semifinal2_player1_id'],
         params['semifinal2_player2'],
+        params['semifinal2_player2_id'],
         params['semifinal2_score1'],
         params['semifinal2_score2'],
         params['final_start_time'],
@@ -42,9 +46,11 @@ def store_game_sync(contract, w3, params):
     ).build_transaction({
         "from": account_address,
         "nonce": nonce,
+        "gas": 2000000,
+        "gasPrice": w3.to_wei('50', 'gwei')
     })
-    signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key=private_key)
-    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+    signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key).raw_transaction
+    tx_hash = w3.eth.send_raw_transaction(signed_tx)
     receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
     return receipt
 
@@ -67,12 +73,16 @@ def store_data(tournament):
     params = {
         'semifinal1_start_time': tournament.semifinal1.start_time,
         'semifinal1_player1': tournament.semifinal1.player_names[0],
+        'semifinal1_player1_id' : int(tournament.semifinal1.player_ids[0]),
         'semifinal1_player2': tournament.semifinal1.player_names[1],
+        'semifinal1_player2_id' : int(tournament.semifinal1.player_ids[1]),
         'semifinal1_score1': tournament.semifinal1.points[0],
         'semifinal1_score2': tournament.semifinal1.points[1],
         'semifinal2_start_time': tournament.semifinal2.start_time,
         'semifinal2_player1': tournament.semifinal2.player_names[0],
+        'semifinal2_player1_id' : int(tournament.semifinal2.player_ids[0]),
         'semifinal2_player2': tournament.semifinal2.player_names[1],
+        'semifinal2_player2_id' : int(tournament.semifinal2.player_ids[1]),
         'semifinal2_score1': tournament.semifinal2.points[0],
         'semifinal2_score2': tournament.semifinal2.points[1],
         'final_start_time': tournament.final.start_time,
@@ -80,6 +90,26 @@ def store_data(tournament):
         'final_player2': tournament.final.player_names[1],
         'final_score1': tournament.final.points[0],
         'final_score2': tournament.final.points[1]
+
+        #'semifinal1_start_time': 1114548,
+        #'semifinal1_player1': "baloo",
+        #'semifinal1_player1_id' : 1,
+        #'semifinal1_player2': "bat",
+        #'semifinal1_player2_id' : 2,
+        #'semifinal1_score1': 3,
+        #'semifinal1_score2': 2,
+        #'semifinal2_start_time': 1114549,
+        #'semifinal2_player1': "basil",
+        #'semifinal2_player1_id' : 155444,
+        #'semifinal2_player2': "flo",
+        #'semifinal2_player2_id' : 4,
+        #'semifinal2_score1': 0,
+        #'semifinal2_score2': 3,
+        #'final_start_time': 1114548,
+        #'final_player1': "bat",
+        #'final_player2': "flo",
+        #'final_score1': 5,
+        #'final_score2': 4
     }
 
     receipt = store_game(params)

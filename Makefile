@@ -1,25 +1,23 @@
-# Makefile
-
 all:
-	# ./get_ip_in_env.sh
-	# ./modsecurity-nginx/generate_nginx_config.sh
+	./get_ip_in_env.sh
 	docker compose up -d --build
+	@./display_ip.sh
 
-# Build the Docker images using docker-compose
+# Build the Docker images using docker compose
 build:
-	docker-compose build
+	docker compose build
 
 # Start the services in detached mode
 up:
-	docker-compose up -d
+	docker compose up -d
 
 # Stop the services
 down:
-	docker-compose down
+	docker compose down
 
 # Clean up Docker containers, images, volumes, and networks
 clean:
-	docker-compose down --rmi all --volumes --remove-orphans
+	docker compose down --rmi all --volumes --remove-orphans
 
 # Clean up Vault-related files and directories
 cleanfiles:

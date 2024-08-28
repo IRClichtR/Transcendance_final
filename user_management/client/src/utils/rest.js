@@ -31,18 +31,24 @@ const rest = ky.extend({
 
 const getMe = (options = {}) => {
 	const response = rest.get('/user/me', options).json();
-	console.log('response-----> ', response);
 	return response;
 };
 
 const updateUser = async (user) => {
 	try {
-		console.log('New user info => ', user);
-		const response = await rest
-			.patch('/user/update/', {
-				body: user,
-			})
-			.json();
+
+		console.log('updateUser user.entries :\n');
+		for (let [key, value] of user.entries()) {
+			console.log(key, ' : ', value);
+		}
+		console.log('\n');
+
+		const response = await rest.patch('/user/update/', {
+			body: user,
+		});
+		console.log('updateUser response : ', response);
+		console.log('\n');
+
 		return response;
 	} catch (error) {
 		if (error.response) {
@@ -61,6 +67,7 @@ const updateUser = async (user) => {
 const getProfilePic = async (user) => {
 	try {
 		const response = await getMe();
+        console.log("getProfilePic Response: ", response);
 		return response;
 	} catch (error) {
 		console.log('error: ', error);
@@ -68,13 +75,18 @@ const getProfilePic = async (user) => {
 	}
 };
 
-const updatePassword = async ({ currentPassword, newPassword }) => {
+const updatePassword = async ({
+	confirm_new_password,
+	new_password,
+	old_password,
+}) => {
 	try {
-		const response = await ky
-			.put('/user/password', {
-				json: { currentPassword, newPassword },
+		const response = await rest
+			.put('/user/password/', {
+				json: { confirm_new_password, new_password, old_password },
 			})
 			.json();
+		console.log('updatePassword response : ', response);
 		return response;
 	} catch (error) {
 		console.error('Failed to update password:', error);

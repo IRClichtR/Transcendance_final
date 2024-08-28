@@ -4,13 +4,13 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 
 class AppUserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, first_name='', last_name=''):
         if not email:
             raise ValueError('An Email is required.')
         if not password:
             raise ValueError('A Password is required.')
         email = self.normalize_email(email)
-        user = self.model(email=email)
+        user = self.model(email=email, first_name=first_name, last_name=last_name)
         user.set_password(password)
         user.save()
         return user
@@ -26,8 +26,8 @@ class AppUserManager(BaseUserManager):
         return user
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(max_length=50, unique=True)
-    username = models.CharField(max_length=50, blank=False, unique=False)
+    email = models.EmailField(max_length=50, unique=False)
+    username = models.CharField(max_length=50, blank=False, unique=True)
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     is_active = models.BooleanField(default=True)
@@ -38,7 +38,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
     objects = AppUserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     def __str__(self):

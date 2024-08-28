@@ -72,13 +72,16 @@ def update_game_state(game_id):
                 game.ball_speed = BALL_SPEED
                 # Increment left player's point
                 game.points[0] += 1
-                if (game.points[0] == MAX_POINT):
-                    if game.game_type == 'final':
-                        game.msg = f"{game.player_names[0]} Win the tournament!!!"
-                    else:
-                        game.msg = f"{game.player_names[0]} Win!"
-                    game.winner = game.player_names[0]
-                    game.end_play = True
+                try:
+                    if (game.points[0] == MAX_POINT):
+                        if game.game_type == 'final':
+                            game.msg = f"{game.player_names[0]} Wins the tournament!!!"
+                        else:
+                            game.msg = f"{game.player_names[0]} Win!"
+                        game.winner = game.player_ids[0]
+                        game.end_play = True
+                except Exception as e:
+                    print(f"Une erreur est survenue : {e}")
 
     # Ball going to the left
     elif game.ball_direction_x == 'negative':
@@ -126,13 +129,16 @@ def update_game_state(game_id):
                 game.ball_speed = BALL_SPEED
                 # Increment right player's point
                 game.points[1] += 1
-                if (game.points[1] == MAX_POINT):
-                    if game.game_type == 'final':
-                        game.msg = f"{game.player_names[1]} Win the tournament!!!"
-                    else:
-                        game.msg = f"{game.player_names[1]} Win!"
-                    game.winner = game.player_names[1]
-                    game.end_play = True
+                try:
+                    if (game.points[1] == MAX_POINT):
+                        if game.game_type == 'final':
+                            game.msg = f"{game.player_names[1]} Wins the tournament!!!"
+                        else:
+                            game.msg = f"{game.player_names[1]} Win!"
+                        game.winner = game.player_ids[1]
+                        game.end_play = True
+                except Exception as e:
+                    print(f"Une erreur est survenue : {e}")
 
     #ball going down
     if game.ball_direction_y == 'positive':
