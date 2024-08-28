@@ -42,6 +42,17 @@ const getTournamentData = (options = {}) => {
     return response;
 }
 
+const getUserTournamentData = async (user) => {
+	try {
+		const response = await getTournamentData();
+        console.log("getUserTournamentData Response: ", response);
+		return response;
+	} catch (error) {
+		console.log('error: ', error);
+		throw new Error('Failed to update user');
+	}
+}
+
 const updateUser = async (user) => {
 	try {
 
