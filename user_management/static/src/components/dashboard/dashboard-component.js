@@ -1,6 +1,6 @@
 import { Task } from '@lit/task';
 import { LitElement, html, css } from 'lit';
-import { getMe, updateUser, updatePassword, getProfilePic, getUserTournamentData } from '../../utils/rest.js';
+import { getMe, getUserTournamentData } from '../../utils/rest.js';
 
 export class DashboardComponent extends LitElement {
     static properties = {
@@ -171,11 +171,7 @@ export class DashboardComponent extends LitElement {
 														Hello,
 														${user.first_name}!
 														<span
-															>${this.checkIfOnline(
-                user
-            )
-                    ? 'Online'
-                    : 'Offline'}
+															>${this.checkIfOnline(user) ? 'Online' : 'Offline'}
 														</span>
 													</p>
 												</div>
@@ -189,9 +185,7 @@ export class DashboardComponent extends LitElement {
 														<img
 															src=${this.link}
 															class="img-fluid rounded-circle"
-															alt="${user.login
-                    ? user.login
-                    : user.first_name}"
+															alt="${user.login ? user.login : user.first_name}"
 														/>
 													</div>
 													<div

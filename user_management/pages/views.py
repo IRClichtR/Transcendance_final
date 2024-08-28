@@ -35,6 +35,7 @@ def req_api42(request, token):
             user.first_name = data['first_name']
             user.last_name = data['last_name']
             user.username = data['email']
+            user.school_id = data['id']
             user.save()
             return redirect('/app/')
     else:
