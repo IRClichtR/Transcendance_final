@@ -2,6 +2,7 @@
 venv
 env/
 ENV/
+.env
 
 # IDE
 .*.un~
@@ -25,9 +26,21 @@ db.sqlite3
 */migrations/*.py[cod]
 */migrations/*.pyc
 */migrations/*.pyo
+pong/pythpong/game/migrations/0*
 
 # staticfiles
 staticfiles/
 media/
 
+# nginx
+modsecurity-nginx/conf/default
 
+# vault
+vault/config/init.file
+vault/config/root.token
+vault/config/unseal.key1
+vault/config/unseal.key2
+vault/config/unseal.key3
+vault/config/unseal.key4
+vault/config/unseal.key5
+vault/data/
