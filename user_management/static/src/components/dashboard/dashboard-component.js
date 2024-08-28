@@ -200,11 +200,7 @@ export class DashboardComponent extends LitElement {
 														<h5
 															class="text-center mb-1"
 														>
-															${user.displayname
-                    ? user.displayname
-                    : user.first_name +
-                    ' ' +
-                    user.last_name}
+															${user.displayname ? user.displayname : user.first_name + ' ' + user.last_name}
 														</h5>
 													</div>
 												</div>
@@ -239,8 +235,7 @@ export class DashboardComponent extends LitElement {
 														type="submit"
 														class="btn btn-primary mt-3"
 														href="/pong"
-														@click="${this
-                    .redirectTPongGame}"
+														@click="${this.redirectTPongGame}"
 													>
 														Play Pong
 													</button>
@@ -640,9 +635,7 @@ export class DashboardComponent extends LitElement {
 																				<div
 																					class="p-2"
 																				>
-																					${user.login
-                    ? user.login
-                    : user.username}
+																					${user.login ? user.login : user.username}
 																				</div>
 																			</div>
 
