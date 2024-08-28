@@ -84,6 +84,9 @@ export class DashboardComponent extends LitElement {
 		];
 	}
 
+    // FIX: test to fetch userTournamentData and console.log it
+    printUserTournamentData = () => console.log(getUserTournamentData(user.id));
+
 	getRandomAvatarSrc = () => {
 		const randomSrc = Math.floor(Math.random() * this.images.length);
 		return this.images[randomSrc];

@@ -754,15 +754,31 @@ var getMe = (options = {}) => {
   const response = rest.get("/user/me", options).json();
   return response;
 };
-var updateUser = async (user) => {
+var getTournamentData = (options = {}) => {
+  const response = rest.get("/pong/api/tournament-history/" + String(options.id)).json();
+  console.log("getTournamentData: ", response);
+  return response;
+};
+var getUserTournamentData = async (user2) => {
+  try {
+    const response = await getTournamentData(user2.id);
+    console.log("getUserTournamentData user.id: ", user2.id);
+    console.log("getUserTournamentData Response: ", response);
+    return response;
+  } catch (error) {
+    console.log("error: ", error);
+    throw new Error("Failed to update user");
+  }
+};
+var updateUser = async (user2) => {
   try {
     console.log("updateUser user.entries :\n");
-    for (let [key, value] of user.entries()) {
+    for (let [key, value] of user2.entries()) {
       console.log(key, " : ", value);
     }
     console.log("\n");
     const response = await rest.patch("/user/update/", {
-      body: user
+      body: user2
     });
     console.log("updateUser response : ", response);
     console.log("\n");
@@ -780,7 +796,7 @@ var updateUser = async (user) => {
     throw new Error("Failed to update user");
   }
 };
-var getProfilePic = async (user) => {
+var getProfilePic = async (user2) => {
   try {
     const response = await getMe();
     console.log("getProfilePic Response: ", response);
@@ -817,7 +833,7 @@ var DashboardComponent = class extends s3 {
     isOnline: { type: Boolean }
   };
   _userTask = new h3(this, {
-    task: async ([user], { signal }) => {
+    task: async ([user2], { signal }) => {
       const response = await getMe({ signal });
       if (response.image?.link) {
         this.link = response.image.link;
@@ -884,6 +900,8 @@ var DashboardComponent = class extends s3 {
       "https://cdn-icons-png.flaticon.com/128/8034/8034559.png"
     ];
   }
+  // FIX: test to fetch userTournamentData and console.log it
+  printUserTournamentData = () => console.log(getUserTournamentData(user.id));
   getRandomAvatarSrc = () => {
     const randomSrc = Math.floor(Math.random() * this.images.length);
     return this.images[randomSrc];
@@ -915,9 +933,9 @@ var DashboardComponent = class extends s3 {
     const parsed = avatars ? JSON.parse(avatars) : {};
     return parsed[email] || "";
   };
-  checkIfOnline = (user) => {
+  checkIfOnline = (user2) => {
     const hour = 60 * 60 * 1e3;
-    const lastLoginDate = new Date(user.last_login);
+    const lastLoginDate = new Date(user2.last_login);
     const now = /* @__PURE__ */ new Date();
     const timeLogedIn = now - lastLoginDate;
     console.log(timeLogedIn, hour);
@@ -940,7 +958,7 @@ var DashboardComponent = class extends s3 {
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
-      complete: (user) => x`
+      complete: (user2) => x`
 				<div class="container container-fluid h-100">
 					<section class="bg-light py-3 py-md-5 py-xl-8">
 						<div class="container container-fluid w-100">
@@ -954,10 +972,10 @@ var DashboardComponent = class extends s3 {
 												<div class="card-header">
 													<p>
 														Hello,
-														${user.first_name}!
+														${user2.first_name}!
 														<span
 															>${this.checkIfOnline(
-        user
+        user2
       ) ? "Online" : "Offline"}
 														</span>
 													</p>
@@ -972,7 +990,7 @@ var DashboardComponent = class extends s3 {
 														<img
 															src=${this.link}
 															class="img-fluid rounded-circle"
-															alt="${user.login ? user.login : user.first_name}"
+															alt="${user2.login ? user2.login : user2.first_name}"
 														/>
 													</div>
 													<div
@@ -981,7 +999,7 @@ var DashboardComponent = class extends s3 {
 														<h5
 															class="text-center mb-1"
 														>
-															${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
+															${user2.displayname ? user2.displayname : user2.first_name + " " + user2.last_name}
 														</h5>
 													</div>
 												</div>
@@ -1105,7 +1123,7 @@ var DashboardComponent = class extends s3 {
 																					<h6
 																						class="mb-1"
 																					>
-																						${user.first_name}
+																						${user2.first_name}
 																					</h6>
 																				</td>
 
@@ -1147,7 +1165,7 @@ var DashboardComponent = class extends s3 {
 																				<td>
 																					<span
 																						class=" btn bg-danger text-light"
-																						>${user.first_name}</span
+																						>${user2.first_name}</span
 																					>
 																				</td>
 																			</tr>
@@ -1257,7 +1275,7 @@ var DashboardComponent = class extends s3 {
 																						<h6
 																							class="mb-1"
 																						>
-																							${user.first_name}
+																							${user2.first_name}
 																						</h6>
 																					</td>
 																					<td>
@@ -1377,7 +1395,7 @@ var DashboardComponent = class extends s3 {
 																				<div
 																					class="p-2"
 																				>
-																					${user.first_name}
+																					${user2.first_name}
 																				</div>
 																			</div>
 
@@ -1397,7 +1415,7 @@ var DashboardComponent = class extends s3 {
 																				<div
 																					class="p-2"
 																				>
-																					${user.last_name}
+																					${user2.last_name}
 																				</div>
 																			</div>
 
@@ -1416,7 +1434,7 @@ var DashboardComponent = class extends s3 {
 																				<div
 																					class="p-2"
 																				>
-																					${user.login ? user.login : user.username}
+																					${user2.login ? user2.login : user2.username}
 																				</div>
 																			</div>
 
@@ -1435,7 +1453,7 @@ var DashboardComponent = class extends s3 {
 																				<div
 																					class="p-2"
 																				>
-																					${user.email}
+																					${user2.email}
 																				</div>
 																			</div>
 																			<div>
@@ -1512,7 +1530,7 @@ var SettingsComponent = class extends s3 {
     previewSrc: { type: String }
   };
   _userTask = new h3(this, {
-    task: async ([user], { signal }) => {
+    task: async ([user2], { signal }) => {
       const me = await getMe({ signal });
       if (me.image?.link) {
         this.link = me.image.link;
@@ -1608,9 +1626,9 @@ var SettingsComponent = class extends s3 {
       fileReader.readAsDataURL(file[0]);
     }
   };
-  checkIfOnline = (user) => {
+  checkIfOnline = (user2) => {
     const hour = 60 * 60 * 1e3;
-    const lastLoginDate = new Date(user.last_login);
+    const lastLoginDate = new Date(user2.last_login);
     const now = /* @__PURE__ */ new Date();
     const timeLogedIn = now - lastLoginDate;
     timeLogedIn < hour ? this.isOnline = true : this.isOnline = false;
@@ -1619,7 +1637,7 @@ var SettingsComponent = class extends s3 {
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading settings...</p>`,
-      complete: (user) => x`
+      complete: (user2) => x`
 				<div class="container container-xxl h-100">
 					<section class="bg-light py-3 py-md-5 py-xl-8">
 						<div class="container">
@@ -1633,10 +1651,10 @@ var SettingsComponent = class extends s3 {
 												<div class="card-header">
 													<p>
 														Hello,
-														${user.first_name}!
+														${user2.first_name}!
 														<span
 															>${this.checkIfOnline(
-        user
+        user2
       ) ? "Online" : "Offline"}
 														</span>
 													</p>
@@ -1648,13 +1666,13 @@ var SettingsComponent = class extends s3 {
 														<img
 															src="${this.link}"
 															class="img-fluid rounded-circle"
-															alt="${user.displayname ? user.displayname : user.first_name}"
+															alt="${user2.displayname ? user2.displayname : user2.first_name}"
 														/>
 													</div>
 													<h5
 														class="text-center mb-1"
 													>
-														${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
+														${user2.displayname ? user2.displayname : user2.first_name + " " + user2.last_name}
 													</h5>
 													<div
 														class="d-grid m-0"
@@ -1751,7 +1769,7 @@ var SettingsComponent = class extends s3 {
 																class="form-control"
 																id="inputFirstName"
 																name="first_name"
-																value="${user.first_name}"
+																value="${user2.first_name}"
 															/>
 														</div>
 														<div
@@ -1768,7 +1786,7 @@ var SettingsComponent = class extends s3 {
 																class="form-control"
 																id="inputLastName"
 																name="last_name"
-																value="${user.last_name}"
+																value="${user2.last_name}"
 															/>
 														</div>
 														<div
@@ -1784,7 +1802,7 @@ var SettingsComponent = class extends s3 {
 																class="form-control"
 																id="inputUsername"
 																name="username"
-																value="${user?.username ? user.username : user.displayname}"
+																value="${user2?.username ? user2.username : user2.displayname}"
 															/>
 														</div>
 														<div
@@ -1800,7 +1818,7 @@ var SettingsComponent = class extends s3 {
 																class="form-control"
 																id="inputEmail"
 																name="email"
-																value="${user.email}"
+																value="${user2.email}"
 															/>
 														</div>
 														<div
@@ -1816,13 +1834,13 @@ var SettingsComponent = class extends s3 {
 																type="email"
 																class="form-control"
 																id="inputConfirmEmail"
-																value="${user.email}"
+																value="${user2.email}"
 															/>
 														</div>
 														<div class="col-12">
 															<button
 																type="submit"
-																class="btn btn-primary ${user.login ? "disabled" : ""}"
+																class="btn btn-primary ${user2.login ? "disabled" : ""}"
 															>
 																Save Changes
 															</button>
@@ -1873,7 +1891,7 @@ var FreindsComponent = class extends s3 {
     }
   }
   _userTask = new h3(this, {
-    task: async ([user], { signal }) => {
+    task: async ([user2], { signal }) => {
       const response = await getMe({ signal });
       console.log("response: ", response);
       if (response.image?.link) {
@@ -1949,9 +1967,9 @@ var FreindsComponent = class extends s3 {
     this.saveFriendsToStorage();
     this.requestUpdate();
   }
-  checkIfOnline = (user) => {
+  checkIfOnline = (user2) => {
     const hour = 60 * 60 * 1e3;
-    const lastLoginDate = new Date(user.last_login);
+    const lastLoginDate = new Date(user2.last_login);
     const now = /* @__PURE__ */ new Date();
     const timeLogedIn = now - lastLoginDate;
     timeLogedIn < hour ? this.isOnline = true : this.isOnline = false;
@@ -1960,7 +1978,7 @@ var FreindsComponent = class extends s3 {
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading friends...</p>`,
-      complete: (user) => x`
+      complete: (user2) => x`
 				<div class="container container-fluid h-100">
 					<section class="bg-light py-3 py-md-5 py-xl-8 shadow-sm">
 						<div class="container-xxl container-fluid">
@@ -1974,10 +1992,10 @@ var FreindsComponent = class extends s3 {
 												<div class="card-header">
 													<p>
 														Hello,
-														${user.first_name}!
+														${user2.first_name}!
 														<span
 															>${this.checkIfOnline(
-        user
+        user2
       ) ? "Online" : "Offline"}
 														</span>
 													</p>
@@ -1989,7 +2007,7 @@ var FreindsComponent = class extends s3 {
 														<img
 															src="${this.link}"
 															class="img-fluid rounded-circle"
-															alt="${user.first_name}"
+															alt="${user2.first_name}"
 														/>
 													</div>
 													<div
@@ -1998,7 +2016,7 @@ var FreindsComponent = class extends s3 {
 														<h5
 															class="text-center mb-1"
 														>
-															${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
+															${user2.displayname ? user2.displayname : user2.first_name + " " + user2.last_name}
 														</h5>
 													</div>
 												</div>
@@ -2018,7 +2036,7 @@ var FreindsComponent = class extends s3 {
 											<div class="py-6">
 												<div class="row">
 													${this.friends.map(
-        (friend) => friend.first_name === user.first_name ? `` : x`
+        (friend) => friend.first_name === user2.first_name ? `` : x`
 																		<div
 																			class="col-lg-4 col-12"
 																		>
@@ -2069,7 +2087,7 @@ var FreindsComponent = class extends s3 {
 											<div class="py-6">
 												<div class="row">
 													${this.myFriends.map(
-        (friend) => friend.first_name === user.first_name ? `` : x`
+        (friend) => friend.first_name === user2.first_name ? `` : x`
 															<div
 																class="col-lg-4 col-12"
 															>
@@ -2128,7 +2146,7 @@ var PasswordChangeComponent = class extends s3 {
     link: { type: String }
   };
   _userTask = new h3(this, {
-    task: async ([user], { signal }) => {
+    task: async ([user2], { signal }) => {
       const response = await getMe({ signal });
       if (response.image?.link) {
         this.link = response.image.link;
@@ -2225,9 +2243,9 @@ var PasswordChangeComponent = class extends s3 {
       alert("Error updating password");
     }
   }
-  checkIfOnline = (user) => {
+  checkIfOnline = (user2) => {
     const hour = 60 * 60 * 1e3;
-    const lastLoginDate = new Date(user.last_login);
+    const lastLoginDate = new Date(user2.last_login);
     const now = /* @__PURE__ */ new Date();
     const timeLogedIn = now - lastLoginDate;
     timeLogedIn < hour ? this.isOnline = true : this.isOnline = false;
@@ -2236,7 +2254,7 @@ var PasswordChangeComponent = class extends s3 {
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading password...</p>`,
-      complete: (user) => x`
+      complete: (user2) => x`
 				<div class="container container-fluid h-100">
 					<section class="bg-light py-3 py-md-5 py-xl-8 shadow-sm">
 						<div class="container-xxl container-fluid">
@@ -2250,10 +2268,10 @@ var PasswordChangeComponent = class extends s3 {
 												<div class="card-header">
 													<p>
 														Hello,
-														${user.first_name}!
+														${user2.first_name}!
 														<span
 															>${this.checkIfOnline(
-        user
+        user2
       ) ? "Online" : "Offline"}
 														</span>
 													</p>
@@ -2265,7 +2283,7 @@ var PasswordChangeComponent = class extends s3 {
 														<img
 															src="${this.link ? this.link : "https://bootdey.com/img/Content/avatar/avatar1.png"}"
 															class="img-fluid rounded-circle"
-															alt="${user.displayname}"
+															alt="${user2.displayname}"
 														/>
 													</div>
 													<div
@@ -2274,7 +2292,7 @@ var PasswordChangeComponent = class extends s3 {
 														<h5
 															class="text-center mb-1"
 														>
-															${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
+															${user2.displayname ? user2.displayname : user2.first_name + " " + user2.last_name}
 														</h5>
 													</div>
 												</div>
@@ -2349,7 +2367,7 @@ var PasswordChangeComponent = class extends s3 {
 													<div class="col-12">
                                                         <button
                                                             type="submit"
-                                                            class="btn btn-primary ${user.login ? "disabled" : ""}"
+                                                            class="btn btn-primary ${user2.login ? "disabled" : ""}"
                                                         >
                                                             Save Password
                                                         </button>
