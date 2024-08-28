@@ -34,3 +34,13 @@ media/
 
 # nginx
 modsecurity-nginx/conf/default
+
+#vaults
+vault/config/init.file
+vault/config/root.token
+vault/config/unseal.key1
+vault/config/unseal.key2
+vault/config/unseal.key3
+vault/config/unseal.key4
+vault/config/unseal.key5
+vault/data/

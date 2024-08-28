@@ -1,6 +1,6 @@
 Vault commands
 
-docker-compose exec vault bash
+docker compose exec vault bash
 
 vault operator init
 
