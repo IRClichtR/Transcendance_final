@@ -60,6 +60,7 @@
                     <label for="playerName">Enter your name:</label>
                     <input class="w-50" type="text" id="playerNameLocalStart" name="playerName" required />
                     <input type="hidden" id="playerIdLocalStart" name="playerId" value="" />
+                    <input type="hidden" id="playerUsernameLocalStart" name="playerUsername" value="" />
                     <button class="btn btn-outline-success w-50 mt-2" type="submit" id="localButton">
                         Play
                     </button>
@@ -75,6 +76,7 @@
                 <form id="startForm" method="POST" action="{% url 'start_game' %}">
                     {% csrf_token %}
                     <input type="hidden" id="playerIdNameStart" name="playerId" value="" />
+                    <input type="hidden" id="playerUsernameNameStart" name="playerUsername" value="" />
                     <button class="btn btn-outline-success w-50 mt-2" type="submit" id="startButton">
                         Play
                     </button>
@@ -90,6 +92,7 @@
                 <form id="startTournamentForm" method="POST" action="{% url 'waiting_room' %}">
                     {% csrf_token %}
                     <input type="hidden" id="playerIdTournament" name="playerId" value="" />
+                    <input type="hidden" id="playerUsernameTournament" name="playerUsername" value="" />
                     <button class="btn btn-outline-success w-50 mt-2" type="submit" id="startTournamentButton">
                         Play
                     </button>
