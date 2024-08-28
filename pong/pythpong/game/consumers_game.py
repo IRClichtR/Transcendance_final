@@ -37,7 +37,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
             try:
                 await self.accept()
-                print(f"WebSocket connected: Game ID {self.game_id}, Player ID {self.player_pos}")
+                print(f"WebSocket connected: Game ID {self.game_id}, Player Pos {self.player_pos}")
             except Exception as e:
                 print(f"Error during WebSocket accept: {e}")
                 await self.close()
@@ -55,7 +55,6 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def websocket_receive(self, event):
         message = event['text']
         data = json.loads(message)
-        #print("Data received:", data)
 
         game_data = data.get('game')
         
@@ -131,7 +130,7 @@ class GameConsumer(AsyncWebsocketConsumer):
     #handle tournament final
     async def handle_end_game(self):
         game = await self.get_game()
-        if (game.game_type == 'regular' or game.game_type == 'local' or game.player_names[int(self.player_pos)] != game.winner):
+        if (game.game_type == 'regular' or game.game_type == 'local' or game.player_ids[int(self.player_pos)] != game.winner):
             return
         elif game.game_type == 'final':
             tournament = await self.get_tournament(game.tournament_id)
@@ -173,8 +172,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         game_state = event.get('game_state')
         if game_state and self.connected == True:
             await self.send(text_data=json.dumps(game_state))
-        #else:
-         #   print("No game_state found in event")
     
     async def game_timer(self, event):
         message = event['message']

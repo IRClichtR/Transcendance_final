@@ -26,6 +26,7 @@ app_patterns = [
     path('waiting_room', waiting_room, name='waiting_room'),
     path('waiting_room/<str:player_name>/<int:player_id>', waiting_room_by_name, name='waiting_room_by_name'),
     path('get_data', get_data, name='get_data'),
+    #path('bc', store_tournament_data, name='store_tournament_data'), DEBUG ONLY
     # path('pong/debug/settings/', debug_settings, name='debug-settings'),
     # include router-generated URL patterns
     # path('pong/api/', include(router.urls)),
