@@ -951,10 +951,10 @@ var DashboardComponent = class extends s3 {
   };
   // NOTE: add method to fetch tournament winner and display it
   fetchTournamentWinner = (tournament_history) => {
-    const player1 = tournament_history[3].final_player1;
-    const player2 = tournament_history[3].final_player2;
-    const player1Score = tournament_history[3].final_score1;
-    const player2Score = tournament_history[3].final_score2;
+    const player1 = tournament_history.final_player1;
+    const player2 = tournament_history.final_player2;
+    const player1Score = tournament_history.final_score1;
+    const player2Score = tournament_history.final_score2;
     if (player1Score > player2Score) {
       return player1;
     } else {
@@ -1061,42 +1061,46 @@ var DashboardComponent = class extends s3 {
 																				</tr>
 																			</thead>
 																			<tbody>
-																				<tr>
-																					<td>
-																						<h6 class="mb-1">
-																							${new Date(this.tournamentData.tournament_history[3].final_start_time * 1e3).toLocaleDateString()}
-																						</h6>
-																					</td>
+																				${this.tournamentData.tournament_history.map(
+        (tournament) => x`
+																						<tr>
+																							<td>
+																								<h6 class="mb-1">
+																									${new Date(tournament.final_start_time * 1e3).toLocaleDateString()}
+																								</h6>
+																							</td>
 
-																					// * Player 1
-																					<td><h6 class="mb-1">${user.first_name}</h6></td>
-																					<td>
-																						<h6 class="mb-1"></h6>
-																						${this.tournamentData.tournament_history[3].final_score1}
-																					</td>
+																							<td><h6 class="mb-1">${user.first_name}</h6></td>
+																							<td>
+																								<h6 class="mb-1"></h6>
+																								${tournament.semifinal1_score1}
+																							</td>
 
-																					// * Player 2
-																					<td><h6 class="mb-1">${this.tournamentData.tournament_history[3].semifinal1_player2}</h6></td>
-																					<td>
-																						<h6 class="mb-1"></h6>
-																						${this.tournamentData.tournament_history[3].final_score2}
-																					</td>
+																							<td><h6 class="mb-1">${tournament.semifinal1_player2}</h6></td>
+																							<td>
+																								<h6 class="mb-1"></h6>
+																								${tournament.semifinal1_score2}
+																							</td>
 
-																					// * Player 3
-																					<td><h6 class="mb-1">${this.tournamentData.tournament_history[3].semifinal2_player1}</h6></td>
-																					<td>
-																						<h6 class="mb-1"></h6>
-																						${this.tournamentData.tournament_history[3].final_score3}
-																					</td>
+																							<td><h6 class="mb-1">${tournament.semifinal2_player1}</h6></td>
+																							<td>
+																								<h6 class="mb-1"></h6>
+																								${tournament.semifinal2_score1}
+																							</td>
 
-																					// * Player 4
-																					<td><h6 class="mb-1">${this.tournamentData.tournament_history[3].semifinal2_player2}</h6></td>
-																					<td>
-																						<h6 class="mb-1"></h6>
-																						${this.tournamentData.tournament_history[3].final_score4}
-																					</td>
-																					<td><span class=" btn bg-success text-light">La Mere Noel</span></td>
-																				</tr>
+																							<td><h6 class="mb-1">${tournament.semifinal2_player2}</h6></td>
+																							<td>
+																								<h6 class="mb-1"></h6>
+																								${tournament.semifinal2_score2}
+																							</td>
+																							<td>
+																								<span class=" btn bg-success text-light"
+																									>${this.fetchTournamentWinner(tournament)}</span
+																								>
+																							</td>
+																						</tr>
+																					`
+      )}
 																			</tbody>
 																		</table>
 																	</div>
