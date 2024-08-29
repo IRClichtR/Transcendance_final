@@ -727,9 +727,7 @@ var r5 = (s6, i7) => s6 === i7 || s6.length === i7.length && s6.every((s7, h4) =
 // src/utils/rest.js
 import ky from "https://esm.sh/ky@1";
 var getCookies = () => {
-  return Object.fromEntries(
-    document.cookie.split("; ").map((v2) => v2.split(/=(.*)/s).map(decodeURIComponent))
-  );
+  return Object.fromEntries(document.cookie.split("; ").map((v2) => v2.split(/=(.*)/s).map(decodeURIComponent)));
 };
 var csrfToken = getCookies().csrftoken;
 var rest = ky.extend({
@@ -742,9 +740,7 @@ var rest = ky.extend({
     afterResponse: [
       async (request, options, response) => {
         if (response.status === 401) {
-          location.assign(
-            "/login?next=" + encodeURIComponent(location.pathname)
-          );
+          location.assign("/login?next=" + encodeURIComponent(location.pathname));
         }
       }
     ]
@@ -768,6 +764,21 @@ var getTournamentData = async (user) => {
   } catch (error) {
     console.log("error: ", error);
     throw new Error("Failed to get user tournament-history");
+  }
+};
+var getGamesData = async (user) => {
+  if (!user) {
+    throw new Error("Unable to get games data due to missing user");
+  }
+  const id = user.school_id ?? user.id;
+  console.log("getGamesData user.id: ", id);
+  try {
+    const response = rest.get(`/pong/api/games-history/${id}`).json();
+    console.log("getGamesData: ", response);
+    return response;
+  } catch (error) {
+    console.log("error: ", error);
+    throw new Error("Failed to get user games");
   }
 };
 var updateUser = async (user) => {
@@ -806,11 +817,7 @@ var getProfilePic = async (user) => {
     throw new Error("Failed to update user");
   }
 };
-var updatePassword = async ({
-  confirm_new_password,
-  new_password,
-  old_password
-}) => {
+var updatePassword = async ({ confirm_new_password, new_password, old_password }) => {
   try {
     const response = await rest.put("/user/password/", {
       json: { confirm_new_password, new_password, old_password }
@@ -836,7 +843,8 @@ var DashboardComponent = class extends s3 {
     task: async ([user], { signal }) => {
       const response = await getMe({ signal });
       this.tournamentData = await getTournamentData(response);
-      console.log("this.tournamentData:", this.tournamentData);
+      this.gamesData = await getGamesData(response);
+      console.log("gamesData: ", this.gamesData);
       if (response.image?.link) {
         this.link = response.image.link;
         return response;
@@ -949,19 +957,20 @@ var DashboardComponent = class extends s3 {
     const pongURL = `https://${currentHostname}:${targetPort}/pong/`;
     window.location.href = pongURL;
   };
-  // NOTE: add method to fetch tournament winner and display it
   fetchTournamentWinner = (tournament_history) => {
     const player1 = tournament_history.final_player1;
     const player2 = tournament_history.final_player2;
     const player1Score = tournament_history.final_score1;
     const player2Score = tournament_history.final_score2;
-    if (player1Score > player2Score) {
-      return player1;
-    } else {
-      return player2;
-    }
+    player1Score > player2Score ? player1 : player2;
   };
-  // NOTE: loop through tournament data to display all tournaments
+  fetch1v1Winner = (game) => {
+    const player1 = game.player_name_0;
+    const player2 = game.player_name_1;
+    const player1Score = game.score_0;
+    const player2Score = game.score_1;
+    player1Score > player2Score ? player1 : player2;
+  };
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
