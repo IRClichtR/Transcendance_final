@@ -283,45 +283,25 @@ export class DashboardComponent extends LitElement {
 																							</td>
 
 																							<td><h6 class="mb-1">${user.first_name}</h6></td>
-																							<td>
-																								<h6 class="mb-1"></h6>
-																								${tournament.semifinal1_score1}
-																							</td>
+																							<td><h6 class="mb-1">${tournament.semifinal1_score1}</h6></td>
 
 																							<td><h6 class="mb-1">${tournament.semifinal1_player2}</h6></td>
-																							<td>
-																								<h6 class="mb-1"></h6>
-																								${tournament.semifinal1_score2}
-																							</td>
+																							<td><h6 class="mb-1">${tournament.semifinal1_score2}</h6></td>
 
 																							<td><h6 class="mb-1">${tournament.semifinal2_player1}</h6></td>
-																							<td>
-																								<h6 class="mb-1"></h6>
-																								${tournament.semifinal2_score1}
-																							</td>
+																							<td><h6 class="mb-1">${tournament.semifinal2_score1}</h6></td>
 
 																							<td><h6 class="mb-1">${tournament.semifinal2_player2}</h6></td>
-																							<td>
-																								<h6 class="mb-1"></h6>
-																								${tournament.semifinal2_score2}
-																							</td>
+																							<td><h6 class="mb-1">${tournament.semifinal2_score2}</h6></td>
 
 																							<td><h6 class="mb-1">${tournament.final_player1}</h6></td>
-																							<td>
-																								<h6 class="mb-1"></h6>
-																								${tournament.final_score1}
-																							</td>
+																							<td><h6 class="mb-1">${tournament.final_score1}</h6></td>
 
 																							<td><h6 class="mb-1">${tournament.final_player2}</h6></td>
-																							<td>
-																								<h6 class="mb-1"></h6>
-																								${tournament.final_score2}
-																							</td>
+																							<td><h6 class="mb-1">${tournament.final_score2}</h6></td>
 
 																							<td>
-																								<span class=" btn bg-success text-light"
-																									>${this.fetchTournamentWinner(tournament)}</span
-																								>
+																								<span class=" btn bg-success text-light" >${this.fetchTournamentWinner(tournament)}</span >
 																							</td>
 																						</tr>
 																					`
