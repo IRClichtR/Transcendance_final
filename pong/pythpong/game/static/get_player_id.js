@@ -38,6 +38,8 @@ fetch('/user/me', {
     document.getElementById('playerIdTournament').value = playerId;
 })
 .catch(error => {
+    alert('You have to be login to continue.');
+	window.location.href = '/login';
     console.error('Error:', error);
 });
 
