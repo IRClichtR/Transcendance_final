@@ -20,9 +20,12 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 def user_data(request):
-    users = User.objects.all()
-    serializer = UserSerializer(users, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    auth_method = request.session.get('authMethod')
+    if (auth_method is not None):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    return HttpResponseForbidden("Access denied")
 
 def getProfile_from_db(id):
     try:
