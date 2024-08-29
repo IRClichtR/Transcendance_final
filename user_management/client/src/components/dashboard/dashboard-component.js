@@ -143,6 +143,14 @@ export class DashboardComponent extends LitElement {
 		window.location.href = pongURL;
 	};
 
+	// * To Do: add method to fetch tournament winner and display it
+	fetchTournamentWinner = (tournamentData) => {
+		// * To Do: fetch tournament winner
+		// * To Do: display tournament winner
+	};
+	// * To Do: loop through tournament data to display all tournaments
+	// * To Do:
+
 	render() {
 		return this._userTask.render({
 			pending: () => html`<p>Loading dashboard...</p>`,

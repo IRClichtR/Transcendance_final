@@ -949,6 +949,11 @@ var DashboardComponent = class extends s3 {
     const pongURL = `https://${currentHostname}:${targetPort}/pong/`;
     window.location.href = pongURL;
   };
+  // * To Do: add method to fetch tournament winner and display it
+  fetchTournamentWinner = (tournamentData) => {
+  };
+  // * To Do: loop through tournament data to display all tournaments
+  // * To Do:
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
