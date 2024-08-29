@@ -122,7 +122,6 @@ export class DashboardComponent extends LitElement {
 		const timeLogedIn = now - lastLoginDate;
 
 		console.log(timeLogedIn, hour);
-		console.log('before this.isOnline: ', this.isOnline);
 
 		if (timeLogedIn < hour) {
 			this.isOnline = true; // Correct assignment
@@ -130,7 +129,6 @@ export class DashboardComponent extends LitElement {
 			this.isOnline = false; // Ensure isOnline is set to false otherwise
 		}
 
-		console.log('after this.isOnline: ', this.isOnline);
 		return this.isOnline;
 	};
 
@@ -158,6 +156,14 @@ export class DashboardComponent extends LitElement {
 		const player1Score = game.score_0;
 		const player2Score = game.score_1;
 		player1Score > player2Score ? player1 : player2;
+	};
+
+	fetch1v1Loser = (game) => {
+		const player1 = game.player_name_0;
+		const player2 = game.player_name_1;
+		const player1Score = game.score_0;
+		const player2Score = game.score_1;
+		player1Score < player2Score ? player1 : player2;
 	};
 
 	render() {
@@ -220,15 +226,19 @@ export class DashboardComponent extends LitElement {
 																			</tr>
 																		</thead>
 																		<tbody>
-																			<tr>
-																				<td><h6 class="mb-1">22/12/2021</h6></td>
-																				<td><h6 class="mb-1">${user.first_name}</h6></td>
-																				<td><h6 class="mb-1">12</h6></td>
-																				<td><h6 class="mb-1">La Mere Noel</h6></td>
-																				<td><h6 class="mb-1">777</h6></td>
-																				<td><span class=" btn bg-success text-light">La Mere Noel</span></td>
-																				<td><span class=" btn bg-danger text-light">${user.first_name}</span></td>
-																			</tr>
+																			${this.gamesData.games.map(
+																				(game) => html`
+																					<tr>
+																						<td><h6 class="mb-1">${new Date(game.start_time * 1000).toLocaleDateString()}</h6></td>
+																						<td><h6 class="mb-1">${user.first_name}</h6></td>
+																						<td><h6 class="mb-1">${game.score_0}</h6></td>
+																						<td><h6 class="mb-1">${game.player_name_1}</h6></td>
+																						<td><h6 class="mb-1">${game.score_1}</h6></td>
+																						<td><span class=" btn bg-success text-light">${this.fetch1v1Winner(game)}</span></td>
+																						<td><span class=" btn bg-danger text-light">${this.fetch1v1Loser(game)}</span></td>
+																					</tr>
+																				`
+																			)}
 																		</tbody>
 																	</table>
 																</div>

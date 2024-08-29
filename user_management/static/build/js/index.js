@@ -941,13 +941,11 @@ var DashboardComponent = class extends s3 {
     const now = /* @__PURE__ */ new Date();
     const timeLogedIn = now - lastLoginDate;
     console.log(timeLogedIn, hour);
-    console.log("before this.isOnline: ", this.isOnline);
     if (timeLogedIn < hour) {
       this.isOnline = true;
     } else {
       this.isOnline = false;
     }
-    console.log("after this.isOnline: ", this.isOnline);
     return this.isOnline;
   };
   redirectTPongGame = () => {
@@ -970,6 +968,13 @@ var DashboardComponent = class extends s3 {
     const player1Score = game.score_0;
     const player2Score = game.score_1;
     player1Score > player2Score ? player1 : player2;
+  };
+  fetch1v1Loser = (game) => {
+    const player1 = game.player_name_0;
+    const player2 = game.player_name_1;
+    const player1Score = game.score_0;
+    const player2Score = game.score_1;
+    player1Score < player2Score ? player1 : player2;
   };
   render() {
     return this._userTask.render({
@@ -1031,15 +1036,19 @@ var DashboardComponent = class extends s3 {
 																			</tr>
 																		</thead>
 																		<tbody>
-																			<tr>
-																				<td><h6 class="mb-1">22/12/2021</h6></td>
-																				<td><h6 class="mb-1">${user.first_name}</h6></td>
-																				<td><h6 class="mb-1">12</h6></td>
-																				<td><h6 class="mb-1">La Mere Noel</h6></td>
-																				<td><h6 class="mb-1">777</h6></td>
-																				<td><span class=" btn bg-success text-light">La Mere Noel</span></td>
-																				<td><span class=" btn bg-danger text-light">${user.first_name}</span></td>
-																			</tr>
+																			${this.gamesData.games.map(
+        (game) => x`
+																					<tr>
+																						<td><h6 class="mb-1">${new Date(game.start_time * 1e3).toLocaleDateString()}</h6></td>
+																						<td><h6 class="mb-1">${user.first_name}</h6></td>
+																						<td><h6 class="mb-1">${game.score_0}</h6></td>
+																						<td><h6 class="mb-1">${game.player_name_1}</h6></td>
+																						<td><h6 class="mb-1">${game.score_1}</h6></td>
+																						<td><span class=" btn bg-success text-light">${this.fetch1v1Winner(game)}</span></td>
+																						<td><span class=" btn bg-danger text-light">${this.fetch1v1Loser(game)}</span></td>
+																					</tr>
+																				`
+      )}
 																		</tbody>
 																	</table>
 																</div>
