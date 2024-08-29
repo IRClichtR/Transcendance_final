@@ -182,7 +182,7 @@ def get_regular_history (request, player_id):
 
     data = {
         'player_id': player_id,
-        '1v1': formatted_history,
+        'games': formatted_history,
     }
     return JsonResponse(data)
 
