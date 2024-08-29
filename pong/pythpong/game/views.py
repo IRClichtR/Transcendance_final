@@ -36,7 +36,7 @@ from .eth import store_data
 
 def start_game(request):
     if request.method == 'POST':
-        player_name = request.POST.get('playerName')
+        player_name = request.POST.get('playerUsername')
         player_id = request.POST.get('playerId')
         game_id, player_pos = get_game_pos_id(player_name, player_id)
         return redirect('play_game', game_id=game_id, player_pos=player_pos, player_name=player_name)
@@ -45,8 +45,9 @@ def start_game(request):
 def start_local_game(request):
     if request.method == 'POST':
         player_id = request.POST.get('playerId')
-        player_name = request.POST.get('playerName')
-        game_id = get_local_game(player_name, player_id)
+        player_name2 = request.POST.get('playerName')
+        player_name = request.POST.get('playerUsername')
+        game_id = get_local_game(player_name, player_id, player_name2)
         return redirect('play_local_game', game_id=game_id, player_name=player_name)
     return render(request, 'game/index.html')
 
@@ -89,7 +90,7 @@ def index(request):
 
 def waiting_room(request):
     if request.method == 'POST':
-        player_name = request.POST.get('playerName')
+        player_name = request.POST.get('playerUsername')
         player_id = request.POST.get('playerId')
         waiting_room = WaitingRoom.objects.all().first()
         if waiting_room is None:

@@ -35,7 +35,7 @@ media/
 # nginx
 modsecurity-nginx/conf/default
 
-#vaults
+# vault
 vault/config/init.file
 vault/config/root.token
 vault/config/unseal.key1

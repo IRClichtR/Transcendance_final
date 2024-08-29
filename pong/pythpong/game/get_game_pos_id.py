@@ -31,12 +31,12 @@ def get_game_pos_id(player_name, player_id):
     new_game = Game.objects.create_game(player_name, player_id, 'regular')
     return new_game.game_id, player_pos
 
-def get_local_game(player_name, player_id):
+def get_local_game(player_name, player_id, player_name2):
 
     new_game = Game.objects.create_game(player_name, player_id, 'local')
     new_game.player_pos = [0, 1]
     new_game.player_ids = [0, 0]
-    new_game.player_names.append("Player 2")
+    new_game.player_names.append(player_name2)
     new_game.start_play = True
     new_game.start_time = int(time.time())
     new_game.save()
