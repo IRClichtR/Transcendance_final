@@ -122,6 +122,8 @@ gameSocket.onmessage = function (event) {
 };
 
 gameSocket.onerror = function (error) {
+    alert('Restart a new game.');
+	window.location.href = '/pong';
     console.error("WebSocket error observed: ", error);
 };
 

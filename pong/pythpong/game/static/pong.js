@@ -65,6 +65,12 @@ gameSocket.onopen = function (e) {
     console.log("WebSocket connection opened.");
 };
 
+gameSocket.onerror = function (event)
+{
+    alert('Restart a new game.');
+	window.location.href = '/pong';
+}
+
 gameSocket.onmessage = function (event) {
     const data = JSON.parse(event.data);
     console.log("Received message: ", data);
