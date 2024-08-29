@@ -469,9 +469,7 @@ export class DashboardComponent extends LitElement {
 																						<h6
 																							class="mb-1"
 																						>
-																							${new Date(
-                        this.tournamentData.tournament_history[3].final_start_time * 1000
-                    ).toLocaleDateString()}
+																							${new Date(this.tournamentData.tournament_history[3].final_start_time * 1000).toLocaleDateString()}
 																						</h6>
 																					</td>
 
