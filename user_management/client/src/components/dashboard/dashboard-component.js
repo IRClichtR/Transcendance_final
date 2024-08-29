@@ -236,8 +236,7 @@ export class DashboardComponent extends LitElement {
 														type="submit"
 														class="btn btn-primary mt-3"
 														href="/pong"
-														@click="${this
-                    .redirectTPongGame}"
+														@click="${this.redirectTPongGame}"
 													>
 														Play Pong
 													</button>
