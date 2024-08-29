@@ -1,7 +1,7 @@
-FROM docker.elastic.co/elastic.co/kibana/kibana:8.4.0
+FROM docker.elastic.co/kibana/kibana:8.4.0
 
+USER root
 RUN apt-get update && apt-get install -y openssl
-
 RUN mkdir -p /usr/share/kibana/config/certs 
 
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
@@ -10,10 +10,9 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -subj "/CN=localhost"
 
 # Copier le script de configuration dans le conteneur
-COPY setup_elasticsearch.sh /usr/local/bin/setup_elasticsearch.sh
-
+COPY ./setup_elasticsearch_api.sh /usr/local/bin/setup_elasticsearch_api.sh
 # Rendre le script exécutable
-RUN chmod +x /usr/local/bin/setup_elasticsearch.sh
+RUN chmod +x /usr/local/bin/setup_elasticsearch_api.sh
 
 # Ajouter une commande pour exécuter le script lors du démarrage du conteneur
-CMD ["/bin/bash", "-c", "/usr/local/bin/setup_elasticsearch.sh && /usr/local/bin/kibana-docker"]
+CMD ["/bin/bash", "-c", "/usr/local/bin/setup_elasticsearch_api.sh && /usr/local/bin/kibana-docker"]

@@ -77,9 +77,9 @@ services:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=${ELASTIC_PWD}
       - xpack.security.enabled=true
-      - xpack.securfity.http.ssl.enabled=true
+      - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.keystore.path=/usr/share/elasticsearch/config/certs/elastic-certificates.p12
-      - xpack.security.http.ssl.trustore.path=/usr/share/elasticsearch/config/certs/elastic-certificates.p12
+      - xpack.security.http.ssl.truststore.path=/usr/share/elasticsearch/config/certs/elastic-certificates.p12
     volumes:
       - esdata:/usr/share//elasticsearch/data
     ports:
