@@ -126,7 +126,7 @@ def login(request):
         elif request.method == 'GET':
             return render(request, 'pages/login.html', {'URL': f"https://{settings.HOST_IP}:8443/login"})
     else:
-        return render(request, 'pages/login.html', {'error': 'Already login'})
+        return redirect('/app/')
 
 #@login_required
 def logout_normal(request):
