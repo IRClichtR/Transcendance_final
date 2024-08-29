@@ -908,14 +908,10 @@ var DashboardComponent = class extends s3 {
   };
   storeAvatarSrc = (email, src) => {
     if (!email || typeof email !== "string") {
-      throw new Error(
-        "Unable to store avatar without an email, got: " + email
-      );
+      throw new Error("Unable to store avatar without an email, got: " + email);
     }
     if (!src || typeof src !== "string") {
-      throw new Error(
-        "Unable to store avatar without a src, got: " + src
-      );
+      throw new Error("Unable to store avatar without a src, got: " + src);
     }
     const avatars = localStorage.getItem("avatars");
     const parsed = avatars ? JSON.parse(avatars) : {};
@@ -925,9 +921,7 @@ var DashboardComponent = class extends s3 {
   };
   getStoredAvatarSrc = (email) => {
     if (!email || typeof email !== "string") {
-      throw new Error(
-        "Unable to store avatar without an email, got: " + email
-      );
+      throw new Error("Unable to store avatar without an email, got: " + email);
     }
     const avatars = localStorage.getItem("avatars");
     const parsed = avatars ? JSON.parse(avatars) : {};
@@ -966,41 +960,20 @@ var DashboardComponent = class extends s3 {
 								<div class="col-12 col-lg-4 col-xl-3">
 									<div class="row gy-4">
 										<div class="col-12">
-											<div
-												class="card widget-card shadow-sm"
-											>
+											<div class="card widget-card shadow-sm">
 												<div class="card-header">
 													<p>
-														Hello,
-														${user.first_name}!
-														<span
-															>${this.checkIfOnline(
-        user
-      ) ? "Online" : "Offline"}
-														</span>
+														Hello, ${user.first_name}!
+														<span>${this.checkIfOnline(user) ? "Online" : "Offline"}</span>
 													</p>
 												</div>
 
-												<div
-													class="card-body align-items-center"
-												>
-													<div
-														class="text-center mb-3"
-													>
-														<img
-															src=${this.link}
-															class="img-fluid rounded-circle"
-															alt="${user.login ? user.login : user.first_name}"
-														/>
+												<div class="card-body align-items-center">
+													<div class="text-center mb-3">
+														<img src=${this.link} class="img-fluid rounded-circle" alt="${user.login ? user.login : user.first_name}" />
 													</div>
-													<div
-														class="card-body align-items-center"
-													>
-														<h5
-															class="text-center mb-1"
-														>
-															${user.displayname ? user.displayname : user.first_name + " " + user.last_name}
-														</h5>
+													<div class="card-body align-items-center">
+														<h5 class="text-center mb-1">${user.displayname ? user.displayname : user.first_name + " " + user.last_name}</h5>
 													</div>
 												</div>
 											</div>
@@ -1010,164 +983,40 @@ var DashboardComponent = class extends s3 {
 
 								<div class="col-12 col-lg-9 ">
 									<div class="card widget-card shadow-sm">
-										<div
-											class="card-body container container-xxl"
-										>
-											<div
-												class="tab-content "
-												id="profileTabContent"
-											>
-												<div
-													class="tab-pane fade show active"
-													id="overview-tab-pane"
-													role="tabpanel"
-													aria-labelledby="overview-tab"
-													tabindex="0"
-												>
-													<h5
-														style="text-decoration: underline;"
-														class="mb-3"
-													>
-														Let's Play Pong!
-													</h5>
-													<button
-														type="submit"
-														class="btn btn-primary mt-3"
-														href="/pong"
-														@click="${this.redirectTPongGame}"
-													>
-														Play Pong
-													</button>
+										<div class="card-body container container-xxl">
+											<div class="tab-content " id="profileTabContent">
+												<div class="tab-pane fade show active" id="overview-tab-pane" role="tabpanel" aria-labelledby="overview-tab" tabindex="0">
+													<h5 style="text-decoration: underline;" class="mb-3">Let's Play Pong!</h5>
+													<button type="submit" class="btn btn-primary mt-3" href="/pong" @click="${this.redirectTPongGame}">Play Pong</button>
 												</div>
 
-												<h5
-													style="text-decoration: underline;"
-													class="mb-3 pt-5"
-												>
-													1v1 Dashboard
-												</h5>
+												<h5 style="text-decoration: underline;" class="mb-3 pt-5">1v1 Dashboard</h5>
 												<div class="container">
-													<div
-														class="row justify-content-center"
-													>
-														<div
-															class="card widget-card border-light shadow-sm"
-														>
-															<div
-																class="card-body p-4"
-															>
-																<div
-																	class="table-responsive"
-																>
-																	<table
-																		class="table table-borderless bsb-table-xl text-nowrap align-middle m-0"
-																	>
+													<div class="row justify-content-center">
+														<div class="card widget-card border-light shadow-sm">
+															<div class="card-body p-4">
+																<div class="table-responsive">
+																	<table class="table table-borderless bsb-table-xl text-nowrap align-middle m-0">
 																		<thead>
 																			<tr>
-																				<th>
-																					Game
-																				</th>
-																				<th>
-																					Date
-																				</th>
-																				<th>
-																					Player
-																					1
-																				</th>
-																				<th>
-																					Score
-																					P1
-																				</th>
-																				<th>
-																					Player
-																					2
-																				</th>
-																				<th>
-																					Score
-																					P2
-																				</th>
-																				<th>
-																					Winner
-																				</th>
-																				<th>
-																					Looser
-																				</th>
+																				<th>Date</th>
+																				<th>Player 1</th>
+																				<th>Score P1</th>
+																				<th>Player 2</th>
+																				<th>Score P2</th>
+																				<th>Winner</th>
+																				<th>Looser</th>
 																			</tr>
 																		</thead>
 																		<tbody>
 																			<tr>
-																				<td>
-																					<div
-																						class="d-flex align-items-center"
-																					>
-																						<div>
-																							<h6
-																								class="m-0"
-																							>
-																								Game
-																								#1
-																							</h6>
-																						</div>
-																					</div>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						22/12/2021
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						${user.first_name}
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						12
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						La
-																						Mere
-																						Noel
-																					</h6>
-																				</td>
-
-																				<td>
-																					<h6
-																						class="mb-1"
-																					>
-																						777
-																					</h6>
-																				</td>
-
-																				<td>
-																					<span
-																						class=" btn bg-success text-light"
-																						>La
-																						Mere
-																						Noel</span
-																					>
-																				</td>
-
-																				<td>
-																					<span
-																						class=" btn bg-danger text-light"
-																						>${user.first_name}</span
-																					>
-																				</td>
+																				<td><h6 class="mb-1">22/12/2021</h6></td>
+																				<td><h6 class="mb-1">${user.first_name}</h6></td>
+																				<td><h6 class="mb-1">12</h6></td>
+																				<td><h6 class="mb-1">La Mere Noel</h6></td>
+																				<td><h6 class="mb-1">777</h6></td>
+																				<td><span class=" btn bg-success text-light">La Mere Noel</span></td>
+																				<td><span class=" btn bg-danger text-light">${user.first_name}</span></td>
 																			</tr>
 																		</tbody>
 																	</table>
@@ -1177,174 +1026,65 @@ var DashboardComponent = class extends s3 {
 													</div>
 													<br />
 
-													<h5
-														style="text-decoration: underline;"
-														class="mb-3 pt-5"
-													>
-														Tournament Dashboard
-													</h5>
+													<h5 style="text-decoration: underline;" class="mb-3 pt-5">Tournament Dashboard</h5>
 													<div class="container">
-														<div
-															class="row justify-content-center"
-														>
-															<div
-																class="card widget-card border-light shadow-sm"
-															>
-																<div
-																	class="card-body p-4"
-																>
-																	<div
-																		class="table-responsive"
-																	>
-																		<table
-																			class="table table-borderless bsb-table-xl text-nowrap align-middle m-0"
-																		>
+														<div class="row justify-content-center">
+															<div class="card widget-card border-light shadow-sm">
+																<div class="card-body p-4">
+																	<div class="table-responsive">
+																		<table class="table table-borderless bsb-table-xl text-nowrap align-middle m-0">
 																			<thead>
 																				<tr>
-																					<th>
-																						Game
-																					</th>
-																					<th>
-																						Date
-																					</th>
-																					<th>
-																						Player
-																						1
-																					</th>
-																					<th>
-																						Score
-																						P1
-																					</th>
-																					<th>
-																						Player
-																						2
-																					</th>
-																					<th>
-																						Score
-																						P2
-																					</th>
-																					<th>
-																						Player
-																						3
-																					</th>
-																					<th>
-																						Score
-																						P3
-																					</th>
-																					<th>
-																						Player
-																						4
-																					</th>
-																					<th>
-																						Score
-																						P4
-																					</th>
-																					<th>
-																						1st
-																						Position
-																					</th>
+																					<th>Date</th>
+																					<th>Player 1</th>
+																					<th>Score P1</th>
+																					<th>Player 2</th>
+																					<th>Score P2</th>
+																					<th>Player 3</th>
+																					<th>Score P3</th>
+																					<th>Player 4</th>
+																					<th>Score P4</th>
+																					<th>Winner</th>
 																				</tr>
 																			</thead>
 																			<tbody>
 																				<tr>
 																					<td>
-																						<div
-																							class="d-flex align-items-center"
-																						>
-																							<div>
-																								<h6
-																									class="m-0"
-																								>
-																									Game
-																									#1
-																								</h6>
-																							</div>
-																						</div>
-																					</td>
-
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
+																						<h6 class="mb-1">
 																							${new Date(
         this.tournamentData.tournament_history[3].final_start_time * 1e3
       ).toLocaleDateString()}
 																						</h6>
 																					</td>
 
+																					// * Player 1
+																					<td><h6 class="mb-1">${user.first_name}</h6></td>
 																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							${user.first_name}
-																						</h6>
-																					</td>
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							12
-																						</h6>
+																						<h6 class="mb-1"></h6>
+																						${this.tournamentData.tournament_history[3].final_score1}
 																					</td>
 
+																					// * Player 2
+																					<td><h6 class="mb-1">${this.tournamentData.tournament_history[3].semifinal1_player2}</h6></td>
 																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							La
-																							Mere
-																							Noel
-																						</h6>
-																					</td>
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							777
-																						</h6>
+																						<h6 class="mb-1"></h6>
+																						${this.tournamentData.tournament_history[3].final_score2}
 																					</td>
 
+																					// * Player 3
+																					<td><h6 class="mb-1">${this.tournamentData.tournament_history[3].semifinal2_player1}</h6></td>
 																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							La
-																							Mere
-																							Noel
-																						</h6>
-																					</td>
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							777
-																						</h6>
+																						<h6 class="mb-1"></h6>
+																						${this.tournamentData.tournament_history[3].final_score3}
 																					</td>
 
+																					// * Player 4
+																					<td><h6 class="mb-1">${this.tournamentData.tournament_history[3].semifinal2_player2}</h6></td>
 																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							La
-																							Mere
-																							Noel
-																						</h6>
+																						<h6 class="mb-1"></h6>
+																						${this.tournamentData.tournament_history[3].final_score4}
 																					</td>
-																					<td>
-																						<h6
-																							class="mb-1"
-																						>
-																							777
-																						</h6>
-																					</td>
-																					<td>
-																						<span
-																							class=" btn bg-success text-light"
-																							>La
-																							Mere
-																							Noel</span
-																						>
-																					</td>
+																					<td><span class=" btn bg-success text-light">La Mere Noel</span></td>
 																				</tr>
 																			</tbody>
 																		</table>
@@ -1353,22 +1093,10 @@ var DashboardComponent = class extends s3 {
 															</div>
 														</div>
 														<br />
-														<h5
-															style="text-decoration: underline;"
-															class="mb-2 pt-3"
-														>
-															Profile
-														</h5>
-														<div
-															class="card widget-card border-light shadow-sm"
-														>
-															<div
-																class="card-body p-4 widget-card row justify-content-center"
-															>
-																<div
-																	class="tab-content pt-2"
-																	id="profileTabContent"
-																>
+														<h5 style="text-decoration: underline;" class="mb-2 pt-3">Profile</h5>
+														<div class="card widget-card border-light shadow-sm">
+															<div class="card-body p-4 widget-card row justify-content-center">
+																<div class="tab-content pt-2" id="profileTabContent">
 																	<div
 																		class="tab-pane fade show active"
 																		id="overview-tab-pane"
@@ -1376,96 +1104,37 @@ var DashboardComponent = class extends s3 {
 																		aria-labelledby="overview-tab"
 																		tabindex="0"
 																	>
-																		<div
-																			class="row g-0"
-																		>
-																			<div
-																				class="col-5 col-md-3 bg-light border-bottom border-white border-3"
-																			>
-																				<div
-																					class="p-2"
-																				>
-																					First
-																					Name
-																				</div>
+																		<div class="row g-0">
+																			<div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
+																				<div class="p-2">First Name</div>
 																			</div>
-																			<div
-																				class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3"
-																			>
-																				<div
-																					class="p-2"
-																				>
-																					${user.first_name}
-																				</div>
+																			<div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
+																				<div class="p-2">${user.first_name}</div>
 																			</div>
 
-																			<div
-																				class="col-5 col-md-3 bg-light border-bottom border-white border-3"
-																			>
-																				<div
-																					class="p-2"
-																				>
-																					Last
-																					Name
-																				</div>
+																			<div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
+																				<div class="p-2">Last Name</div>
 																			</div>
-																			<div
-																				class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3"
-																			>
-																				<div
-																					class="p-2"
-																				>
-																					${user.last_name}
-																				</div>
+																			<div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
+																				<div class="p-2">${user.last_name}</div>
 																			</div>
 
-																			<div
-																				class="col-5 col-md-3 bg-light border-bottom border-white border-3"
-																			>
-																				<div
-																					class="p-2"
-																				>
-																					Username
-																				</div>
+																			<div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
+																				<div class="p-2">Username</div>
 																			</div>
-																			<div
-																				class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3"
-																			>
-																				<div
-																					class="p-2"
-																				>
-																					${user.login ? user.login : user.username}
-																				</div>
+																			<div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
+																				<div class="p-2">${user.login ? user.login : user.username}</div>
 																			</div>
 
-																			<div
-																				class="col-5 col-md-3 bg-light border-bottom border-white border-3"
-																			>
-																				<div
-																					class="p-2"
-																				>
-																					Email
-																				</div>
+																			<div class="col-5 col-md-3 bg-light border-bottom border-white border-3">
+																				<div class="p-2">Email</div>
 																			</div>
-																			<div
-																				class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3"
-																			>
-																				<div
-																					class="p-2"
-																				>
-																					${user.email}
-																				</div>
+																			<div class="col-7 col-md-9 bg-light border-start border-bottom border-white border-3">
+																				<div class="p-2">${user.email}</div>
 																			</div>
 																			<div>
-																				<a
-																					type="button"
-																					aria-current="page"
-																					class="nav-link btn btn-primary mt-3"
-																					href="/app/settingsPage"
-																				>
-																					Update
-																					Profile
-																					Info
+																				<a type="button" aria-current="page" class="nav-link btn btn-primary mt-3" href="/app/settingsPage">
+																					Update Profile Info
 																				</a>
 																			</div>
 																		</div>
