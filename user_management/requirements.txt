@@ -14,3 +14,4 @@ django-staticfiles
 Pillow
 requests
 channels[daphne]
+hvac

@@ -14,10 +14,24 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 from datetime import timedelta
+import hvac
 
 
 load_dotenv()
-HOST_IP = os.environ.get('HOST_IP')
+# HOST_IP = os.environ.get('HOST_IP')
+
+VAULT_ADDR = os.environ.get('VAULT_ADDR')
+VAULT_TOKEN = os.environ.get('VAULT_TOKEN')
+
+client = hvac.Client(
+    url=VAULT_ADDR,
+    token=VAULT_TOKEN
+)
+print("CLIENT: ", client)
+secret = client.secrets.kv.v2.read_secret_version(path='myapp/HOST_IP')
+print("SECRET ", secret)
+HOST_IP = secret['data']['data'].get('HOST_IP')
+print("HOST_IP: ", HOST_IP)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

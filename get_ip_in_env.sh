@@ -14,12 +14,12 @@ if [ ! -f .env ]; then
 	echo ".env file not found"
 fi 
 
-if grep -q "HOST_IP=" .env; then
-	if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' "s/HOST_IP=.*/HOST_IP=$ip_address/" .env
-	else
-		sed -i "s/HOST_IP=.*/HOST_IP=$ip_address/" .env
-	fi	
+if grep -q "HOST_IP=" ./vault/config/.env; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "s/HOST_IP=./HOST_IP=$ip_address/" ./vault/config/.env
+    else
+        sed -i "s/HOST_IP=./HOST_IP=$ip_address/" ./vault/config/.env
+    fi
 else
-	echo "HOST_IP=$ip_address" >> .env
+    echo "HOST_IP=$ip_address" >> ./vault/config/.env
 fi
