@@ -168,11 +168,7 @@ export class DashboardComponent extends LitElement {
 														Hello,
 														${user.first_name}!
 														<span
-															>${this.checkIfOnline(
-                user
-            )
-                    ? 'Online'
-                    : 'Offline'}
+															>${this.checkIfOnline(user) ? 'Online' : 'Offline'}
 														</span>
 													</p>
 												</div>
@@ -186,9 +182,7 @@ export class DashboardComponent extends LitElement {
 														<img
 															src=${this.link}
 															class="img-fluid rounded-circle"
-															alt="${user.login
-                    ? user.login
-                    : user.first_name}"
+															alt="${user.login ? user.login : user.first_name}"
 														/>
 													</div>
 													<div
@@ -197,11 +191,7 @@ export class DashboardComponent extends LitElement {
 														<h5
 															class="text-center mb-1"
 														>
-															${user.displayname
-                    ? user.displayname
-                    : user.first_name +
-                    ' ' +
-                    user.last_name}
+															${user.displayname ? user.displayname : user.first_name + ' ' + user.last_name}
 														</h5>
 													</div>
 												</div>
