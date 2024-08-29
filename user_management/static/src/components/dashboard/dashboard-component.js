@@ -250,13 +250,17 @@ export class DashboardComponent extends LitElement {
 																				<tr>
 																					<th>Date</th>
 																					<th>Player 1</th>
-																					<th>Score P1</th>
+																					<th>Semi-1 P1</th>
 																					<th>Player 2</th>
-																					<th>Score P2</th>
+																					<th>Semi-1 P2</th>
 																					<th>Player 3</th>
-																					<th>Score P3</th>
+																					<th>Semi-2 P3</th>
 																					<th>Player 4</th>
-																					<th>Score P4</th>
+																					<th>Semi-2 P4</th>
+																					<th>Final P1</th>
+																					<th>F-Score P1</th>
+																					<th>Final P2</th>
+																					<th>F-Score P2</th>
 																					<th>Winner</th>
 																				</tr>
 																			</thead>
@@ -293,6 +297,19 @@ export class DashboardComponent extends LitElement {
 																								<h6 class="mb-1"></h6>
 																								${tournament.semifinal2_score2}
 																							</td>
+
+																							<td><h6 class="mb-1">${tournament.final_player1}</h6></td>
+																							<td>
+																								<h6 class="mb-1"></h6>
+																								${tournament.final_score1}
+																							</td>
+
+																							<td><h6 class="mb-1">${tournament.final_player2}</h6></td>
+																							<td>
+																								<h6 class="mb-1"></h6>
+																								${tournament.final_score2}
+																							</td>
+
 																							<td>
 																								<span class=" btn bg-success text-light"
 																									>${this.fetchTournamentWinner(tournament)}</span

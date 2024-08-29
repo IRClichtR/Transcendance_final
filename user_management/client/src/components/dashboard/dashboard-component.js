@@ -1,6 +1,6 @@
 import { Task } from '@lit/task';
 import { LitElement, html, css } from 'lit';
-import { getMe, getTournamentData } from '../../utils/rest.js';
+import { getMe, getTournamentData, getGamesData } from '../../utils/rest.js';
 
 export class DashboardComponent extends LitElement {
 	static properties = {
@@ -15,7 +15,8 @@ export class DashboardComponent extends LitElement {
 		task: async ([user], { signal }) => {
 			const response = await getMe({ signal });
 			this.tournamentData = await getTournamentData(response);
-			console.log('this.tournamentData:', this.tournamentData);
+			this.gamesData = await getGamesData(response);
+			console.log('gamesData: ', this.gamesData);
 			if (response.image?.link) {
 				this.link = response.image.link;
 				return response;
@@ -143,24 +144,21 @@ export class DashboardComponent extends LitElement {
 		window.location.href = pongURL;
 	};
 
-	// NOTE: add method to fetch tournament winner and display it
 	fetchTournamentWinner = (tournament_history) => {
-		// fetch tournament winner
 		const player1 = tournament_history.final_player1;
 		const player2 = tournament_history.final_player2;
-
 		const player1Score = tournament_history.final_score1;
 		const player2Score = tournament_history.final_score2;
-
-		//display tournament winner
-		if (player1Score > player2Score) {
-			return player1;
-		} else {
-			return player2;
-		}
+		player1Score > player2Score ? player1 : player2;
 	};
 
-	// NOTE: loop through tournament data to display all tournaments
+	fetch1v1Winner = (game) => {
+		const player1 = game.player_name_0;
+		const player2 = game.player_name_1;
+		const player1Score = game.score_0;
+		const player2Score = game.score_1;
+		player1Score > player2Score ? player1 : player2;
+	};
 
 	render() {
 		return this._userTask.render({
