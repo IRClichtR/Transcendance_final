@@ -226,7 +226,8 @@ export class DashboardComponent extends LitElement {
 																			</tr>
 																		</thead>
 																		<tbody>
-																			${this.gamesData.games.map(
+																			<h1>Hello World</h1>
+																			<!-- ${this.gamesData.games.map(
 																				(game) => html`
 																					<tr>
 																						<td><h6 class="mb-1">${new Date(game.start_time * 1000).toLocaleDateString()}</h6></td>
@@ -238,7 +239,7 @@ export class DashboardComponent extends LitElement {
 																						<td><span class=" btn bg-danger text-light">${this.fetch1v1Loser(game)}</span></td>
 																					</tr>
 																				`
-																			)}
+																			)} -->
 																		</tbody>
 																	</table>
 																</div>

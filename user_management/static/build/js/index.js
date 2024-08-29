@@ -1036,7 +1036,8 @@ var DashboardComponent = class extends s3 {
 																			</tr>
 																		</thead>
 																		<tbody>
-																			${this.gamesData.games.map(
+																			<h1>Hello World</h1>
+																			<!-- ${this.gamesData.games.map(
         (game) => x`
 																					<tr>
 																						<td><h6 class="mb-1">${new Date(game.start_time * 1e3).toLocaleDateString()}</h6></td>
@@ -1048,7 +1049,7 @@ var DashboardComponent = class extends s3 {
 																						<td><span class=" btn bg-danger text-light">${this.fetch1v1Loser(game)}</span></td>
 																					</tr>
 																				`
-      )}
+      )} -->
 																		</tbody>
 																	</table>
 																</div>
