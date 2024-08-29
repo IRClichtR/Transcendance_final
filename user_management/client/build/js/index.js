@@ -949,11 +949,19 @@ var DashboardComponent = class extends s3 {
     const pongURL = `https://${currentHostname}:${targetPort}/pong/`;
     window.location.href = pongURL;
   };
-  // * To Do: add method to fetch tournament winner and display it
-  fetchTournamentWinner = (tournamentData) => {
+  // NOTE: add method to fetch tournament winner and display it
+  fetchTournamentWinner = (tournament_history) => {
+    const player1 = tournament_history[3].final_player1;
+    const player2 = tournament_history[3].final_player2;
+    const player1Score = tournament_history[3].final_score1;
+    const player2Score = tournament_history[3].final_score2;
+    if (player1Score > player2Score) {
+      return player1;
+    } else {
+      return player2;
+    }
   };
-  // * To Do: loop through tournament data to display all tournaments
-  // * To Do:
+  // NOTE: loop through tournament data to display all tournaments
   render() {
     return this._userTask.render({
       pending: () => x`<p>Loading dashboard...</p>`,
@@ -1056,9 +1064,7 @@ var DashboardComponent = class extends s3 {
 																				<tr>
 																					<td>
 																						<h6 class="mb-1">
-																							${new Date(
-        this.tournamentData.tournament_history[3].final_start_time * 1e3
-      ).toLocaleDateString()}
+																							${new Date(this.tournamentData.tournament_history[3].final_start_time * 1e3).toLocaleDateString()}
 																						</h6>
 																					</td>
 
