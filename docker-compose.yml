@@ -70,6 +70,54 @@ services:
     networks:
       - transcendance
 
+  elasticsearch:
+    build: ./elk/elasticsearch
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=${ELASTIC_PWD}
+      - xpack.security.enabled=true
+      - xpack.securfity.http.ssl.enabled=true
+      - xpack.security.http.ssl.keystore.path=/usr/share/elasticsearch/config/certs/elastic-certificates.p12
+      - xpack.security.http.ssl.trustore.path=/usr/share/elasticsearch/config/certs/elastic-certificates.p12
+    volumes:
+      - esdata:/usr/share//elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - transcendance
+    depends_on:
+      - modsecurity-nginx
+  
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.4.0
+    container_name: logstash
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5044:5044"
+    networks:
+      - transcendance
+    depends_on:
+      - modsecurity-nginx
+
+  kibana:
+    build: ./elk/kibana
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=${ELASTIC_HOSTS}
+      - ELASTICSEARCH_USERNAME=${KIBANA_ELASTIC_USR}
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PWD}
+      - SERVER_SSL_ENABLED=true
+      - SERVER_SSL_CERTIFICATE=/usr/share/kibana/config/certs/kibana.crt
+      - SERVER_SSL_KEY=/usr/share/kibana/config/certs/kibana.key 
+    ports:
+      - "5601:5601"
+    networks:
+      - transcendance
+    depends_on:
+      - modsecurity-nginx
+
   vault:
     image: hashicorp/vault
     container_name: vault
@@ -95,6 +143,8 @@ services:
 volumes:
   postgres_data:
 #  static_volume:
+  esdata:
+    driver: local
 
 networks:
   transcendance:

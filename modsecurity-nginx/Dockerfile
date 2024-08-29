@@ -31,6 +31,9 @@ RUN cd opt/ && git clone https://github.com/coreruleset/coreruleset.git modsecur
 	&& cp ModSecurity/unicode.mapping /etc/nginx/modsec/ \
 	&& mv ModSecurity/modsecurity.conf-recommended ModSecurity/modsecurity.conf
 
+RUN apt-get update && apt-get install apache2-utils -y \
+	&& htpasswd -c /etc/nginx/.htpasswd kibana_user  
+
 COPY conf/modsecurity.conf /etc/nginx/modsec/
 
 COPY conf/modsecurity.conf /opt/ModSecurity/
