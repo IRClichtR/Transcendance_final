@@ -95,7 +95,9 @@ def waiting_room(request):
         waiting_room = WaitingRoom.objects.all().first()
         if waiting_room is None:
             waiting_room = WaitingRoom.objects.create()
-
+        else:
+            if player_id in waiting_room.player_ids:
+                return render(request, 'game/index.html')
         waiting_room.players.append(player_name)
         waiting_room.player_ids.append(player_id)
         waiting_room.save()
