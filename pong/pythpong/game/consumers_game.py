@@ -52,6 +52,14 @@ class GameConsumer(AsyncWebsocketConsumer):
             print(f"Unexpected error during WebSocket connection: {e}")
             await self.close()
 
+    async def disconnect(self, close_code):
+        self.connected = False
+        if (close_code == 1001):
+            game = await self.get_game()
+            if len(game.player_ids) == 1:
+                await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+                await database_sync_to_async(game.delete)()
+
     async def websocket_receive(self, event):
         message = event['text']
         data = json.loads(message)
