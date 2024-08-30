@@ -30,6 +30,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, blank=False, unique=True)
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
+    school_id = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=now)

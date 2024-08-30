@@ -11,7 +11,7 @@ def get_web3_instance():
         return w3
     else:
         raise ConnectionError("Unable to connect to provider(Alchemy)")
-    
+
 def get_contract_instance(w3):
     contract_address = settings.CONTRACT_ADDRESS
     with open(settings.CONTRACT_ABI_PATH, 'r') as abi_file:
@@ -79,16 +79,16 @@ def store_game(params):
     try:
         w3 = get_web3_instance()
     except Exception as e:
-        print(f"Error while get_w3_instance: {e}")     
+        print(f"Error while get_w3_instance: {e}")
     try:
         contract = get_contract_instance(w3)
     except Exception as e:
-        print(f"Error while get_contract_instance: {e}")     
+        print(f"Error while get_contract_instance: {e}")
     try:
         receipt = store_game_sync(contract, w3, params)
         return receipt
     except Exception as e:
-        print(f"Error while store_game_sync: {e}")     
+        print(f"Error while store_game_sync: {e}")
 
 def store_data(tournament):
     params = {
@@ -135,12 +135,12 @@ def store_data(tournament):
 
     receipt = store_game(params)
     print(f"Data stored successfully: {receipt}")
-        
+
 def get_all_tournament_games():
     try:
         w3 = get_web3_instance()
     except Exception as e:
-        print(f"Error while get_w3_instance: {e}")     
+        print(f"Error while get_w3_instance: {e}")
     try:
         contract = get_contract_instance(w3)
     except Exception as e:

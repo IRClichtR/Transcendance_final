@@ -1,11 +1,7 @@
 import ky from 'https://esm.sh/ky@1';
 
 const getCookies = () => {
-	return Object.fromEntries(
-		document.cookie
-			.split('; ')
-			.map((v) => v.split(/=(.*)/s).map(decodeURIComponent))
-	);
+	return Object.fromEntries(document.cookie.split('; ').map((v) => v.split(/=(.*)/s).map(decodeURIComponent)));
 };
 
 const csrfToken = getCookies().csrftoken;
@@ -20,9 +16,7 @@ const rest = ky.extend({
 		afterResponse: [
 			async (request, options, response) => {
 				if (response.status === 401) {
-					location.assign(
-						'/login?next=' + encodeURIComponent(location.pathname)
-					);
+					location.assign('/login?next=' + encodeURIComponent(location.pathname));
 				}
 			},
 		],
@@ -31,12 +25,44 @@ const rest = ky.extend({
 
 const getMe = (options = {}) => {
 	const response = rest.get('/user/me', options).json();
+	console.log('getMe response: ', response);
 	return response;
+};
+
+const getTournamentData = async (user) => {
+	if (!user) {
+		throw new Error('Unable to get tournament data due to missing user');
+	}
+	const id = user.school_id ?? user.id;
+	console.log('getTournamentData user.id: ', id);
+	try {
+		const response = rest.get(`/pong/api/tournament-history/${id}`).json();
+		console.log('getTournamentData: ', response);
+		return response;
+	} catch (error) {
+		console.log('error: ', error);
+		throw new Error('Failed to get user tournament-history');
+	}
+};
+
+const getGamesData = async (user) => {
+	if (!user) {
+		throw new Error('Unable to get games data due to missing user');
+	}
+	const id = user.school_id ?? user.id;
+	console.log('getGamesData user.id: ', id);
+	try {
+		const response = rest.get(`/pong/api/games-history/${id}`).json();
+		console.log('getGamesData: ', response);
+		return response;
+	} catch (error) {
+		console.log('error: ', error);
+		throw new Error('Failed to get user games');
+	}
 };
 
 const updateUser = async (user) => {
 	try {
-
 		console.log('updateUser user.entries :\n');
 		for (let [key, value] of user.entries()) {
 			console.log(key, ' : ', value);
@@ -67,7 +93,7 @@ const updateUser = async (user) => {
 const getProfilePic = async (user) => {
 	try {
 		const response = await getMe();
-        console.log("getProfilePic Response: ", response);
+		console.log('getProfilePic Response: ', response);
 		return response;
 	} catch (error) {
 		console.log('error: ', error);
@@ -75,11 +101,7 @@ const getProfilePic = async (user) => {
 	}
 };
 
-const updatePassword = async ({
-	confirm_new_password,
-	new_password,
-	old_password,
-}) => {
+const updatePassword = async ({ confirm_new_password, new_password, old_password }) => {
 	try {
 		const response = await rest
 			.put('/user/password/', {
@@ -94,4 +116,4 @@ const updatePassword = async ({
 	}
 };
 
-export { rest, getMe, updateUser, updatePassword, getProfilePic };
+export { rest, getMe, updateUser, updatePassword, getProfilePic, getTournamentData, getGamesData };
