@@ -152,9 +152,8 @@ def get_history(request, player_id):
 		        'final_score2'          : game[18],
             }
             formatted_history.append(formatted_game)
-    print("FORMATTED_HISTORUY", formatted_history)
     if not formatted_history:
-        return JsonResponse({f'No games found for player {player_id}'}, status=404)
+        return JsonResponse({'error': f'No games found for player {player_id}'}, status=404)
     data = {
         'player_id' : player_id,
         'tournament_history' : formatted_history,
