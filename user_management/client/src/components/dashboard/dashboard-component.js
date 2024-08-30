@@ -147,7 +147,11 @@ export class DashboardComponent extends LitElement {
 		const player2 = tournament_history.final_player2;
 		const player1Score = tournament_history.final_score1;
 		const player2Score = tournament_history.final_score2;
-		player1Score > player2Score ? player1 : player2;
+		if (player1Score > player2Score) {
+			return player1;
+		} else {
+			return player2;
+		}
 	};
 
 	fetch1v1Winner = (game) => {
@@ -155,7 +159,11 @@ export class DashboardComponent extends LitElement {
 		const player2 = game.player_name_1;
 		const player1Score = game.score_0;
 		const player2Score = game.score_1;
-		player1Score > player2Score ? player1 : player2;
+		if (player1Score > player2Score) {
+			return player1;
+		} else {
+			return player2;
+		}
 	};
 
 	fetch1v1Loser = (game) => {
@@ -163,7 +171,11 @@ export class DashboardComponent extends LitElement {
 		const player2 = game.player_name_1;
 		const player1Score = game.score_0;
 		const player2Score = game.score_1;
-		player1Score < player2Score ? player1 : player2;
+		if (player1Score < player2Score) {
+			return player1;
+		} else {
+			return player2;
+		}
 	};
 
 	render() {
@@ -226,14 +238,14 @@ export class DashboardComponent extends LitElement {
 																			</tr>
 																		</thead>
 																		<tbody>
-																			${this.gamesData
+																			${this.gamesData.games
 																				? this.gamesData.games.map(
 																						(game) => html`
 																							<tr>
 																								<td>
 																									<h6 class="mb-1">${new Date(game.start_time * 1000).toLocaleDateString()}</h6>
 																								</td>
-																								<td><h6 class="mb-1">${user.first_name}</h6></td>
+																								<td><h6 class="mb-1">${game.player_name_0}</h6></td>
 																								<td><h6 class="mb-1">${game.score_0}</h6></td>
 																								<td><h6 class="mb-1">${game.player_name_1}</h6></td>
 																								<td><h6 class="mb-1">${game.score_1}</h6></td>
