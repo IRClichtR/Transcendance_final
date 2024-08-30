@@ -4,3 +4,4 @@ web3 #handle blockchain module
 python-dotenv
 djangorestframework
 psycopg2-binary
+hvac

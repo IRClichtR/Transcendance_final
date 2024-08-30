@@ -14,10 +14,19 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 from datetime import timedelta
+import hvac
+from .vault_utils import get_secret_from_vault
 
 
 load_dotenv()
 HOST_IP = os.environ.get('HOST_IP')
+
+VAULT_ADDR = os.environ.get('VAULT_ADDR')
+VAULT_TOKEN = os.environ.get('VAULT_TOKEN')
+
+
+secret_data = get_secret_from_vault('/myapp/')
+print(secret_data)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

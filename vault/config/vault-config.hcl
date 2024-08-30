@@ -12,7 +12,7 @@ storage "file" {
 }
 
 # API address
-api_addr = "http://localhost:8200"
+api_addr = "http://10.24.104.7:8200"
 
 # enabling run in containers
 disable_mlock = true
