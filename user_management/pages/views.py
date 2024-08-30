@@ -13,6 +13,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from dotenv import load_dotenv
 import os
+import re
 
 def req_api42(request, token):
     headers = {'Authorization': f'Bearer {token}'}
@@ -44,7 +45,6 @@ def req_api42(request, token):
 
 @csrf_protect
 def index(request):
-	# ! FIX: find a way to redirect to add username property to user and use it as a login
     if request.method == 'POST' and request.session.get('authMethod', None) is None:
         first_name = request.POST.get('first-name')
         last_name = request.POST.get('last-name')
@@ -64,7 +64,8 @@ def index(request):
             return render(request, 'pages/index.html', {'error': 'Enter a valid email address.'})
         if password != confirm_password:
             return (render(request, 'pages/index.html', {'error': 'Differents passwords'}))
-
+        if not re.match(r'^[a-zA-Z0-9]+$', username):
+            return render(request, 'pages/index.html', {'error': 'Username must contain only alphanumeric characters.'})
         try:
             user = AppUser.objects.create_user(
                 email=email,
@@ -126,7 +127,7 @@ def login(request):
         elif request.method == 'GET':
             return render(request, 'pages/login.html', {'URL': f"https://{settings.HOST_IP}:8443/login"})
     else:
-        return render(request, 'pages/login.html', {'error': 'Already login'})
+        return redirect('/app/')
 
 #@login_required
 def logout_normal(request):

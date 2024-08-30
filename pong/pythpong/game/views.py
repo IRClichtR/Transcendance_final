@@ -8,7 +8,7 @@ from .serializers import GameSerializer, WaitingRoomSerializer, TournamentSerial
 from django.conf import settings
 import requests
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.middleware.csrf import get_token
 from .eth import store_data
 
@@ -89,7 +89,6 @@ def index(request):
     return render(request, 'game/index.html')
 
 def waiting_room(request):
-
     if request.method == 'POST':
         player_name = request.POST.get('playerUsername')
         player_id = request.POST.get('playerId')
@@ -183,7 +182,7 @@ def get_regular_history (request, player_id):
 
     data = {
         'player_id': player_id,
-        '1v1': formatted_history,
+        'games': formatted_history,
     }
     return JsonResponse(data)
 

@@ -11,7 +11,7 @@ def get_web3_instance():
         return w3
     else:
         raise ConnectionError("Unable to connect to provider(Alchemy)")
-    
+
 def get_contract_instance(w3):
     contract_address = settings.CONTRACT_ADDRESS
     with open(settings.CONTRACT_ABI_PATH, 'r') as abi_file:
@@ -23,7 +23,7 @@ def store_game_sync(contract, w3, params):
     account_address = settings.OWNER_ADDRESS
     private_key = settings.OWNER_PRIVATE_KEY
     nonce = w3.eth.get_transaction_count(account_address)
-    unsent_tx = contract.functions.storeGame(
+    function_call = contract.functions.storeGame(
         params['semifinal1_start_time'],
         params['semifinal1_player1'],
         params['semifinal1_player1_id'],
@@ -46,28 +46,49 @@ def store_game_sync(contract, w3, params):
     ).build_transaction({
         "from": account_address,
         "nonce": nonce,
-        "gas": 2000000,
-        "gasPrice": w3.to_wei('100', 'gwei')
     })
-    signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key).raw_transaction
-    tx_hash = w3.eth.send_raw_transaction(signed_tx)
-    receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
-    return receipt
+    gas_estimate = w3.eth.estimate_gas(function_call)
+    gas_price = w3.to_wei('100', 'gwei')
+
+    unsent_tx = {
+        "from": account_address,
+        "nonce": nonce,
+        "gas": gas_estimate,
+        "gasPrice": gas_price,
+        "to": settings.CONTRACT_ADDRESS,
+        "data": function_call['data'],
+    }
+
+    try:
+        signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key).raw_transaction
+        tx_hash = w3.eth.send_raw_transaction(signed_tx)
+        receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+        return receipt
+    except ValueError as e:
+        if 'replacement transaction underpriced' in str(e):
+            gas_price = int(gas_price * 1.1)
+            unsent_tx['gasPrice'] = gas_price
+            signed_tx = w3.eth.account.sign_transaction(unsent_tx, private_key).raw_transaction
+            tx_hash = w3.eth.send_raw_transaction(signed_tx)
+            receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+            return receipt
+        else:
+            raise e
 
 def store_game(params):
     try:
         w3 = get_web3_instance()
     except Exception as e:
-        print(f"Error while get_w3_instance: {e}")     
+        print(f"Error while get_w3_instance: {e}")
     try:
         contract = get_contract_instance(w3)
     except Exception as e:
-        print(f"Error while get_contract_instance: {e}")     
+        print(f"Error while get_contract_instance: {e}")
     try:
         receipt = store_game_sync(contract, w3, params)
         return receipt
     except Exception as e:
-        print(f"Error while store_game_sync: {e}")     
+        print(f"Error while store_game_sync: {e}")
 
 def store_data(tournament):
     params = {
@@ -114,12 +135,12 @@ def store_data(tournament):
 
     receipt = store_game(params)
     print(f"Data stored successfully: {receipt}")
-        
+
 def get_all_tournament_games():
     try:
         w3 = get_web3_instance()
     except Exception as e:
-        print(f"Error while get_w3_instance: {e}")     
+        print(f"Error while get_w3_instance: {e}")
     try:
         contract = get_contract_instance(w3)
     except Exception as e:
