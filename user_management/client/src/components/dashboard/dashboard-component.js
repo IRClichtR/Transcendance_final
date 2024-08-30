@@ -226,19 +226,25 @@ export class DashboardComponent extends LitElement {
 																			</tr>
 																		</thead>
 																		<tbody>
-																			${this.gamesData.games.map(
-																				(game) => html`
-																					<tr>
-																						<td><h6 class="mb-1">${new Date(game.start_time * 1000).toLocaleDateString()}</h6></td>
-																						<td><h6 class="mb-1">${user.first_name}</h6></td>
-																						<td><h6 class="mb-1">${game.score_0}</h6></td>
-																						<td><h6 class="mb-1">${game.player_name_1}</h6></td>
-																						<td><h6 class="mb-1">${game.score_1}</h6></td>
-																						<td><span class=" btn bg-success text-light">${this.fetch1v1Winner(game)}</span></td>
-																						<td><span class=" btn bg-danger text-light">${this.fetch1v1Loser(game)}</span></td>
-																					</tr>
-																				`
-																			)}
+																			${this.gamesData
+																				? this.gamesData.games.map(
+																						(game) => html`
+																							<tr>
+																								<td>
+																									<h6 class="mb-1">${new Date(game.start_time * 1000).toLocaleDateString()}</h6>
+																								</td>
+																								<td><h6 class="mb-1">${user.first_name}</h6></td>
+																								<td><h6 class="mb-1">${game.score_0}</h6></td>
+																								<td><h6 class="mb-1">${game.player_name_1}</h6></td>
+																								<td><h6 class="mb-1">${game.score_1}</h6></td>
+																								<td>
+																									<span class=" btn bg-success text-light">${this.fetch1v1Winner(game)}</span>
+																								</td>
+																								<td><span class=" btn bg-danger text-light">${this.fetch1v1Loser(game)}</span></td>
+																							</tr>
+																						`
+																				  )
+																				: html`<p>No 1v1 data available</p>`}
 																		</tbody>
 																	</table>
 																</div>
@@ -273,39 +279,43 @@ export class DashboardComponent extends LitElement {
 																				</tr>
 																			</thead>
 																			<tbody>
-																				${this.tournamentData.tournament_history.map(
-																					(tournament) => html`
-																						<tr>
-																							<td>
-																								<h6 class="mb-1">
-																									${new Date(tournament.final_start_time * 1000).toLocaleDateString()}
-																								</h6>
-																							</td>
+																				${this.tournamentData
+																					? this.tournamentData.tournament_history.map(
+																							(tournament) => html`
+																								<tr>
+																									<td>
+																										<h6 class="mb-1">
+																											${new Date(tournament.final_start_time * 1000).toLocaleDateString()}
+																										</h6>
+																									</td>
 
-																							<td><h6 class="mb-1">${user.first_name}</h6></td>
-																							<td><h6 class="mb-1">${tournament.semifinal1_score1}</h6></td>
+																									<td><h6 class="mb-1">${user.first_name}</h6></td>
+																									<td><h6 class="mb-1">${tournament.semifinal1_score1}</h6></td>
 
-																							<td><h6 class="mb-1">${tournament.semifinal1_player2}</h6></td>
-																							<td><h6 class="mb-1">${tournament.semifinal1_score2}</h6></td>
+																									<td><h6 class="mb-1">${tournament.semifinal1_player2}</h6></td>
+																									<td><h6 class="mb-1">${tournament.semifinal1_score2}</h6></td>
 
-																							<td><h6 class="mb-1">${tournament.semifinal2_player1}</h6></td>
-																							<td><h6 class="mb-1">${tournament.semifinal2_score1}</h6></td>
+																									<td><h6 class="mb-1">${tournament.semifinal2_player1}</h6></td>
+																									<td><h6 class="mb-1">${tournament.semifinal2_score1}</h6></td>
 
-																							<td><h6 class="mb-1">${tournament.semifinal2_player2}</h6></td>
-																							<td><h6 class="mb-1">${tournament.semifinal2_score2}</h6></td>
+																									<td><h6 class="mb-1">${tournament.semifinal2_player2}</h6></td>
+																									<td><h6 class="mb-1">${tournament.semifinal2_score2}</h6></td>
 
-																							<td><h6 class="mb-1">${tournament.final_player1}</h6></td>
-																							<td><h6 class="mb-1">${tournament.final_score1}</h6></td>
+																									<td><h6 class="mb-1">${tournament.final_player1}</h6></td>
+																									<td><h6 class="mb-1">${tournament.final_score1}</h6></td>
 
-																							<td><h6 class="mb-1">${tournament.final_player2}</h6></td>
-																							<td><h6 class="mb-1">${tournament.final_score2}</h6></td>
+																									<td><h6 class="mb-1">${tournament.final_player2}</h6></td>
+																									<td><h6 class="mb-1">${tournament.final_score2}</h6></td>
 
-																							<td>
-																								<span class=" btn bg-success text-light" >${this.fetchTournamentWinner(tournament)}</span >
-																							</td>
-																						</tr>
-																					`
-																				)}
+																									<td>
+																										<span class=" btn bg-success text-light"
+																											>${this.fetchTournamentWinner(tournament)}</span
+																										>
+																									</td>
+																								</tr>
+																							`
+																					  )
+																					: html`<p>No tournament data available</p>`}
 																			</tbody>
 																		</table>
 																	</div>
