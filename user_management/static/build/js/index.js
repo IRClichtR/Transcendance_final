@@ -807,16 +807,6 @@ var updateUser = async (user) => {
     throw new Error("Failed to update user");
   }
 };
-var getProfilePic = async (user) => {
-  try {
-    const response = await getMe();
-    console.log("getProfilePic Response: ", response);
-    return response;
-  } catch (error) {
-    console.log("error: ", error);
-    throw new Error("Failed to update user");
-  }
-};
 var updatePassword = async ({ confirm_new_password, new_password, old_password }) => {
   try {
     const response = await rest.put("/user/password/", {
@@ -845,6 +835,7 @@ var DashboardComponent = class extends s3 {
       this.tournamentData = await getTournamentData(response);
       this.gamesData = await getGamesData(response);
       console.log("gamesData: ", this.gamesData);
+      const id = response.id.toString();
       if (response.image?.link) {
         this.link = response.image.link;
         return response;
@@ -852,12 +843,12 @@ var DashboardComponent = class extends s3 {
         this.link = response.profile_picture;
         return response;
       } else {
-        const storedAvatar = this.getStoredAvatarSrc(response.email);
+        const storedAvatar = this.getStoredAvatarSrc(id);
         if (storedAvatar) {
           this.link = storedAvatar;
         } else {
           const random = this.getRandomAvatarSrc();
-          this.storeAvatarSrc(response.email, random);
+          this.storeAvatarSrc(id, random);
           this.link = random;
         }
         return response;
@@ -914,26 +905,26 @@ var DashboardComponent = class extends s3 {
     const randomSrc = Math.floor(Math.random() * this.images.length);
     return this.images[randomSrc];
   };
-  storeAvatarSrc = (email, src) => {
-    if (!email || typeof email !== "string") {
-      throw new Error("Unable to store avatar without an email, got: " + email);
+  storeAvatarSrc = (id, src) => {
+    if (!id || typeof id !== "string") {
+      throw new Error("Unable to store avatar without an id, got: " + id);
     }
     if (!src || typeof src !== "string") {
       throw new Error("Unable to store avatar without a src, got: " + src);
     }
     const avatars = localStorage.getItem("avatars");
     const parsed = avatars ? JSON.parse(avatars) : {};
-    parsed[email] = src;
+    parsed[id] = src;
     const stringified = JSON.stringify(parsed);
     localStorage.setItem("avatars", stringified);
   };
-  getStoredAvatarSrc = (email) => {
-    if (!email || typeof email !== "string") {
-      throw new Error("Unable to store avatar without an email, got: " + email);
+  getStoredAvatarSrc = (id) => {
+    if (!id || typeof id !== "string") {
+      throw new Error("Unable to store avatar without an id, got: " + id);
     }
     const avatars = localStorage.getItem("avatars");
     const parsed = avatars ? JSON.parse(avatars) : {};
-    return parsed[email] || "";
+    return parsed[id] || "";
   };
   checkIfOnline = (user) => {
     const hour = 60 * 60 * 1e3;
@@ -1249,21 +1240,21 @@ var SettingsComponent = class extends s3 {
   _userTask = new h3(this, {
     task: async ([user], { signal }) => {
       const me = await getMe({ signal });
+      const id = me.id.toString();
       if (me.image?.link) {
         this.link = me.image.link;
         return me;
       } else if (me.profile_picture) {
         this.link = me.profile_picture;
-        this.storeAvatarSrc(me.email, this.link);
+        this.storeAvatarSrc(id, this.link);
         return me;
       }
-      const storedAvatar = await this.getStoredAvatarSrc(me.email);
-      console.log("storedAvatar: ", storedAvatar);
+      const storedAvatar = await this.getStoredAvatarSrc(id);
       if (storedAvatar) {
         this.link = storedAvatar;
       } else {
         const random = this.getRandomAvatarSrc();
-        this.storeAvatarSrc(me.email, random);
+        this.storeAvatarSrc(id, random);
         this.link = random;
       }
       return me;
@@ -1283,10 +1274,14 @@ var SettingsComponent = class extends s3 {
     this.profilePicture = "";
     this.previewSrc = "";
   }
-  storeAvatarSrc = (email, src) => {
-    if (!email || typeof email !== "string") {
+  getRandomAvatarSrc = () => {
+    const randomSrc = Math.floor(Math.random() * this.images.length);
+    return this.images[randomSrc];
+  };
+  storeAvatarSrc = (id, src) => {
+    if (!id || typeof id !== "string") {
       throw new Error(
-        "Unable to store avatar without an email, got: " + email
+        "Unable to store avatar without a user ID, got: " + id
       );
     }
     if (!src || typeof src !== "string") {
@@ -1296,20 +1291,19 @@ var SettingsComponent = class extends s3 {
     }
     const avatars = localStorage.getItem("avatars");
     const parsed = avatars ? JSON.parse(avatars) : {};
-    parsed[email] = src;
+    parsed[id] = src;
     const stringified = JSON.stringify(parsed);
     localStorage.setItem("avatars", stringified);
   };
-  getStoredAvatarSrc = async (email) => {
-    if (!email || typeof email !== "string") {
+  getStoredAvatarSrc = async (id) => {
+    if (!id || typeof id !== "string") {
       throw new Error(
-        "Unable to store avatar without an email, got: " + email
+        "Unable to store avatar without a user ID, got: " + id
       );
     }
-    const storedProfilePicture = await getProfilePic();
     const avatars = localStorage.getItem("avatars");
     const parsed = avatars ? JSON.parse(avatars) : {};
-    return parsed[email] || "";
+    return parsed[id] || "";
   };
   updateUserInfo = async (event) => {
     event.preventDefault();

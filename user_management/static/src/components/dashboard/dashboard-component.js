@@ -17,6 +17,7 @@ export class DashboardComponent extends LitElement {
 			this.tournamentData = await getTournamentData(response);
 			this.gamesData = await getGamesData(response);
 			console.log('gamesData: ', this.gamesData);
+			const id = response.id.toString();
 			if (response.image?.link) {
 				this.link = response.image.link;
 				return response;
@@ -24,12 +25,12 @@ export class DashboardComponent extends LitElement {
 				this.link = response.profile_picture;
 				return response;
 			} else {
-				const storedAvatar = this.getStoredAvatarSrc(response.email);
+				const storedAvatar = this.getStoredAvatarSrc(id);
 				if (storedAvatar) {
 					this.link = storedAvatar;
 				} else {
 					const random = this.getRandomAvatarSrc();
-					this.storeAvatarSrc(response.email, random);
+					this.storeAvatarSrc(id, random);
 					this.link = random;
 				}
 				return response;
@@ -92,27 +93,27 @@ export class DashboardComponent extends LitElement {
 		return this.images[randomSrc];
 	};
 
-	storeAvatarSrc = (email, src) => {
-		if (!email || typeof email !== 'string') {
-			throw new Error('Unable to store avatar without an email, got: ' + email);
+	storeAvatarSrc = (id, src) => {
+		if (!id || typeof id !== 'string') {
+			throw new Error('Unable to store avatar without an id, got: ' + id);
 		}
 		if (!src || typeof src !== 'string') {
 			throw new Error('Unable to store avatar without a src, got: ' + src);
 		}
 		const avatars = localStorage.getItem('avatars');
 		const parsed = avatars ? JSON.parse(avatars) : {};
-		parsed[email] = src;
+		parsed[id] = src;
 		const stringified = JSON.stringify(parsed);
 		localStorage.setItem('avatars', stringified);
 	};
 
-	getStoredAvatarSrc = (email) => {
-		if (!email || typeof email !== 'string') {
-			throw new Error('Unable to store avatar without an email, got: ' + email);
+	getStoredAvatarSrc = (id) => {
+		if (!id || typeof id !== 'string') {
+			throw new Error('Unable to store avatar without an id, got: ' + id);
 		}
 		const avatars = localStorage.getItem('avatars');
 		const parsed = avatars ? JSON.parse(avatars) : {};
-		return parsed[email] || '';
+		return parsed[id] || '';
 	};
 
 	checkIfOnline = (user) => {
