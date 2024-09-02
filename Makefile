@@ -61,6 +61,9 @@ dockerfclean:
 fclean: clean cleanfiles dockerfclean
 	@echo "✅ Full cleanup completed."
 
+# Verbose mode
+v:
+	$(MAKE) --no-print-directory MAKEFLAGS="-n" all
 
 # Declare phony targets to avoid conflicts with files of the same name
 .PHONY: build up down clean cleanfiles
