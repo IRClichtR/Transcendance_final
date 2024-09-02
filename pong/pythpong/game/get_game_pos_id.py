@@ -16,7 +16,7 @@ def get_game_pos_id(player_name, player_id):
     existing_games = Game.objects.all()
 
     for existing_game in existing_games:
-        if len(existing_game.player_pos) == 1:
+        if len(existing_game.player_pos) == 1 and player_id not in existing_game.player_ids:
             #add the new player
             player_pos = list({0, 1} - set(existing_game.player_pos))[0]
             existing_game.player_names.append(player_name)

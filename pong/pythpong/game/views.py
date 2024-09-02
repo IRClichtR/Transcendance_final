@@ -95,7 +95,9 @@ def waiting_room(request):
         waiting_room = WaitingRoom.objects.all().first()
         if waiting_room is None:
             waiting_room = WaitingRoom.objects.create()
-
+        else:
+            if player_id in waiting_room.player_ids:
+                return render(request, 'game/index.html')
         waiting_room.players.append(player_name)
         waiting_room.player_ids.append(player_id)
         waiting_room.save()
@@ -119,7 +121,6 @@ def get_history(request, player_id):
     result = get_all_tournament_games()
     if result is None or 'data' not in result:
         return JsonResponse({'error': 'Could not retrieve tournament games'}, status=500)
-
     tournament_history = result['data']
     formatted_history = []
 
@@ -153,7 +154,8 @@ def get_history(request, player_id):
 		        'final_score2'          : game[18],
             }
             formatted_history.append(formatted_game)
-
+    if not formatted_history:
+        return JsonResponse({'error': f'No games found for player {player_id}'}, status=404)
     data = {
         'player_id' : player_id,
         'tournament_history' : formatted_history,
@@ -163,12 +165,11 @@ def get_history(request, player_id):
 def get_regular_history (request, player_id):
     queryset = Game.objects.filter(game_type='regular')
     if not queryset.exists():
-        return JsonResponse({'error': 'Could not retrieve games'}, status=500)
-
+        return JsonResponse({'player_id': player_id, 'games': []}) 
+    
     formatted_history = []
-
     for game in queryset:
-        if str(player_id) == game.player_ids[0] or str(player_id) == game.player_ids[1]:
+        if len(game.player_ids) >= 2 and (str(player_id) == game.player_ids[0] or str(player_id) == game.player_ids[1]):
             formatted_game = {
                 'start_time': game.start_time,
                 'player_name_0': game.player_names[0] if len(game.player_names) > 0 else None,
@@ -179,10 +180,9 @@ def get_regular_history (request, player_id):
                 'score_1': game.points[1] if len(game.points) > 1 else None,
             }
             formatted_history.append(formatted_game)
-
     data = {
         'player_id': player_id,
-        '1v1': formatted_history,
+        'games': formatted_history,
     }
     return JsonResponse(data)
 
