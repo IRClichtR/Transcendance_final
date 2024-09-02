@@ -78,6 +78,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8200:8200"
+      - "8201:8201"
     volumes:
       - ./vault/config:/vault/config
       - ./vault/policies:/vault/policies
@@ -85,11 +86,13 @@ services:
       - ./vault/logs:/vault/logs
     environment:
       - VAULT_ADDR=http://127.0.0.1:8200
+      - VAULT_API_ADDR=https://127.0.0.1:8200
+      - VAULT_ADDRESS=https://127.0.0.1:8200
     # command: server -config=/vault/config/vault-config.hcl
     cap_add:
       - IPC_LOCK
     networks:
-      - monitoring
+      - transcendance
     restart: on-failure:10
 
 volumes:
@@ -98,5 +101,4 @@ volumes:
 
 networks:
   transcendance:
-  monitoring:
     driver: bridge
