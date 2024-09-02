@@ -85,6 +85,7 @@ def index(request):
 def login(request):
     load_dotenv()
     HOST_IP = os.environ.get('HOST_IP')
+    SECRET_42 = os.environ.get('SECRET_42')
 
     user = get_user_model()
     if request.session.get('authMethod', None) is None:
@@ -108,7 +109,7 @@ def login(request):
             data = {
                 "grant_type": "authorization_code",
                 "client_id": "u-s4t2ud-e6514ae93c2f3f3c25c6c98db2627ae8b9c70362848bea099f4e972c73370ec3",
-                "client_secret": "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",
+                "client_secret": {SECRET_42},
                 "code": code,
                 "redirect_uri": f"https://{HOST_IP}:8443/login"
             }
@@ -125,11 +126,11 @@ def login(request):
             else:
                 return render(request, 'pages/login.html', {'error': 'Token exchange failed'})
         elif request.method == 'GET':
-            return render(request, 'pages/login.html', {'URL': f"https://{settings.HOST_IP}:8443/login"})
+            return render(request, 'pages/login.html', {'URL': f"https://{HOST_IP}:8443/login"})
     else:
         return redirect('/app/')
 
-#@login_required
+
 def logout_normal(request):
     if 'authMethod' in request.session:
         request.session.pop('authMethod')
