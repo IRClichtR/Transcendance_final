@@ -101,6 +101,14 @@ export class SettingsComponent extends LitElement {
 		}
 		console.log('\n');
 
+		const newUsername = formData.get('username');
+		const regex = /^[a-zA-Z0-9]+$/;
+
+		if (!regex.test(newUsername)) {
+			alert('The username must contain alphanumeric character only.');
+			return;
+		}
+
 		try {
 			const response = await updateUser(formData);
 
