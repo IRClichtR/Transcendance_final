@@ -350,22 +350,6 @@ export class SettingsComponent extends LitElement {
 																value="${user.email}"
 															/>
 														</div>
-														<div
-															class="col-12 col-md-6"
-														>
-															<label
-																for="inputConfirmEmail"
-																class="form-label"
-																>Confirm
-																Email</label
-															>
-															<input
-																type="email"
-																class="form-control"
-																id="inputConfirmEmail"
-																value="${user.email}"
-															/>
-														</div>
 														<div class="col-12">
 															<button
 																type="submit"

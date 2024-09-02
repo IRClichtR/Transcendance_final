@@ -34,27 +34,29 @@ export class FreindsComponent extends LitElement {
 
 	_userTask = new Task(this, {
 		task: async ([user], { signal }) => {
-			const response = await getMe({ signal });
-
-			console.log('response: ', response);
-
-			if (response.image?.link) {
-				this.link = response.image.link;
-				return response;
-			} else if (response?.profile_picture) {
-				this.link = response.profile_picture;
-				return response;
+			const me = await getMe({ signal });
+	
+			const id = me.id.toString();
+	
+			if (me.image?.link) {
+				this.link = me.image.link;
+				return me;
+			} else if (me.profile_picture) {
+				this.link = me.profile_picture;
+				this.storeAvatarSrc(id, this.link);
+				return me;
 			}
-
-			const storedAvatar = this.getStoredAvatarSrc(response.email);
+	
+			const storedAvatar = await this.getStoredAvatarSrc(id);
 			if (storedAvatar) {
 				this.link = storedAvatar;
 			} else {
 				const random = this.getRandomAvatarSrc();
-				this.storeAvatarSrc(response.email, random);
+				this.storeAvatarSrc(id, random);
 				this.link = random;
 			}
-			return response;
+	
+			return me;
 		},
 		args: () => [this.user],
 	});
@@ -69,10 +71,15 @@ export class FreindsComponent extends LitElement {
 		return [globalStyle, css``];
 	}
 
-	storeAvatarSrc = (email, src) => {
-		if (!email || typeof email !== 'string') {
+	getRandomAvatarSrc = () => {
+		const randomSrc = Math.floor(Math.random() * this.images.length);
+		return this.images[randomSrc];
+	};
+
+	storeAvatarSrc = (id, src) => {
+		if (!id || typeof id !== 'string') {
 			throw new Error(
-				'Unable to store avatar without an email, got: ' + email
+				'Unable to store avatar without a user ID, got: ' + id
 			);
 		}
 		if (!src || typeof src !== 'string') {
@@ -82,20 +89,20 @@ export class FreindsComponent extends LitElement {
 		}
 		const avatars = localStorage.getItem('avatars');
 		const parsed = avatars ? JSON.parse(avatars) : {};
-		parsed[email] = src;
+		parsed[id] = src;
 		const stringified = JSON.stringify(parsed);
 		localStorage.setItem('avatars', stringified);
 	};
-
-	getStoredAvatarSrc = (email) => {
-		if (!email || typeof email !== 'string') {
+	
+	getStoredAvatarSrc = async (id) => {
+		if (!id || typeof id !== 'string') {
 			throw new Error(
-				'Unable to store avatar without an email, got: ' + email
+				'Unable to store avatar without a user ID, got: ' + id
 			);
 		}
 		const avatars = localStorage.getItem('avatars');
 		const parsed = avatars ? JSON.parse(avatars) : {};
-		return parsed[email] || '';
+		return parsed[id] || '';
 	};
 
 	saveFriendsToStorage() {
