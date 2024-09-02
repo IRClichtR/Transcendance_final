@@ -68,7 +68,7 @@ export VAULT_TOKEN=$(cat /vault/config/root.token)
 
 # Enable the KV secrets engine at the path "secret"
 echo "Enabling KV secrets engine..."
-vault secrets enable -path=secret kv -tlss-skip-verify
+vault secrets enable -tls-skip-verify -path=secret kv 
 
 if [ $? -ne 0 ]; then
     echo "Failed to enable KV secrets engine."

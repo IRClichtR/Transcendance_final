@@ -2,65 +2,65 @@
 
 services:
 
-  web:
-    container_name: web
-    build:
-      context: ./user_management
-      dockerfile: Dockerfile
-    volumes:
-      - ./user_management:/app
-    env_file:
-      - .env
-    expose:
-      - "8001"
-    depends_on:
-      - db
-    networks:
-      - transcendance
+  # web:
+  #   container_name: web
+  #   build:
+  #     context: ./user_management
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./user_management:/app
+  #   env_file:
+  #     - .env
+  #   expose:
+  #     - "8001"
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - transcendance
 
-  game:
-    container_name: game
-    build:
-      context: ./pong
-      dockerfile: Dockerfile
-    volumes:
-      - ./pong:/app
-    entrypoint: ["/bin/sh", "-c", "chmod +x /app/entrypoint.sh && /app/entrypoint.sh"]
-    expose:
-      - "8002"
-    env_file:
-      - .env
-    depends_on:
-      - web
-      - db
-    networks:
-      - transcendance
+  # game:
+  #   container_name: game
+  #   build:
+  #     context: ./pong
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./pong:/app
+  #   entrypoint: ["/bin/sh", "-c", "chmod +x /app/entrypoint.sh && /app/entrypoint.sh"]
+  #   expose:
+  #     - "8002"
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - web
+  #     - db
+  #   networks:
+  #     - transcendance
 
-  db:
-    build:
-      context: ./db
-      dockerfile: Dockerfile
-    container_name: db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env
-    networks:
-      - transcendance
+  # db:
+  #   build:
+  #     context: ./db
+  #     dockerfile: Dockerfile
+  #   container_name: db
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data/
+  #   ports:
+  #     - "5432:5432"
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - transcendance
 
-  modsecurity-nginx:
-    container_name: nginx_server
-    build: ./modsecurity-nginx
-    # volumes:
-    #   - static_volume:/home/app/web/staticfiles
-    ports:
-      - 8443:443
-    depends_on:
-      - web
-    networks:
-      - transcendance
+  # modsecurity-nginx:
+  #   container_name: nginx_server
+  #   build: ./modsecurity-nginx
+  #   # volumes:
+  #   #   - static_volume:/home/app/web/staticfiles
+  #   ports:
+  #     - 8443:443
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     - transcendance
 
   vault:
     image: hashicorp/vault
