@@ -5,7 +5,7 @@ set -x
 
 # Start Vault in server mode with the specified configuration
 echo "Starting Vault server with configuration..."
-vault server -config=/vault/config/vault-config.hcl &
+vault server -config=vault-config.hcl -tls-skip-verify &
 VAULT_PID=$!
 echo "Vault server started with PID $VAULT_PID."
 
@@ -16,7 +16,7 @@ sleep 5
 # Initialize Vault if not already initialized
 if [ ! -f /vault/config/init.file ]; then
     echo "Initializing Vault..."
-    init_output=$(vault operator init -key-shares=5 -key-threshold=3)
+    init_output=$(vault operator init -key-shares=5 -key-threshold=3 -tls-skip-verify)
     
     if [ $? -ne 0 ]; then
         echo "Vault initialization failed."
@@ -39,7 +39,7 @@ fi
 # Unseal Vault using 3 random unseal keys out of the 5
 echo "Unsealing Vault with 3 random keys..."
 shuf -n 3 -e /vault/config/unseal.key{1..5} | while read keyfile; do
-    vault operator unseal $(cat "$keyfile")
+    vault operator unseal -tls-skip-verify $(cat "$keyfile")
 done
 
 # Check if unsealing was successful
@@ -52,7 +52,7 @@ fi
 
 # Log in using the root token
 echo "Logging in to Vault with the root token..."
-vault login $(cat /vault/config/root.token)
+vault login -tls-skip-verify $(cat /vault/config/root.token)
 
 # Check if login was successful
 if [ $? -ne 0 ]; then
@@ -68,7 +68,7 @@ export VAULT_TOKEN=$(cat /vault/config/root.token)
 
 # Enable the KV secrets engine at the path "secret"
 echo "Enabling KV secrets engine..."
-vault secrets enable -path=secret kv
+vault secrets enable -path=secret kv -tlss-skip-verify
 
 if [ $? -ne 0 ]; then
     echo "Failed to enable KV secrets engine."
@@ -89,7 +89,7 @@ if [ -f "$ENV_FILE" ]; then
         key=$(echo $key | xargs)
         value=$(echo $value | xargs)
         echo "Storing secret $key..."
-        vault kv put secret/myapp/$key value=$value
+        vault kv put secret/myapp/$key value=$value -tls-skip-verify
     done < "$ENV_FILE"
     echo "All secrets have been saved in Vault."
 else
@@ -110,7 +110,7 @@ wait $VAULT_PID
 # # Check if vault is already initialized
 # init_output=$(docker exec vault vault operator init)
 # if [ $? -ne 0 ]; then
-# 	echo "[ERROR] Vault initialization failed"
+# 	ec -tls-skip-verifyho "[ERROR] Vault initialization failed"
 # 	exit 1
 # fi
 
