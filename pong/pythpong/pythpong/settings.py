@@ -21,7 +21,7 @@ load_dotenv()
 # HOST_IP = os.environ.get('HOST_IP')
 
 VAULT_ADDR = os.environ.get('VAULT_ADDR')
-VAULT_TOKEN = os.environ.get('VAULT_TOKEN')
+VAULT_TOKEN = "hvs.SY60Js0DECb3jO0UMsxSbYLw"
 
 client = hvac.Client(
     url=VAULT_ADDR,
