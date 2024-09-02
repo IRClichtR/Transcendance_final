@@ -62,32 +62,39 @@ const getGamesData = async (user) => {
 };
 
 const updateUser = async (user) => {
-	try {
-		console.log('updateUser user.entries :\n');
-		for (let [key, value] of user.entries()) {
-			console.log(key, ' : ', value);
-		}
-		console.log('\n');
+    try {
+        console.log('updateUser user.entries :\n');
+        for (let [key, value] of user.entries()) {
+            console.log(key, ' : ', value);
+        }
+        console.log('\n');
 
-		const response = await rest.patch('/user/update/', {
-			body: user,
-		});
-		console.log('updateUser response : ', response);
-		console.log('\n');
+        const response = await rest.patch('/user/update/', {
+            body: user,
+        });
+        console.log('updateUser response : ', response);
+        console.log('\n');
 
-		return response;
-	} catch (error) {
-		if (error.response) {
-			console.log('Error details (response) => ', error.response);
-			console.log('Error status => ', error.response.status);
-			console.log('Error data => ', await error.response.json());
-		} else if (error.request) {
-			console.log('Error details (request) => ', error.request);
-		} else {
-			console.log('Error message => ', error.message);
-		}
-		throw new Error('Failed to update user');
-	}
+        return response;
+    } catch (error) {
+        if (error.response) {
+            console.log('Error details (response) => ', error.response);
+            console.log('Error status => ', error.response.status);
+            const errorData = await error.response.json();
+            console.log('Error data => ', errorData);
+
+            if (errorData.username && errorData.username.length > 0) {
+                const msg_err = errorData.username[0];
+                alert(msg_err);
+                throw new Error(msg_err);
+            }
+        } else if (error.request) {
+            console.log('Error details (request) => ', error.request);
+        } else {
+            console.log('Error message => ', error.message);
+        }
+        throw new Error('Failed to update user');
+    }
 };
 
 const getProfilePic = async (user) => {

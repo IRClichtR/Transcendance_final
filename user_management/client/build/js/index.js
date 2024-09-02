@@ -798,7 +798,13 @@ var updateUser = async (user) => {
     if (error.response) {
       console.log("Error details (response) => ", error.response);
       console.log("Error status => ", error.response.status);
-      console.log("Error data => ", await error.response.json());
+      const errorData = await error.response.json();
+      console.log("Error data => ", errorData);
+      if (errorData.username && errorData.username.length > 0) {
+        const msg_err = errorData.username[0];
+        alert(msg_err);
+        throw new Error(msg_err);
+      }
     } else if (error.request) {
       console.log("Error details (request) => ", error.request);
     } else {
@@ -1313,6 +1319,12 @@ var SettingsComponent = class extends s3 {
       console.log(key, " : ", value);
     }
     console.log("\n");
+    const newUsername = formData.get("username");
+    const regex = /^[a-zA-Z0-9]+$/;
+    if (!regex.test(newUsername)) {
+      alert("The username must contain alphanumeric character only.");
+      return;
+    }
     try {
       const response = await updateUser(formData);
       console.log("updatUserInfo response.entries :\n");
