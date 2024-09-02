@@ -1,8 +1,13 @@
 #!/bin/bash
 
+# Verbose mode: on
+set -x
+
 # Start Vault in server mode with the specified configuration
+echo "Starting Vault server with configuration..."
 vault server -config=/vault/config/vault-config.hcl &
 VAULT_PID=$!
+echo "Vault server started with PID $VAULT_PID."
 
 # Wait for Vault to start
 echo "Waiting for Vault server to start..."
@@ -19,6 +24,7 @@ if [ ! -f /vault/config/init.file ]; then
     fi
 
     echo "$init_output" > /vault/config/init.file
+	echo "Vault initialization complete. Saving unseal keys and root token..."
 
     for i in {1..5}; do
         cat /vault/config/init.file | grep "Unseal Key $i:" | awk '{print $NF}' > "/vault/config/unseal.key$i"
@@ -27,7 +33,7 @@ if [ ! -f /vault/config/init.file ]; then
     cat /vault/config/init.file | grep 'Initial Root Token:' | awk '{print $NF}' > /vault/config/root.token
     echo "Vault initialized and keys saved."
 else
-    echo "Vault is already initialized."
+    echo "Vault is already initialized. Skipping initialization."
 fi
 
 # Unseal Vault using 3 random unseal keys out of the 5
@@ -40,6 +46,8 @@ done
 if [ $? -ne 0 ]; then
     echo "Unsealing Vault failed."
     exit 1
+else
+    echo "Vault unsealed successfully."
 fi
 
 # Log in using the root token
@@ -50,6 +58,8 @@ vault login $(cat /vault/config/root.token)
 if [ $? -ne 0 ]; then
     echo "Vault login failed."
     exit 1
+else
+    echo "Logged in to Vault successfully."
 fi
 
 # Export the root token as an environment variable
@@ -59,6 +69,13 @@ export VAULT_TOKEN=$(cat /vault/config/root.token)
 # Enable the KV secrets engine at the path "secret"
 echo "Enabling KV secrets engine..."
 vault secrets enable -path=secret kv
+
+if [ $? -ne 0 ]; then
+    echo "Failed to enable KV secrets engine."
+    exit 1
+else
+    echo "KV secrets engine enabled successfully."
+fi
 
 # Load environment variables from a .env file into Vault
 ENV_FILE=/vault/config/.env
