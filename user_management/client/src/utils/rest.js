@@ -88,6 +88,11 @@ const updateUser = async (user) => {
                 alert(msg_err);
                 throw new Error(msg_err);
             }
+			if (errorData.email && errorData.email.length > 0) {
+                const msg_err = errorData.email[0];
+                alert(msg_err);
+                throw new Error(msg_err);
+            }
         } else if (error.request) {
             console.log('Error details (request) => ', error.request);
         } else {
