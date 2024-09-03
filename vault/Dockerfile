@@ -9,22 +9,23 @@ RUN apk --no-cache add \
 		curl \
 		unzip \
 		coreutils \
-		openssl
+		openssl 
 
 # Keys and cert gen
 # Verbose: create directory for TLS certificates
 RUN echo "Creating directory /vault/tls-certificates..." && \
 	mkdir -p /vault/tls-certificates
 
-# Importing tokens and certificates
-COPY tls-certificates/cert.pem /tls-certificates/cert.pem
-COPY tls-certificates/key.pem /tls-certificates/key.pem
+# # Importing tokens and certificates
+# COPY tls-certificates/cert.pem /tls-certificates/cert.pem
+# COPY tls-certificates/key.pem /tls-certificates/key.pem
+COPY tls-certificates/san.cnf /tls-certificates/san.cnf
 
-# RUN echo "Generating TLS keys and certificates..." && \
-# 	openssl req -newkey rsa:2048 -x509 -nodes -days 42 \
-# 	-keyout /vault/tls-certificates/key.pem \
-# 	-out /vault/tls-certificates/cert.pem \
-# 	-config san.cnf
+RUN echo "Generating TLS keys and certificates..." && \
+	openssl req -newkey rsa:2048 -x509 -nodes -days 42 \
+	-keyout /tls-certificates/key.pem \
+	-out /tls-certificates/cert.pem \
+	-config /tls-certificates/san.cnf
 
 # Verbose: set permissions
 RUN echo "Setting permissions on cert and key files..." && \
