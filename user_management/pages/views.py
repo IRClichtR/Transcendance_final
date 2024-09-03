@@ -66,6 +66,8 @@ def index(request):
             return (render(request, 'pages/index.html', {'error': 'Differents passwords'}))
         if not re.match(r'^[a-zA-Z0-9]+$', username):
             return render(request, 'pages/index.html', {'error': 'Username must contain only alphanumeric characters.'})
+        if not re.match(r'^[a-zA-Z]+$', first_name) or not re.match(r'^[a-zA-Z]+$', last_name):
+            return render(request, 'pages/index.html', {'error': 'Firstname and lastname must contain only alphabetic characters.'})
         try:
             user = AppUser.objects.create_user(
                 email=email,

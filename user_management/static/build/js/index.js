@@ -1326,8 +1326,15 @@ var SettingsComponent = class extends s3 {
     console.log("\n");
     const newUsername = formData.get("username");
     const regex = /^[a-zA-Z0-9]+$/;
+    const regexAlpha = /^[a-zA-Z]+$/;
+    const newFirstname = formData.get("first_name");
+    const newLastname = formData.get("last_name");
     if (!regex.test(newUsername)) {
       alert("The username must contain alphanumeric character only.");
+      return;
+    }
+    if (!regexAlpha.test(newFirstname) || !regexAlpha.test(newLastname)) {
+      alert("The firstname and lastname must contain alphabetic character only.");
       return;
     }
     try {
