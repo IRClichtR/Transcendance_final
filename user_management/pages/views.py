@@ -86,6 +86,8 @@ def login(request):
     load_dotenv()
     HOST_IP = os.environ.get('HOST_IP')
     SECRET_42 = os.environ.get('SECRET_42')
+    UID_42 = os.environ.get('UID_42')
+    print(UID_42)
 
     user = get_user_model()
     if request.session.get('authMethod', None) is None:
@@ -102,13 +104,17 @@ def login(request):
         elif request.method == 'GET' and not request.user.is_authenticated:
             code = request.GET.get("code")
             if not code:
-                return render(request, 'pages/login.html', {'URL': f"https://{HOST_IP}:8443/login"})
+                context = {
+                    'URL': f"https://{HOST_IP}:8443/login",
+                    'UID': UID_42
+                }
+                return render(request, 'pages/login.html', context)
 
             url_token = "https://api.intra.42.fr/oauth/token"
             headers = {"Content-Type": "application/x-www-form-urlencoded"}
             data = {
                 "grant_type": "authorization_code",
-                "client_id": "u-s4t2ud-e6514ae93c2f3f3c25c6c98db2627ae8b9c70362848bea099f4e972c73370ec3",
+                "client_id": {UID_42},
                 "client_secret": {SECRET_42},
                 "code": code,
                 "redirect_uri": f"https://{HOST_IP}:8443/login"
@@ -126,7 +132,11 @@ def login(request):
             else:
                 return render(request, 'pages/login.html', {'error': 'Token exchange failed'})
         elif request.method == 'GET':
-            return render(request, 'pages/login.html', {'URL': f"https://{HOST_IP}:8443/login"})
+            context = {
+                'URL': f"https://{HOST_IP}:8443/login",
+                'UID': UID_42
+            }
+            return render(request, 'pages/login.html', context)
     else:
         return redirect('/app/')
 
