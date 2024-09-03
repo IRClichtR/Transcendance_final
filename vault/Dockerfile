@@ -32,13 +32,13 @@ RUN echo "Setting permissions on cert and key files..." && \
 	chmod 644 /tls-certificates/cert.pem /tls-certificates/key.pem
 
 # Copy Vault configuration
-# RUN echo "Copying Vault configuration..." && \
-#     mkdir -p /vault/config
-
+RUN echo "Copying Vault configuration..."
 COPY vault-config.hcl /vault-config.hcl
+# COPY ../.env /config/.env
 
-# Policies and script import
-# COPY policy.hcl /policy.hcl
+# # Policies and script import
+# RUN mkdir -p /vault/config
+# COPY policies/policy.hcl /policies/policy.hcl
 
 COPY entrypoint.sh /vault/entrypoint.sh
 RUN chmod +x /vault/entrypoint.sh

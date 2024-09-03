@@ -78,7 +78,9 @@ else
 fi
 
 # Load environment variables from a .env file into Vault
-ENV_FILE=/vault/config/.env
+RELATIVE_PATH="../.env"
+
+ENV_FILE=$(realpath "$(dirname "$0")/$RELATIVE_PATH")
 
 if [ -f "$ENV_FILE" ]; then
     echo "Loading secrets from .env file..."
@@ -96,61 +98,15 @@ else
     echo "No .env file found. Skipping secret loading."
 fi
 
+
+# Get the list of secrets
+docker exec vault vault kv list kv/data/myapp
+
 # Wait for Vault process to finish
 echo "Vault server is running. Waiting for process to finish..."
 wait $VAULT_PID
 
 
-
-# VAULT_ADDR="http://0.0.0.0:8200"
-
-# echo "Initializing Vault... $VAULT_ADDR"
-
-
-# # Check if vault is already initialized
-# init_output=$(docker exec vault vault operator init)
-# if [ $? -ne 0 ]; then
-# 	ec -tls-skip-verifyho "[ERROR] Vault initialization failed"
-# 	exit 1
-# fi
-
-# # If vault is already initialized init_output will get the actual status
-# echo "Unseal keys and root token: $init_output"
-# unseal_key_1=$(echo "$init_output" | awk '/Unseal Key 1/ {print $4}')
-# unseal_key_2=$(echo "$init_output" | awk '/Unseal Key 2/ {print $4}')
-# unseal_key_3=$(echo "$init_output" | awk '/Unseal Key 3/ {print $4}')
-
-# # unsealing keys
-# echo "Unseal Key 1: $unseal_key_1"
-# docker exec vault vault operator unseal $unseal_key_1
-# if [ $? -ne 0 ]; then
-# 	echo "Erreur lors du déverrouillage de Vault avec la clé $unseal_key_1"
-# 	exit 1
-# fi
-
-# echo "Unseal Key 2: $unseal_key_2"
-# docker exec vault vault operator unseal $unseal_key_2
-# if [ $? -ne 0 ]; then
-# 	echo "Erreur lors du déverrouillage de Vault avec la clé $unseal_key_2"
-# 	exit 1
-# fi
-
-# echo "Unseal Key 3: $unseal_key_3"
-# docker exec vault vault operator unseal $unseal_key_3
-# if [ $? -ne 0 ]; then
-# 	echo "Erreur lors du déverrouillage de Vault avec la clé $unseal_key_3"
-# 	exit 1
-# fi
-
-# # Get root token
-# root_token=$(echo "$init_output" | awk '/Initial Root Token/ {print $4}')
-# echo "Root Token: $root_token"
-# docker exec vault vault login $root_token
-# if [ $? -ne 0 ]; then
-# 	exit 1
-# fi
-
-# export VAULT_TOKEN=$root_token
 
 # echo "Vérification du Secret Engine KV..."
 # kv_enabled=$(docker exec vault vault secrets list | grep -E "^kv/")
