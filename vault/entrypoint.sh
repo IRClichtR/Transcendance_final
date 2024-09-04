@@ -92,7 +92,7 @@ vault write dbs/roles/ourdb-admin \
 vault auth enable approle
 
 # Importing policies from file into vault
-cat policy/policy.hcl | vault policy write data-policy -
+cat policies/policy.hcl | vault policy write data-policy -
 vault write auth/approle/role/dataapp policies=data-policy
 
 # Extracting role-id from vault
@@ -120,52 +120,39 @@ vault kv get secret/django/oauth_api
 vault kv put secret/django/blockchain_api bc_url=$ALCHEMY_PROVIDER_URL bc_wallet=$OWNER_ADDRESS bc_key=$OWNER_PRIVATE_KEY bc_smart=$CONTRACT_ADDRESS
 vault kv put secret/django/djkey_api djkey=$DJANGO_SECRET_KEY
 
-# Load environment variables from a .env file into Vault
-RELATIVE_PATH="../.env"
+# # Load environment variables from a .env file into Vault
+# RELATIVE_PATH="../.env"
 
-ENV_FILE=$(realpath "$(dirname "$0")/$RELATIVE_PATH")
+# ENV_FILE=$(realpath "$(dirname "$0")/$RELATIVE_PATH")
 
-if [ -f "$ENV_FILE" ]; then
-    echo "Loading secrets from .env file..."
-    while IFS='=' read -r key value; do
-        if [[ "$key" == \#* || "$key" == "" ]]; then
-            continue
-        fi
-        key=$(echo $key | xargs)
-        value=$(echo $value | xargs)
-        echo "Storing secret $key..."
-        vault kv put secret/myapp/$key value=$value -tls-skip-verify
-    done < "$ENV_FILE"
-    echo "All secrets have been saved in Vault."
-else
-    echo "No .env file found. Skipping secret loading."
-fi
+# if [ -f "$ENV_FILE" ]; then
+#     echo "Loading secrets from .env file..."
+#     while IFS='=' read -r key value; do
+#         if [[ "$key" == \#* || "$key" == "" ]]; then
+#             continue
+#         fi
+#         key=$(echo $key | xargs)
+#         value=$(echo $value | xargs)
+#         echo "Storing secret $key..."
+#         vault kv put secret/myapp/$key value=$value -tls-skip-verify
+#     done < "$ENV_FILE"
+#     echo "All secrets have been saved in Vault."
+# else
+#     echo "No .env file found. Skipping secret loading."
+# fi
 
+#token with use limit for django approle
+cat policy-admin.hcl | vault policy write admin-policy -
+django_vault_token=$(vault token create -ttl=42m -use-limit=7 -policy=credentials-token-policy | awk '$1 == "token" {print $2}')
+echo "$django_vault_token" > shared-volume/django_vault_token.txt
 
 # Get the list of secrets
-docker exec vault vault kv list kv/data/myapp
+# docker exec vault vault kv list kv/data/myapp
 
 # Wait for Vault process to finish
 echo "Vault server is running. Waiting for process to finish..."
 wait $VAULT_PID
 
-
-
-# echo "Vérification du Secret Engine KV..."
-# kv_enabled=$(docker exec vault vault secrets list | grep -E "^kv/")
-# if [ -z "$kv_enabled" ]; then
-# 	echo "Activation du Secret Engine KV version 2..."
-# 	docker exec vault vault secrets enable -version=2 kv
-# 	if [ $? -ne 0 ]; then
-# 		echo "Erreur lors de l'activation du Secret Engine KV"
-# 		exit 1
-# 	fi
-# else
-# 	echo "Le Secret Engine KV est déjà activé."
-# fi
-
-# # path to adapt
-# RELATIVE_PATH="../../.env.dev"
 
 # # same same
 # ENV_FILE=$(realpath "$(dirname "$0")/$RELATIVE_PATH")
