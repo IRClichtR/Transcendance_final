@@ -86,13 +86,14 @@ vault write dbs/roles/ourdb-admin \
   default_ttl=42h \
   max_ttl=42h \
   creation_statements="CREATE USER \"{{name}}\" WITH SUPERUSER ENCRYPTED PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \"{{name}}\";" \
-  revocation_statements="REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM \"{{name}}\"; DROP OWNED BY \"{{name}}\"; DROP ROLE \"{{name}}\";"
+  revocation_statements="REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM \"{{name}}\"; DROP OWNED BY \"{{name}}\"; DROP ROLE \"{{name}}\";" \
+  verify_connection=false
 
 # enabling roles on vault
 vault auth enable approle
 
 # Importing policies from file into vault
-cat policies/policy.hcl | vault policy write data-policy -
+cat policies/policy_read.hcl | vault policy write data-policy -
 vault write auth/approle/role/dataapp policies=data-policy
 
 # Extracting role-id from vault
@@ -144,7 +145,7 @@ vault kv put secret/django/djkey_api djkey=$DJANGO_SECRET_KEY
 #token with use limit for django approle
 cat policy-admin.hcl | vault policy write admin-policy -
 django_vault_token=$(vault token create -ttl=42m -use-limit=7 -policy=credentials-token-policy | awk '$1 == "token" {print $2}')
-echo "$django_vault_token" > shared-volume/django_vault_token.txt
+echo "$django_vault_token" > shared/django_vault_token.txt
 
 # Get the list of secrets
 # docker exec vault vault kv list kv/data/myapp
