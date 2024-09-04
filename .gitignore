@@ -44,3 +44,4 @@ vault/config/unseal.key3
 vault/config/unseal.key4
 vault/config/unseal.key5
 vault/data/
+vault/tls-certificates/
