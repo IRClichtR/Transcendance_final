@@ -15,9 +15,9 @@ up:
 down:
 	docker compose down
 
-# Clean up Docker containers, images, volumes, and networks
+# Clean up Docker containers, images, and networks
 clean:
-	docker compose down --rmi all --volumes --remove-orphans
+	docker compose down --rmi all --remove-orphans
 
 # Clean up Vault-related files and directories
 cleanfiles:

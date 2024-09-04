@@ -143,19 +143,19 @@ def get_history(request, player_id):
 		        'semifinal1_player1'    : game[7],
 		        'semifinal1_player2'    : game[8],
 		        'semifinal2_player1'    : game[9],
-		        'semifinal2_player2'    : game[10],        
-		        'final_player1'         : game[11],         
+		        'semifinal2_player2'    : game[10],
+		        'final_player1'         : game[11],
 		        'final_player2'         : game[12],
-		        'semifinal1_score1'     : game[13],    
-		        'semifinal1_score2'     : game[14],    
-		        'semifinal2_score1'     : game[15],    
-		        'semifinal2_score2'     : game[16],    
+		        'semifinal1_score1'     : game[13],
+		        'semifinal1_score2'     : game[14],
+		        'semifinal2_score1'     : game[15],
+		        'semifinal2_score2'     : game[16],
 		        'final_score1'          : game[17],
 		        'final_score2'          : game[18],
             }
             formatted_history.append(formatted_game)
     if not formatted_history:
-        return JsonResponse({'error': f'No games found for player {player_id}'}, status=404)
+        return JsonResponse({'player_id': player_id, 'tournament_history': []})
     data = {
         'player_id' : player_id,
         'tournament_history' : formatted_history,
