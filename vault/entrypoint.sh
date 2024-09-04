@@ -93,7 +93,7 @@ vault write dbs/roles/ourdb-admin \
 vault auth enable approle
 
 # Importing policies from file into vault
-cat policies/policy_read.hcl | vault policy write data-policy -
+cat policy_read.hcl | vault policy write data-policy -
 vault write auth/approle/role/dataapp policies=data-policy
 
 # Extracting role-id from vault
@@ -121,6 +121,28 @@ vault kv get secret/django/oauth_api
 vault kv put secret/django/blockchain_api bc_url=$ALCHEMY_PROVIDER_URL bc_wallet=$OWNER_ADDRESS bc_key=$OWNER_PRIVATE_KEY bc_smart=$CONTRACT_ADDRESS
 vault kv put secret/django/djkey_api djkey=$DJANGO_SECRET_KEY
 
+
+#token with use limit for django approle
+cat policy-admin.hcl | vault policy write admin-policy -
+django_vault_token=$(vault token create -ttl=42m -use-limit=7 -policy=admin-policy | awk '$1 == "token" {print $2}')
+echo "$django_vault_token" > shared/django_vault_token.txt
+
+
+# Wait for Vault process to finish
+echo "Vault server is running. Waiting for process to finish..."
+wait $VAULT_PID
+
+
+# # same same
+# ENV_FILE=$(realpath "$(dirname "$0")/$RELATIVE_PATH")
+
+# # modifying output messages
+# echo "Vérification de l'existence du fichier .env..."
+# if [ ! -f "$ENV_FILE" ]; then
+# 	echo "Le fichier .env n'existe pas à l'emplacement spécifié."
+# 	exit 1
+# fi
+
 # # Load environment variables from a .env file into Vault
 # RELATIVE_PATH="../.env"
 
@@ -140,29 +162,6 @@ vault kv put secret/django/djkey_api djkey=$DJANGO_SECRET_KEY
 #     echo "All secrets have been saved in Vault."
 # else
 #     echo "No .env file found. Skipping secret loading."
-# fi
-
-#token with use limit for django approle
-cat policies/policy-admin.hcl | vault policy write admin-policy -
-django_vault_token=$(vault token create -ttl=42m -use-limit=7 -policy=policy_admin | awk '$1 == "token" {print $2}')
-echo "$django_vault_token" > shared/django_vault_token.txt
-
-# Get the list of secrets
-# docker exec vault vault kv list kv/data/myapp
-
-# Wait for Vault process to finish
-echo "Vault server is running. Waiting for process to finish..."
-wait $VAULT_PID
-
-
-# # same same
-# ENV_FILE=$(realpath "$(dirname "$0")/$RELATIVE_PATH")
-
-# # modifying output messages
-# echo "Vérification de l'existence du fichier .env..."
-# if [ ! -f "$ENV_FILE" ]; then
-# 	echo "Le fichier .env n'existe pas à l'emplacement spécifié."
-# 	exit 1
 # fi
 
 # echo "Lecture et enregistrement des secrets du fichier .env dans Vault..."
@@ -189,6 +188,10 @@ wait $VAULT_PID
 # done < "$ENV_FILE"
 
 # echo "All secrets have been saved in Vault."
+
+
+# Get the list of secrets
+# docker exec vault vault kv list kv/data/myapp
 
 # # Get the list of secrets
 # docker exec vault vault kv list kv/data/myapp

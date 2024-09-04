@@ -37,9 +37,9 @@ COPY vault-config.hcl /vault-config.hcl
 # COPY ../.env /config/.env
 
 # Policies and script import
-RUN mkdir -p /vault/policies
-COPY policies/policy_read.hcl /policies/policy_read.hcl
-COPY policies/policy_admin.hcl /policies/policy_admin.hcl
+# RUN mkdir -p /vault/policies
+COPY policy_read.hcl /policy_read.hcl
+COPY policy_admin.hcl /policy_admin.hcl
 
 COPY entrypoint.sh /vault/entrypoint.sh
 RUN chmod +x /vault/entrypoint.sh
