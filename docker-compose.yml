@@ -51,8 +51,6 @@ services:
   modsecurity-nginx:
     container_name: nginx_server
     build: ./modsecurity-nginx
-    # volumes:
-    #   - static_volume:/home/app/web/staticfiles
     ports:
       - 8443:443
     depends_on:
@@ -86,7 +84,6 @@ services:
 
 volumes:
   postgres_data:
-#  static_volume:
 
 networks:
   transcendance:
