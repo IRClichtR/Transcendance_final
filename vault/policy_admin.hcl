@@ -1,4 +1,4 @@
-# creating admin role in vault/cubbyhole
+# creating admin role in cubbyhole
 
 path "cubbyhole/approle_role" {
   capabilities = [ "create", "read", "update", "delete" ]

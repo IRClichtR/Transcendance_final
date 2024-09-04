@@ -123,7 +123,7 @@ vault kv put secret/django/djkey_api djkey=$DJANGO_SECRET_KEY
 
 
 #token with use limit for django approle
-cat policy-admin.hcl | vault policy write admin-policy -
+cat policy_admin.hcl | vault policy write admin-policy -
 django_vault_token=$(vault token create -ttl=42m -use-limit=7 -policy=admin-policy | awk '$1 == "token" {print $2}')
 echo "$django_vault_token" > shared/django_vault_token.txt
 
