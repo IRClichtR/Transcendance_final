@@ -78,6 +78,7 @@ services:
       - ./vault/logs:/vault/logs
       - ./vault/shared:/vault/shared
     environment:
+      - VAULT_SKIP_VERIFY=TRUE
       - .env
     cap_add:
       - IPC_LOCK

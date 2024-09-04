@@ -45,3 +45,4 @@ vault/config/unseal.key4
 vault/config/unseal.key5
 vault/data/
 vault/tls-certificates/
+vault/shared/django_vault_token.txt
