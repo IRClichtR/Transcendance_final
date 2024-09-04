@@ -23,7 +23,7 @@ clean:
 cleanfiles:
 	@read -p "Are you sure you want to delete Vault logs, data, policies, and key files? (y/N) " confirm && \
 	[ "$$confirm" = "y" ] || exit 1
-	rm -rf ./vault/logs ./vault/data ./vault/policies
+	rm -rf ./vault/logs ./vault/data
 	rm -f ./vault/config/init.file \
 	      ./vault/config/root.token \
 	      ./vault/config/unseal.key1 \
