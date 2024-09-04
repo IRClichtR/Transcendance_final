@@ -12,7 +12,7 @@ BALL_START_VELOCITY_X = 3
 BALL_START_VELOCITY_Y = 1
 BAT_MOVEMENT_SPEED = 20
 BALL_DIAMETER = 20
-MAX_POINT = 1
+MAX_POINT = 3
 DIRECTION_CHOICES = [('positive', 'negative')]
 
 # To adjust how velocity_x is modify
