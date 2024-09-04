@@ -65,6 +65,41 @@ fi
 # Export the root token as an environment variable
 export VAULT_TOKEN=$(cat /vault/config/root.token)
 
+# Enabling database support
+echo "Enabling database plugin"
+vault secrets enable -path=dbs database
+
+# Setting up postgres connection
+echo "Importing postgres connection information"
+vault write dbs/config/ourdb \
+  plugin_name=postgresql-database-plugin \
+  connection_url='postgresql://{{username}}:{{password}}@db:5432/'${POSTGRES_DB}'' \
+  allowed_roles=ourdb-admin \
+  username=${POSTGRES_USER} \
+  password=${POSTGRES_PASSWORD} \
+  verify_connection=false
+
+# Setting up postgres admin role
+echo "Adding admin role"
+vault write dbs/roles/ourdb-admin \
+  db_name=ourdb \
+  default_ttl=42h \
+  max_ttl=42h \
+  creation_statements="CREATE USER \"{{name}}\" WITH SUPERUSER ENCRYPTED PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \"{{name}}\";" \
+  revocation_statements="REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM \"{{name}}\"; DROP OWNED BY \"{{name}}\"; DROP ROLE \"{{name}}\";"
+
+# enabling roles on vault
+vault auth enable approle
+
+# Importing policies from file into vault
+cat policy/policy.hcl | vault policy write data-policy -
+vault write auth/approle/role/dataapp policies=data-policy
+
+# Extracting role-id from vault
+role_id=$(vault read auth/approle/role/dataapp/role-id | grep "role_id" | awk '{print $NF}')
+echo "Role ID: $role_id"
+secret_id=$(vault write -force auth/approle/role/dataapp/secret-id | grep "secret_id" | awk '$1 == "secret_id" {print $NF}')
+
 
 # Enable the KV secrets engine at the path "secret"
 echo "Enabling KV secrets engine..."
@@ -76,6 +111,14 @@ if [ $? -ne 0 ]; then
 else
     echo "KV secrets engine enabled successfully."
 fi
+
+# Uploading djando credentials into vault
+vault kv put secret/django/oauth_api client_id=$UID_42 client_secret=$SECRET_42
+vault kv get secret/django/oauth_api
+
+# Uploading blockchain credentials into vault
+vault kv put secret/django/blockchain_api bc_url=$ALCHEMY_PROVIDER_URL bc_wallet=$OWNER_ADDRESS bc_key=$OWNER_PRIVATE_KEY bc_smart=$CONTRACT_ADDRESS
+vault kv put secret/django/djkey_api djkey=$DJANGO_SECRET_KEY
 
 # Load environment variables from a .env file into Vault
 RELATIVE_PATH="../.env"
